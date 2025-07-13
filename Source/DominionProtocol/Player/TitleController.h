@@ -6,14 +6,18 @@
 #include "BasePlayerController.h"
 #include "TitleController.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnSlotUIStartGame)
-DECLARE_MULTICAST_DELEGATE(FOnSlotUIDeleteGame)
-DECLARE_MULTICAST_DELEGATE(FOnSlotUIBackToTitleMenu)
-DECLARE_MULTICAST_DELEGATE(FOnSlotUIMoveSelectionUp)
-DECLARE_MULTICAST_DELEGATE(FOnSlotUIMoveSelectionDown)
-DECLARE_MULTICAST_DELEGATE(FOnMenuUIMoveSelectionUp)
-DECLARE_MULTICAST_DELEGATE(FOnMenuUIMoveSelectionDown)
-DECLARE_MULTICAST_DELEGATE(FOnMenuUIConfirmSelection)
+#pragma region ForwardDeclaration
+
+DECLARE_MULTICAST_DELEGATE(FOnSlotUIStartGameEvent)
+DECLARE_MULTICAST_DELEGATE(FOnSlotUIDeleteGameEvent)
+DECLARE_MULTICAST_DELEGATE(FOnSlotUIBackToTitleMenuEvent)
+DECLARE_MULTICAST_DELEGATE(FOnSlotUIMoveSelectionUpEvent)
+DECLARE_MULTICAST_DELEGATE(FOnSlotUIMoveSelectionDownEvent)
+DECLARE_MULTICAST_DELEGATE(FOnMenuUIMoveSelectionUpEvent)
+DECLARE_MULTICAST_DELEGATE(FOnMenuUIMoveSelectionDownEvent)
+DECLARE_MULTICAST_DELEGATE(FOnMenuUIConfirmSelectionEvent)
+
+#pragma endregion
 
 class UNewTitleHUDWidget;
 
@@ -24,20 +28,40 @@ class DOMINIONPROTOCOL_API ATitleController : public ABasePlayerController
 
 public:
 	// Slot UI
-	FOnSlotUIStartGame OnSlotUIStartGame;
-	FOnSlotUIDeleteGame OnSlotUIDeleteGame;
-	FOnSlotUIBackToTitleMenu OnSlotUIBackToTitleMenu;
-	FOnSlotUIMoveSelectionUp OnSlotUIMoveSelectionUp;
-	FOnSlotUIMoveSelectionDown OnSlotUIMoveSelectionDown;
+	FOnSlotUIStartGameEvent OnSlotUIStartGameEvent;
+	FOnSlotUIDeleteGameEvent OnSlotUIDeleteGameEvent;
+	FOnSlotUIBackToTitleMenuEvent OnSlotUIBackToTitleMenuEvent;
+	FOnSlotUIMoveSelectionUpEvent OnSlotUIMoveSelectionUpEvent;
+	FOnSlotUIMoveSelectionDownEvent OnSlotUIMoveSelectionDownEvent;
 
 	// MenuUI
-	FOnMenuUIMoveSelectionUp OnMenuUIMoveSelectionUp;
-	FOnMenuUIMoveSelectionDown OnMenuUIMoveSelectionDown;
-	FOnMenuUIConfirmSelection OnMenuUIConfirmSelection;
+	FOnMenuUIMoveSelectionUpEvent OnMenuUIMoveSelectionUpEvent;
+	FOnMenuUIMoveSelectionDownEvent OnMenuUIMoveSelectionDownEvent;
+	FOnMenuUIConfirmSelectionEvent OnMenuUIConfirmSelectionEvent;
 	
 	ATitleController();
+	
+	void SetupMappingContext(const UInputMappingContext* NewInputMappingContext);
 
-	// Bind Action
+	FORCEINLINE float GetFadeDuration() const { return FadeDuration; }
+	
+protected:
+	UFUNCTION()
+	virtual void CreateAndAddHUDWidget() override;
+	
+	UFUNCTION()
+	virtual void SetupMappingContext() override;
+	
+	UFUNCTION()
+	virtual void SetupInputMode() override;
+
+	UFUNCTION()
+	virtual void BindInputActions() override;
+	
+	virtual void BeginPlay() override;
+	
+#pragma region BindAction
+	
 	UFUNCTION()
 	void OnTitleSlotUIStartGame() const;
 
@@ -61,32 +85,8 @@ public:
 
 	UFUNCTION()
 	void OnTitleMenuUIConfirmSelection() const;
-	
-	void SetupMappingContext(const UInputMappingContext* NewInputMappingContext);
 
-	FORCEINLINE float GetFadeDuration() const { return FadeDuration; }
-	
-protected:
-	virtual void BeginPlay() override;
-
-	UFUNCTION()
-	virtual void CreateAndAddHUDWidget() override;
-	
-	UFUNCTION()
-	virtual void SetupMappingContext() override;
-	
-	UFUNCTION()
-	virtual void SetupInputMode() override;
-
-	UFUNCTION()
-	virtual void BindInputActions() override;
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	TObjectPtr<UInputMappingContext> TitleSlotUIMappingContext;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-	TObjectPtr<UInputMappingContext> TitleMenuUIMappingContext;
+#pragma endregion
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
@@ -95,7 +95,7 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UNewTitleHUDWidget> TitleHUDWidgetInstance;
 	
-#pragma region TitleMenuUI Input Actions Section
+#pragma region MenuUIInputActionsSection
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputAction> InputTitleMenuUIMoveSelectionUp;
@@ -109,7 +109,7 @@ protected:
 
 #pragma endregion
 
-#pragma region SlotUI Input Actions Section
+#pragma region SlotUIInputActionsSection
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputAction> InputTitleSlotUIStartGame;

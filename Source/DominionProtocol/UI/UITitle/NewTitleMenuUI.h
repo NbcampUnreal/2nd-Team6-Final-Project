@@ -4,15 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Interface/UIInterface.h"
 #include "NewTitleMenuUI.generated.h"
 
 class UNewTitleMenuButton;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewTitleMenuUI : public UUserWidget
+class DOMINIONPROTOCOL_API UNewTitleMenuUI : public UUserWidget, public IUIInterface
 {
 	GENERATED_BODY()
 
+public:
+	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 	
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -49,4 +52,7 @@ protected:
 
 	UPROPERTY()
 	int32 MaxButtonBoxFocusIndex = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputMappingContext> TitleMenuMappingContext;
 };

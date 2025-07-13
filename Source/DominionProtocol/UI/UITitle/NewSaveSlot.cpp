@@ -62,7 +62,7 @@ void UNewSaveSlot::SetSaveSlotInfo()
 		GameIndex->SetText(FText::FromString(GameIndexString));
 
 		const FDateTime SaveDataTime = SaveSlotMetaData.SaveDateTime;
-		const FString SaveTimeString = FString::Printf(TEXT("마지막 저장 일 : %d / %d / %d"), SaveDataTime.GetYear(), SaveDataTime.GetMonth(), SaveDataTime.GetDay());
+		const FString SaveTimeString = FString::Printf(TEXT("마지막 저장 시간 : %d / %d / %d : %d"), SaveDataTime.GetMonth(), SaveDataTime.GetDay(), SaveDataTime.GetHour(), SaveDataTime.GetMinute());
 		SaveTime->SetText(FText::FromString(SaveTimeString));
 		
 		const FString PlayTimeString = FString::Printf(TEXT("총 플레이 시간 : %d : %d"), SaveSlotMetaData.PlayTime/60, SaveSlotMetaData.PlayTime%60);
@@ -70,7 +70,7 @@ void UNewSaveSlot::SetSaveSlotInfo()
 
 		CurrentLevelName->SetText(SaveSlotMetaData.PlayingLevelDisplayName);
 
-		const FString PlayerLevelString = FString::Printf(TEXT("플에이어 레벨 : %d"), SaveSlotMetaData.PlayerLevel);
+		const FString PlayerLevelString = FString::Printf(TEXT("플레이어 레벨 : %d"), SaveSlotMetaData.PlayerLevel);
 		PlayerLevel->SetText(FText::FromString(PlayerLevelString));
 	}
 	else

@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "BaseHUDWidget.generated.h"
 
+class UEnhancedInputLocalPlayerSubsystem;
+
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCurrentTopUIChanged, UUserWidget*)
 
 UCLASS(Abstract)
@@ -36,7 +38,11 @@ public:
 	
 protected:
 	virtual void NativeConstruct() override;
+
+	UFUNCTION()
+	void ChangeMappingContext(UUserWidget* NewTopUI) const;
 	
+	void BindTopUIChangeDelegate();
 
 protected:
 	UPROPERTY(meta = (BindWidget))
@@ -44,5 +50,8 @@ protected:
 
 	UPROPERTY()
 	TArray<TObjectPtr<UUserWidget>> ActivatedUIStack;
+
+	UPROPERTY()
+	TObjectPtr<UEnhancedInputLocalPlayerSubsystem> LocalPlayerInputSubsystem;
 	
 };

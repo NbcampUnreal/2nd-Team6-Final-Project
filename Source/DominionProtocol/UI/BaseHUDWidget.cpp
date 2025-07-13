@@ -3,8 +3,11 @@
 
 #include "UI/BaseHUDWidget.h"
 
+#include "EnhancedInputSubsystems.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Interface/UIInterface.h"
+#include "Player/BasePlayerController.h"
 
 UUserWidget* UBaseHUDWidget::PushUI(UUserWidget* WidgetToPush)
 {
@@ -71,6 +74,8 @@ void UBaseHUDWidget::PopUI()
 		CurrentTopUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
+	ActivatedUIStack.Pop();
+
 	if (ActivatedUIStack.Num() > 0)
 	{
 		TObjectPtr<UUserWidget> NewTopUI = ActivatedUIStack.Last();
@@ -108,6 +113,7 @@ void UBaseHUDWidget::PopSpecificUI(UUserWidget* WidgetToPop)
 		{
 			WidgetToPop->SetVisibility(ESlateVisibility::Collapsed);
 		}
+		
 		ActivatedUIStack.Remove(WidgetToPop);
 
 		// 3. Pop 한 Widget 이 과거 최상위 위젯이었고, 스택에 위젯이 남아있다면 새로운 최상위 위젯 표시
@@ -189,5 +195,48 @@ void UBaseHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	const ULocalPlayer* LocalPlayer = GetOwningPlayer()->GetLocalPlayer();
+	if (LocalPlayer)
+	{
+		LocalPlayerInputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+	}
+
 	ensureMsgf(RootCanvasPanel, TEXT("RootCanvasPanel Not Connected"));
+}
+
+void UBaseHUDWidget::ChangeMappingContext(UUserWidget* NewTopUI) const
+{
+	if (ActivatedUIStack.Num() > 0)
+	{
+		if (NewTopUI && NewTopUI->Implements<UUIInterface>())
+		{
+			const auto* UIInterface = Cast<IUIInterface>(NewTopUI);
+			if (UIInterface)
+			{
+				const UInputMappingContext* MappingContext = IUIInterface::Execute_GetInputMappingContext(NewTopUI);
+				if (MappingContext)
+				{
+					LocalPlayerInputSubsystem->ClearAllMappings();
+					LocalPlayerInputSubsystem->AddMappingContext(MappingContext, 1);
+				}
+				else
+				{
+					ensureMsgf(MappingContext, TEXT("Failed to load IMC assets. Check connections."));
+				}
+			}
+		}
+	}
+	else if (ActivatedUIStack.Num() == 0)
+	{
+		auto* PlayerController = Cast<ABasePlayerController>(GetOwningPlayer());
+		if (PlayerController)
+		{
+			PlayerController->SetupMappingContext();
+		}
+	}
+}
+
+void UBaseHUDWidget::BindTopUIChangeDelegate()
+{
+	OnCurrentTopUIChanged.AddUObject(this, &UBaseHUDWidget::ChangeMappingContext);
 }

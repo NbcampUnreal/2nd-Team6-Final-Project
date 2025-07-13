@@ -22,15 +22,10 @@ protected:
 	
 	// for Button Event
 	UFUNCTION(BlueprintCallable)
-	void ActivateSaveSlotBoxUI();
+	void ActivateSaveSlotUI();
 
 	UFUNCTION(BlueprintCallable)
-	void DeactivateTitleMenuUI();
-
-	UFUNCTION()
-	void ChangeMappingContext(UUserWidget* NewTopUI) const;
-
-	void BindTopUIChangeDelegate();
+	void DeactivateSaveSlotUI();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))

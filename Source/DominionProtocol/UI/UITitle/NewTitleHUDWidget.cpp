@@ -23,40 +23,12 @@ void UNewTitleHUDWidget::NativeConstruct()
 	PushUI(TitleMenuUI);
 }
 
-void UNewTitleHUDWidget::ActivateSaveSlotBoxUI()
+void UNewTitleHUDWidget::ActivateSaveSlotUI()
 {
 	PushUI(SaveSlotBoxUI);
 }
 
-void UNewTitleHUDWidget::DeactivateTitleMenuUI()
+void UNewTitleHUDWidget::DeactivateSaveSlotUI()
 {
 	PopSpecificUI(SaveSlotBoxUI);
-}
-
-void UNewTitleHUDWidget::ChangeMappingContext(UUserWidget* NewTopUI) const
-{
-	if (NewTopUI == SaveSlotBoxUI)
-	{
-		TitleController->SetupMappingContext(TitleController->TitleSlotUIMappingContext);
-	}
-	else if (NewTopUI == TitleMenuUI)
-	{
-		TitleController->SetupMappingContext(TitleController->TitleMenuUIMappingContext);
-	}
-	else
-	{
-		if (NewTopUI)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("NewTopUI is %s"), *NewTopUI->GetName());	
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("NewTopUI is NULL"));	
-		}
-	}
-}
-
-void UNewTitleHUDWidget::BindTopUIChangeDelegate()
-{
-	OnCurrentTopUIChanged.AddUObject(this, &UNewTitleHUDWidget::ChangeMappingContext);
 }

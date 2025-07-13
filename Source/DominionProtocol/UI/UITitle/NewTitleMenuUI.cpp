@@ -29,6 +29,11 @@ void UNewTitleMenuUI::NativeConstruct()
 	ChangeButtonBoxFocusIndex(0);
 }
 
+UInputMappingContext* UNewTitleMenuUI::GetInputMappingContext_Implementation() const
+{
+	return TitleMenuMappingContext;
+}
+
 void UNewTitleMenuUI::ChangeButtonBoxFocusIndex(const int32 NewFocusIndex)
 {
 	if (!TitleMenuButtons.IsEmpty())

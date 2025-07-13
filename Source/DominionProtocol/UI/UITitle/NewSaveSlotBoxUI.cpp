@@ -8,6 +8,11 @@
 #include "DomiFramework/GameInstance/SaveManagerSubsystem.h"
 #include "Player/TitleController.h"
 
+UInputMappingContext* UNewSaveSlotBoxUI::GetInputMappingContext_Implementation() const
+{
+	return TitleSlotUIMappingContext;
+}
+
 void UNewSaveSlotBoxUI::RefreshSlotData(const ESlateVisibility VisibilityState)
 {
 	if (VisibilityState == ESlateVisibility::Visible)

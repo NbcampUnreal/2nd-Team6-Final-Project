@@ -10,6 +10,7 @@
 ABasePlayerController::ABasePlayerController()
 {
 	FadeDuration = 1.f;
+	
 }
 
 void ABasePlayerController::FadeIn(const float PlayTime)
@@ -87,11 +88,11 @@ void ABasePlayerController::BindInputActions()
 {
 }
 
-void ABasePlayerController::RemoveAllMappingContext()
+void ABasePlayerController::RemoveAllMappingContext() const
 {
-	for (const UInputMappingContext* MappingContext : MappingContextArray)
+	if (LocalPlayerInputSubsystem)
 	{
-		LocalPlayerInputSubsystem->RemoveMappingContext(MappingContext);
+		LocalPlayerInputSubsystem->ClearAllMappings();
 	}
 }
 

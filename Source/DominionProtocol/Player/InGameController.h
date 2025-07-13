@@ -6,20 +6,38 @@
 #include "BasePlayerController.h"
 #include "InGameController.generated.h"
 
-DECLARE_DELEGATE(FOnPressedMainMenuSwitchShowAndHideWidgetEvent);
-DECLARE_DELEGATE(FOnPressedDialogueChangedNextStoryState);
+#pragma region ForwardDeclaration
 
-DECLARE_DELEGATE(FOnPressedCrackMenuBackButtonEvent);
-DECLARE_DELEGATE(FOnPressedCrackMenuConfirmButtonEvent);
+DECLARE_MULTICAST_DELEGATE(FOnSwitchMainMenuUIActivationEvent);
+DECLARE_MULTICAST_DELEGATE(FOnMainMenuUIMoveSelectionLeftEvent);
+DECLARE_MULTICAST_DELEGATE(FOnMainMenuUIMoveSelectionRightEvent);
+DECLARE_MULTICAST_DELEGATE(FOnEquipmentUIMoveSelectionUpEvent);
+DECLARE_MULTICAST_DELEGATE(FOnEquipmentUIMoveSelectionDownEvent);
+DECLARE_MULTICAST_DELEGATE(FOnEquipmentUIEquipItemActionEvent);
+DECLARE_MULTICAST_DELEGATE(FOnEquipmentUIUnequipItemActionEvent);
+DECLARE_MULTICAST_DELEGATE(FOnItemUIMoveSelectionUpEvent);
+DECLARE_MULTICAST_DELEGATE(FOnItemUIMoveSelectionDownEvent);
+DECLARE_MULTICAST_DELEGATE(FOnItemUIMoveSelectionLeftEvent);
+DECLARE_MULTICAST_DELEGATE(FOnItemUIMoveSelectionRightEvent);
+DECLARE_MULTICAST_DELEGATE(FOnItemUIConsumeItemActionEvent);
+DECLARE_MULTICAST_DELEGATE(FOnItemUIEquipItemActionEvent);
+DECLARE_MULTICAST_DELEGATE(FOnItemUIUnequipItemActionEvent);
+DECLARE_MULTICAST_DELEGATE(FOnSettingUIMoveSelectionUpEvent);
+DECLARE_MULTICAST_DELEGATE(FOnSettingUIMoveSelectionDownEvent);
+DECLARE_MULTICAST_DELEGATE(FOnSettingUIMoveSelectionLeftEvent);
+DECLARE_MULTICAST_DELEGATE(FOnSettingUIMoveSelectionRightEvent);
+DECLARE_MULTICAST_DELEGATE(FOnSettingUIConfirmSelectionActionEvent);
+DECLARE_MULTICAST_DELEGATE(FOnDialogueUIChangeStoryStateNextEvent);
+DECLARE_MULTICAST_DELEGATE(FOnCrackMenuUIBackToCrackMenuEvent);
+DECLARE_MULTICAST_DELEGATE(FOnAbilityEnforceUISaveChangesEvent);
+DECLARE_MULTICAST_DELEGATE(FOnTeleportSubUISelectionUpEvent);
+DECLARE_MULTICAST_DELEGATE(FOnTeleportSubUISelectionDownEvent);
+DECLARE_MULTICAST_DELEGATE(FOnTeleportSubUISelectionLeftEvent);
+DECLARE_MULTICAST_DELEGATE(FOnTeleportSubUISelectionRightEvent);
+DECLARE_MULTICAST_DELEGATE(FOnTeleportSubUIConfirmSelectionActionEvent);
+DECLARE_MULTICAST_DELEGATE(FOnPotionEnforceUIEnforceConfirmEvent);
 
-DECLARE_DELEGATE(FOnPressedMainMenuButtonQEvent);
-DECLARE_DELEGATE(FOnPressedMainMenuButtonEEvent);
-DECLARE_DELEGATE(FOnPressedMainMenuButtonREvent);
-DECLARE_DELEGATE(FOnPressedMainMenuButtonAEvent);
-DECLARE_DELEGATE(FOnPressedMainMenuButtonDEvent);
-DECLARE_DELEGATE(FOnPressedMainMenuButtonZEvent);
-DECLARE_DELEGATE(FOnPressedMainMenuButtonCEvent);
-DECLARE_DELEGATE(FOnPressedMainMenuButtonSpaceBarEvent);
+#pragma endregion
 
 class UDomiInGameHUDWidget;
 
@@ -29,20 +47,40 @@ class DOMINIONPROTOCOL_API AInGameController : public ABasePlayerController
 	GENERATED_BODY()
 
 public:
-	FOnPressedMainMenuSwitchShowAndHideWidgetEvent OnPressedMainMenuSwitchShowAndHideWidgetEvent;
-	FOnPressedDialogueChangedNextStoryState OnPressedDialogueChangedNextStoryState;
-	FOnPressedCrackMenuBackButtonEvent OnPressedCrackMenuBackButtonEvent;
-	FOnPressedCrackMenuConfirmButtonEvent OnPressedCrackMenuConfirmButtonEvent;
-	FOnPressedMainMenuButtonQEvent OnPressedMainMenuButtonQEvent;
-	FOnPressedMainMenuButtonEEvent OnPressedMainMenuButtonEEvent;
-	FOnPressedMainMenuButtonREvent OnPressedMainMenuButtonREvent;
-	FOnPressedMainMenuButtonAEvent OnPressedMainMenuButtonAEvent;
-	FOnPressedMainMenuButtonDEvent OnPressedMainMenuButtonDEvent;
-	FOnPressedMainMenuButtonZEvent OnPressedMainMenuButtonZEvent;
-	FOnPressedMainMenuButtonCEvent OnPressedMainMenuButtonCEvent;
-	FOnPressedMainMenuButtonSpaceBarEvent OnPressedMainMenuButtonSpaceBarEvent;
+
+#pragma region DelegateEvent
 	
-	//
+	FOnSwitchMainMenuUIActivationEvent OnSwitchMainMenuUIActivationEvent;
+	FOnMainMenuUIMoveSelectionLeftEvent OnMainMenuUIMoveSelectionLeftEvent;
+	FOnMainMenuUIMoveSelectionRightEvent OnMainMenuUIMoveSelectionRightEvent;
+	FOnEquipmentUIMoveSelectionUpEvent OnEquipmentUIMoveSelectionUpEvent;
+	FOnEquipmentUIMoveSelectionDownEvent OnEquipmentUIMoveSelectionDownEvent;
+	FOnEquipmentUIEquipItemActionEvent OnEquipmentUIEquipItemActionEvent;
+	FOnEquipmentUIUnequipItemActionEvent OnEquipmentUIUnequipItemActionEvent;
+	FOnItemUIMoveSelectionUpEvent OnItemUIMoveSelectionUpEvent;
+	FOnItemUIMoveSelectionDownEvent OnItemUIMoveSelectionDownEvent;
+	FOnItemUIMoveSelectionLeftEvent OnItemUIMoveSelectionLeftEvent;
+	FOnItemUIMoveSelectionRightEvent OnItemUIMoveSelectionRightEvent;
+	FOnItemUIConsumeItemActionEvent OnItemUIConsumeItemActionEvent;
+	FOnItemUIEquipItemActionEvent OnItemUIEquipItemActionEvent;
+	FOnItemUIUnequipItemActionEvent OnItemUIUnequipItemActionEvent;
+	FOnSettingUIMoveSelectionUpEvent OnSettingUIMoveSelectionUpEvent;
+	FOnSettingUIMoveSelectionDownEvent OnSettingUIMoveSelectionDownEvent;
+	FOnSettingUIMoveSelectionLeftEvent OnSettingUIMoveSelectionLeftEvent;
+	FOnSettingUIMoveSelectionRightEvent OnSettingUIMoveSelectionRightEvent;
+	FOnSettingUIConfirmSelectionActionEvent OnSettingUIConfirmSelectionActionEvent;
+	FOnDialogueUIChangeStoryStateNextEvent OnDialogueUIChangeStoryStateNextEvent;
+	FOnCrackMenuUIBackToCrackMenuEvent OnCrackMenuUIBackToCrackMenuEvent;
+	FOnAbilityEnforceUISaveChangesEvent OnAbilityEnforceUISaveChangesEvent;
+	FOnTeleportSubUISelectionUpEvent OnTeleportSubUISelectionUpEvent;
+	FOnTeleportSubUISelectionDownEvent OnTeleportSubUISelectionDownEvent;
+	FOnTeleportSubUISelectionLeftEvent OnTeleportSubUISelectionLeftEvent;
+	FOnTeleportSubUISelectionRightEvent OnTeleportSubUISelectionRightEvent;
+	FOnTeleportSubUIConfirmSelectionActionEvent OnTeleportSubUIConfirmSelectionActionEvent;
+	FOnPotionEnforceUIEnforceConfirmEvent OnPotionEnforceUIEnforceConfirmEvent;
+
+
+#pragma endregion
 	
 	AInGameController();
 	
@@ -50,176 +88,261 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetupMappingContext(UInputMappingContext* NewMappingContext);
 	
-	// Binding InputAction
-	UFUNCTION()
-	void OnMainMenuSwitchShowAndHideWidget();
-
-	UFUNCTION()
-	void OnDialogueChangedNextStoryState();
-
-	UFUNCTION()
-	void OnPressedCrackMenuBackButton();
-
-	UFUNCTION()
-	void OnPressedCrackMenuConfirmButton();
-	
-	UFUNCTION()
-	void OnPressedMainMenuButtonQ();
-	
-	UFUNCTION()
-	void OnPressedMainMenuButtonE();
-	
-	UFUNCTION()
-	void OnPressedMainMenuButtonR();
-	
-	UFUNCTION()
-	void OnPressedMainMenuButtonA();
-	
-	UFUNCTION()
-	void OnPressedMainMenuButtonD();
-	
-	UFUNCTION()
-	void OnPressedMainMenuButtonZ();
-	
-	UFUNCTION()
-	void OnPressedMainMenuButtonC();
-	
-	UFUNCTION()
-	void OnPressedMainMenuButtonSpaceBar();
-	
 	UFUNCTION(BlueprintPure)
 	UDomiInGameHUDWidget* GetInGameHUDWidget() const { return InGameHUDWidgetInstance; }
 
+	virtual void SetupMappingContext() override;
+	
 protected:
 	virtual void BeginPlay() override;
 	
 	virtual void CreateAndAddHUDWidget() override;
 	virtual void SetupInputMode() override;
-	virtual void SetupMappingContext() override;
 	virtual void BindInputActions() override;
+
+#pragma region InputBindingFunction
+	
+	UFUNCTION()
+	void OnSwitchMainMenuUIActivation() const;
+	
+	UFUNCTION()
+	void OnMainMenuUIMoveSelectionLeft() const;
+	
+	UFUNCTION()
+	void OnMainMenuUIMoveSelectionRight() const;
+	
+	UFUNCTION()
+	void OnEquipmentUIMoveSelectionUp() const;
+	
+	UFUNCTION()
+	void OnEquipmentUIMoveSelectionDown() const;
+	
+	UFUNCTION()
+	void OnEquipmentUIEquipItemAction() const;
+	
+	UFUNCTION()
+	void OnEquipmentUIUnequipItemAction() const;
+	
+	UFUNCTION()
+	void OnItemUIMoveSelectionUp() const;
+	
+	UFUNCTION()
+	void OnItemUIMoveSelectionDown() const;
+	
+	UFUNCTION()
+	void OnItemUIMoveSelectionLeft() const;
+	
+	UFUNCTION()
+	void OnItemUIMoveSelectionRight() const;
+	
+	UFUNCTION()
+	void OnItemUIConsumeItemAction() const;
+	
+	UFUNCTION()
+	void OnItemUIEquipItemAction() const;
+	
+	UFUNCTION()
+	void OnItemUIUnequipItemAction() const;
+	
+	UFUNCTION()
+	void OnSettingUIMoveSelectionUp() const;
+	
+	UFUNCTION()
+	void OnSettingUIMoveSelectionDown() const;
+	
+	UFUNCTION()
+	void OnSettingUIMoveSelectionLeft() const;
+	
+	UFUNCTION()
+	void OnSettingUIMoveSelectionRight() const;
+	
+	UFUNCTION()
+	void OnSettingUIConfirmSelectionAction() const;
+	
+	UFUNCTION()
+	void OnDialogueUIChangeStoryStateNext() const;
+	
+	UFUNCTION()
+	void OnCrackMenuUIBackToCrackMenu() const;
+	
+	UFUNCTION()
+	void OnAbilityEnforceUISaveChanges() const;
+	
+	UFUNCTION()
+	void OnTeleportSubUISelectionUp() const;
+	
+	UFUNCTION()
+	void OnTeleportSubUISelectionDown() const;
+	
+	UFUNCTION()
+	void OnTeleportSubUISelectionLeft() const;
+	
+	UFUNCTION()
+	void OnTeleportSubUISelectionRight() const;
+	
+	UFUNCTION()
+	void OnTeleportSubUIConfirmSelectionAction() const;
+	
+	UFUNCTION()
+	void OnPotionEnforceUIEnforceConfirm() const;
+
+#pragma endregion
+
+#pragma region CharacterInput
 	
 public:
-	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputMappingContext> MainMenuMappingContext;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputMappingContext> DialogueMappingContext;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputMappingContext> CrackMenuMappingContext;
-
-
-
-#pragma region Character Input Actions Section
-	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> MoveAction;
 
-	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> LookAction;
 
-	// Dash Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> DashAction;
 	
-	// Sprint Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> SprintAction;
 
-	// Parry Input Action 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> ParryAction;
 	
-	// BaseAttack Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> BaseAttackAction;
 
-	// WeaponSkill Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> WeaponSkillAction;
 
-	// MagicSkill Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> MagicSkillAction;
 
-	// Interact Input Action
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> InteractAction;
-
-	// RockOn Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> LockOnAction;
 
-	//Consume slot 1 Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> ConsumeItemAction_1;
 
-	//Consume slot 2 Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> ConsumeItemAction_2;
 
-	//Consume slot 3 Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> ConsumeItemAction_3;
 
-	//Swap Weapon Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> SwapWeapon;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InteractionScroll;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InteractAction;
 	
 #pragma endregion
 	
-#pragma region Controller Input Actions Section
-	// MainMenuUI Section 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MainMenuSwitchShowAndHideWidget;
+#pragma region UIInput
 
+	// MainMenuUI Common Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MainMenuPressButtonQ;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MainMenuPressButtonE;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MainMenuPressButtonR;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MainMenuPressButtonA;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MainMenuPressButtonD;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MainMenuPressButtonZ;
+	TObjectPtr<UInputAction> InputSwitchMainMenuUIActivation;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MainMenuPressButtonC;
+	TObjectPtr<UInputAction> InputMainMenuUIMoveSelectionLeft;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MainMenuPressButtonSpaceBar;
-	
-	
-	
-	
-	// DialogueUI Section
+	TObjectPtr<UInputAction> InputMainMenuUIMoveSelectionRight;
+
+
+	// EquipmentSubUI Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> DialogueChangeNextStoryState;
+	TObjectPtr<UInputAction> InputEquipmentUIMoveSelectionUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputEquipmentUIMoveSelectionDown;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputEquipmentUIEquipItemAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputEquipmentUIUnequipItemAction;
 
 
-	// CrackMenuUI Section
+	// ItemSubUI Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputItemUIMoveSelectionUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputItemUIMoveSelectionDown;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputItemUIMoveSelectionLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputItemUIMoveSelectionRight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputItemUIConsumeItemAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputItemUIEquipItemAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputItemUIUnequipItemAction;
+
+	
+	// SettingSubUI Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputSettingUIMoveSelectionUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputSettingUIMoveSelectionDown;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputSettingUIMoveSelectionLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputSettingUIMoveSelectionRight;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputSettingUIConfirmSelectionAction;
+	
+	
+	// DialogueUI Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputDialogueUIChangeStoryStateNext;
+
+
+	// CrackMenuUI Common Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> PressedCrackBackButton;
+	TObjectPtr<UInputAction> InputCrackMenuUIBackToCrackMenu;
+
+	// AbilityEnforceSubUI InputAction
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> PressedCrackConfirmButton;
+	TObjectPtr<UInputAction> InputAbilityEnforceUISaveChanges;
+
+	// TeleportCrackSubUI InputAction
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputTeleportSubUISelectionUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputTeleportSubUISelectionDown;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputTeleportSubUISelectionLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputTeleportSubUISelectionRight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputTeleportSubUIConfirmSelectionAction;
+
+	// PotionEnforceSubUI InputAction
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputPotionEnforceUIEnforceConfirm;
 	
 #pragma endregion
 	
@@ -230,5 +353,4 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UDomiInGameHUDWidget> InGameHUDWidgetInstance;
 	
-	bool bActiveInGameMenuOpen = false;
 };

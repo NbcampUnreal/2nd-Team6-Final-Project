@@ -6,6 +6,7 @@
 #include "UI/BaseHUDWidget.h"
 #include "DomiInGameHUDWidget.generated.h"
 
+class AInGameController;
 
 
 UCLASS()
@@ -46,44 +47,43 @@ protected:
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<class AInGameController> OwningController;
+	TObjectPtr<AInGameController> OwningController;
 
-#pragma region UI Alway
+#pragma region HUD
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UDomiStatusBarWidget> StatusBarWidget;
+	TObjectPtr<UUserWidget> StatusBarWidget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UDomiItemSlotsWidget> ItemSlotsWidget;
+	TObjectPtr<UUserWidget> ItemSlotsWidget;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UUserWidget> InteractionWidget;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UUserWidget> EventBoxWidget;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UUserWidget> BossMonsterHPBar;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UUserWidget> LockOnHUDWidget;
 
 #pragma endregion
 
-#pragma region UI On/Off
+#pragma region UI 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UAlertWidget> AlertWidget;
+	TObjectPtr<UUserWidget> AlertWidget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UNewEventBoxWidget> EventBoxWidget; 
+	TObjectPtr<UUserWidget> CrackMenuWidget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UUserWidget> InteractionWidget;
+	TObjectPtr<UUserWidget> MainMenuWidget;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UUserWidget> CrackMenuWidget;
+	TObjectPtr<UUserWidget> DialogueWidget;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UBossMonsterHPBarWidget> BossMonsterHPBar;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UUserWidget> MainMenuWidget;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UNewDialogueWidget> DialogueWidget;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<class UUserWidget> LockOnHUDWidget;
-
-	
 	
 #pragma endregion
 };

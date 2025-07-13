@@ -11,7 +11,6 @@ void UDomiInGameHUDWidget::OnShowCrackMenuWidget()
 {
 	ShowCrackMenuWidget();
 
-	OwningController->SetupMappingContext(OwningController->CrackMenuMappingContext);
 }
 
 void UDomiInGameHUDWidget::OnMainMenuSwitchShowAndHideWidget()

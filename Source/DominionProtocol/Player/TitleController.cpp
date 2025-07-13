@@ -21,42 +21,42 @@ ATitleController::ATitleController()
 
 void ATitleController::OnTitleSlotUIStartGame() const
 {
-	OnSlotUIStartGame.Broadcast();
+	OnSlotUIStartGameEvent.Broadcast();
 }
 
 void ATitleController::OnTitleSlotUIDeleteGame() const
 {
-	OnSlotUIDeleteGame.Broadcast();
+	OnSlotUIDeleteGameEvent.Broadcast();
 }
 
 void ATitleController::OnTitleSlotUIBackToTitleMenu() const
 {
-	OnSlotUIBackToTitleMenu.Broadcast();
+	OnSlotUIBackToTitleMenuEvent.Broadcast();
 }
 
 void ATitleController::OnTitleSlotUIMoveSelectionUp() const
 {
-	OnSlotUIMoveSelectionUp.Broadcast();
+	OnSlotUIMoveSelectionUpEvent.Broadcast();
 }
 
 void ATitleController::OnTitleSlotUIMoveSelectionDown() const
 {
-	OnSlotUIMoveSelectionDown.Broadcast();
+	OnSlotUIMoveSelectionDownEvent.Broadcast();
 }
 
 void ATitleController::OnTitleMenuUIMoveSelectionUp() const
 {
-	OnMenuUIMoveSelectionUp.Broadcast();
+	OnMenuUIMoveSelectionUpEvent.Broadcast();
 }
 
 void ATitleController::OnTitleMenuUIMoveSelectionDown() const
 {
-	OnMenuUIMoveSelectionDown.Broadcast();
+	OnMenuUIMoveSelectionDownEvent.Broadcast();
 }
 
 void ATitleController::OnTitleMenuUIConfirmSelection() const
 {
-	OnMenuUIConfirmSelection.Broadcast();
+	OnMenuUIConfirmSelectionEvent.Broadcast();
 }
 
 void ATitleController::SetupMappingContext(const UInputMappingContext* NewInputMappingContext)
@@ -74,9 +74,6 @@ void ATitleController::SetupMappingContext(const UInputMappingContext* NewInputM
 void ATitleController::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	MappingContextArray.AddUnique(TitleMenuUIMappingContext);
-	MappingContextArray.AddUnique(TitleSlotUIMappingContext);
 	
 	FadeIn();
 }
@@ -99,7 +96,7 @@ void ATitleController::SetupInputMode()
 {
 	Super::SetupInputMode();
 
-	const FInputModeGameAndUI CurrentInputMode;
+	const FInputModeUIOnly CurrentInputMode;
 	SetInputMode(CurrentInputMode);
 	bShowMouseCursor = true;
 }

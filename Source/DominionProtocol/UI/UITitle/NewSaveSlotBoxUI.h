@@ -4,17 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Interface/UIInterface.h"
 #include "NewSaveSlotBoxUI.generated.h"
 
 class UVerticalBox;
 class UNewSaveSlot;
+class USaveManagerSubsystem;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewSaveSlotBoxUI : public UUserWidget
+class DOMINIONPROTOCOL_API UNewSaveSlotBoxUI : public UUserWidget, public IUIInterface
 {
 	GENERATED_BODY()
 
 public:
+	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
+	
 	UFUNCTION(BlueprintCallable)
 	void RefreshSlotData(const ESlateVisibility VisibilityState);
 	
@@ -62,7 +66,7 @@ protected:
 	
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<class USaveManagerSubsystem> SaveManagerSubsystemInstance;
+	TObjectPtr<USaveManagerSubsystem> SaveManagerSubsystemInstance;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UVerticalBox> SaveSlotBox;
@@ -75,5 +79,7 @@ protected:
 
 	UPROPERTY()
 	int32 MaxSaveSlotBoxFocusIndex = 0;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputMappingContext> TitleSlotUIMappingContext;
 };

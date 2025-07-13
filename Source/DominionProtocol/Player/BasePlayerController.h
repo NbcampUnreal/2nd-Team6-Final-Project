@@ -25,6 +25,8 @@ public:
 
 	UFUNCTION()
 	void FadeOut(const float PlayTime = -1.f);
+	
+	virtual void SetupMappingContext();
 
 protected:
 	virtual void BeginPlay() override;
@@ -33,20 +35,15 @@ protected:
 
 	virtual void SetupInputMode();
 
-	virtual void SetupMappingContext();
-
 	virtual void BindInputActions();
 	
-	void RemoveAllMappingContext();
+	void RemoveAllMappingContext() const;
 
 	// 함수 사용 시 GET_FUNCTION_NAME_CHECKED 를 사용하여 FunctionName 을 입력해주세요 
 	void HelperBindInputAction(UEnhancedInputComponent* EnhancedInputComponent, const UInputAction* Action, const ETriggerEvent Event, const FName FunctionName);
 
 
 protected:
-	UPROPERTY()
-	TArray<TObjectPtr<UInputMappingContext>> MappingContextArray;
-	
 	UPROPERTY()
 	TObjectPtr<UEnhancedInputLocalPlayerSubsystem> LocalPlayerInputSubsystem;
 
