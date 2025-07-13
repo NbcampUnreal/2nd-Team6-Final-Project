@@ -12,10 +12,6 @@ UCLASS()
 class DOMINIONPROTOCOL_API UNewTitleHUDWidget : public UBaseHUDWidget
 {
 	GENERATED_BODY()
-
-public:
-	UUserWidget* GetTitleMenuUI() const { return TitleMenuUI; }
-	UUserWidget* GetSaveSlotBoxUI() const { return SaveSlotBoxUI; }
 	
 protected:
 	virtual void NativeConstruct() override;
@@ -34,6 +30,4 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UUserWidget> SaveSlotBoxUI;
 
-	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<ATitleController> TitleController;
 };

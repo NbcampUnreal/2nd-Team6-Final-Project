@@ -11,14 +11,6 @@ void UNewTitleHUDWidget::NativeConstruct()
 	
 	ensureMsgf(TitleMenuUI, TEXT("TitleMenuUI Not Connected"));
 	ensureMsgf(SaveSlotBoxUI, TEXT("SaveSlotBoxUI Not Connected"));
-	
-	auto* PlayerController = Cast<ATitleController>(GetOwningPlayer());
-	if (PlayerController)
-	{
-		TitleController = PlayerController;
-	}
-	
-	BindTopUIChangeDelegate();
 
 	PushUI(TitleMenuUI);
 }

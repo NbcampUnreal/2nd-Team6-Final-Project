@@ -39,7 +39,7 @@ DECLARE_MULTICAST_DELEGATE(FOnPotionEnforceUIEnforceConfirmEvent);
 
 #pragma endregion
 
-class UDomiInGameHUDWidget;
+class UNewInGameHUDWidget;
 
 UCLASS()
 class DOMINIONPROTOCOL_API AInGameController : public ABasePlayerController
@@ -89,7 +89,7 @@ public:
 	void SetupMappingContext(UInputMappingContext* NewMappingContext);
 	
 	UFUNCTION(BlueprintPure)
-	UDomiInGameHUDWidget* GetInGameHUDWidget() const { return InGameHUDWidgetInstance; }
+	UNewInGameHUDWidget* GetInGameHUDWidget() const { return InGameHUDWidgetInstance; }
 
 	virtual void SetupMappingContext() override;
 	
@@ -348,9 +348,9 @@ public:
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<UDomiInGameHUDWidget> InGameHUDWidgetClass;
+	TSubclassOf<UNewInGameHUDWidget> InGameHUDWidgetClass;
 	
 	UPROPERTY()
-	TObjectPtr<UDomiInGameHUDWidget> InGameHUDWidgetInstance;
+	TObjectPtr<UNewInGameHUDWidget> InGameHUDWidgetInstance;
 	
 };

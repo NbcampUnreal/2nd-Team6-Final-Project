@@ -10,7 +10,7 @@
 #include "DomiFramework/GameState/BaseGameState.h"
 #include "Player/InGameController.h"
 #include "Player/Characters/DomiCharacter.h"
-#include "UI/UIInGame/DomiInGameHUDWidget.h"
+#include "UI/UIInGame/NewInGameHUDWidget.h"
 #include "Components/AudioComponent.h"
 #include "Sound/SoundBase.h"
 #include "WorldObjects/DialogueManager.h"
@@ -186,12 +186,12 @@ void ACrack::Interact_Implementation(AActor* Interactor)
 
 	BaseGameMode->Save();
 	
-	UDomiInGameHUDWidget* InGameHUDWidget = PlayerController->GetInGameHUDWidget();
+	UNewInGameHUDWidget* InGameHUDWidget = PlayerController->GetInGameHUDWidget();
 
 	// 균열 이동
 	if (InGameHUDWidget)
 	{
-		InGameHUDWidget->OnShowCrackMenuWidget();
+		InGameHUDWidget->ActivateCrackMenuUI();
 	}
 
 	// 레벨업

@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UI/RenewalUI/NewMenuWidget.h"
+#include "Blueprint/UserWidget.h"
 #include "NewItemWidget.generated.h"
 
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewItemWidget : public UNewMenuWidget
+class DOMINIONPROTOCOL_API UNewItemWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	

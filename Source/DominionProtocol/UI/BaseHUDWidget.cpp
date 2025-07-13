@@ -202,6 +202,8 @@ void UBaseHUDWidget::NativeConstruct()
 	}
 
 	ensureMsgf(RootCanvasPanel, TEXT("RootCanvasPanel Not Connected"));
+
+	BindTopUIChangeDelegate();
 }
 
 void UBaseHUDWidget::ChangeMappingContext(UUserWidget* NewTopUI) const

@@ -12,7 +12,7 @@
 #include "Components/ItemComponent/ItemComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/InGameController.h"
-#include "UI/UIInGame/DomiInGameHUDWidget.h"
+#include "UI/UIInGame/NewInGameHUDWidget.h"
 
 UPlayerControlState::UPlayerControlState()
 {

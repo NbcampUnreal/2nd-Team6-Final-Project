@@ -6,11 +6,11 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Util/DevCheatManager.h"
-#include "UI/UIInGame/DomiInGameHUDWidget.h"
+#include "UI/UIInGame/NewInGameHUDWidget.h"
 
 AInGameController::AInGameController()
 {
-	static ConstructorHelpers::FClassFinder<UDomiInGameHUDWidget> InGameHUDWidgetRef (TEXT("/Game/Blueprints/UI/WBP_DomiInGameHUDWidget.WBP_DomiInGameHUDWidget_C"));
+	static ConstructorHelpers::FClassFinder<UNewInGameHUDWidget> InGameHUDWidgetRef (TEXT("/Game/Blueprints/UI/WBP_DomiInGameHUDWidget.WBP_DomiInGameHUDWidget_C"));
 	if (InGameHUDWidgetRef.Class)
 	{
 		InGameHUDWidgetClass = InGameHUDWidgetRef.Class;	
@@ -30,7 +30,7 @@ void AInGameController::CreateAndAddHUDWidget()
 {
 	Super::CreateAndAddHUDWidget();
 	
-	InGameHUDWidgetInstance = CreateWidget<UDomiInGameHUDWidget>(this, InGameHUDWidgetClass);
+	InGameHUDWidgetInstance = CreateWidget<UNewInGameHUDWidget>(this, InGameHUDWidgetClass);
 
 	if (InGameHUDWidgetInstance)
 	{
