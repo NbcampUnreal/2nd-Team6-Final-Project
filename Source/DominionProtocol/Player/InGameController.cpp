@@ -68,7 +68,8 @@ void AInGameController::BindInputActions()
 	auto* EnhancedInputComp = Cast<UEnhancedInputComponent>(InputComponent);
 	check(EnhancedInputComp);
 
-	HelperBindInputAction(EnhancedInputComp, InputSwitchMainMenuUIActivation, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnSwitchMainMenuUIActivation));
+	HelperBindInputAction(EnhancedInputComp, InputMainMenuUIActivateAction, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnMainMenuUIActivateAction));
+	HelperBindInputAction(EnhancedInputComp, InputMainMenuUIDeactivateAction, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnMainMenuUIDeactivateAction));
 	HelperBindInputAction(EnhancedInputComp, InputMainMenuUIMoveSelectionLeft, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnMainMenuUIMoveSelectionLeft));
 	HelperBindInputAction(EnhancedInputComp, InputMainMenuUIMoveSelectionRight, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnMainMenuUIMoveSelectionRight));
 	HelperBindInputAction(EnhancedInputComp, InputEquipmentUIMoveSelectionUp, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnEquipmentUIMoveSelectionUp));
@@ -89,6 +90,8 @@ void AInGameController::BindInputActions()
 	HelperBindInputAction(EnhancedInputComp, InputSettingUIConfirmSelectionAction, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnSettingUIConfirmSelectionAction));
 	HelperBindInputAction(EnhancedInputComp, InputDialogueUIChangeStoryStateNext, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnDialogueUIChangeStoryStateNext));
 	HelperBindInputAction(EnhancedInputComp, InputCrackMenuUIBackToCrackMenu, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnCrackMenuUIBackToCrackMenu));
+	HelperBindInputAction(EnhancedInputComp, InputCrackMenuUIMoveSelectionUp, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnCrackMenuUIMoveSelectionUp));
+	HelperBindInputAction(EnhancedInputComp, InputCrackMenuUIMoveSelectionDown, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnCrackMenuUIMoveSelectionDown));
 	HelperBindInputAction(EnhancedInputComp, InputAbilityEnforceUISaveChanges, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnAbilityEnforceUISaveChanges));
 	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUISelectionUp, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionUp));
 	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUISelectionDown, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionDown));
@@ -99,9 +102,14 @@ void AInGameController::BindInputActions()
 	
 }
 
-void AInGameController::OnSwitchMainMenuUIActivation() const
+void AInGameController::OnMainMenuUIActivateAction() const
 {
-	OnSwitchMainMenuUIActivationEvent.Broadcast();
+	OnMainMenuUIActivateActionEvent.Broadcast();
+}
+
+void AInGameController::OnMainMenuUIDeactivateAction() const
+{
+	OnMainMenuUIDeactivateActionEvent.Broadcast();
 }
 
 void AInGameController::OnMainMenuUIMoveSelectionLeft() const
@@ -202,6 +210,16 @@ void AInGameController::OnDialogueUIChangeStoryStateNext() const
 void AInGameController::OnCrackMenuUIBackToCrackMenu() const
 {
 	OnCrackMenuUIBackToCrackMenuEvent.Broadcast();
+}
+
+void AInGameController::OnCrackMenuUIMoveSelectionUp() const
+{
+	OnCrackMenuUIMoveSelectionUpEvent.Broadcast();
+}
+
+void AInGameController::OnCrackMenuUIMoveSelectionDown() const
+{
+	OnCrackMenuUIMoveSelectionDownEvent.Broadcast();
 }
 
 void AInGameController::OnAbilityEnforceUISaveChanges() const

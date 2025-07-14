@@ -3,10 +3,10 @@
 
 #include "UI/UITitle/NewSaveSlotBoxUI.h"
 
-#include "NewSaveSlot.h"
 #include "Components/VerticalBox.h"
 #include "DomiFramework/GameInstance/SaveManagerSubsystem.h"
 #include "Player/TitleController.h"
+#include "UI/BaseContent.h"
 
 UInputMappingContext* UNewSaveSlotBoxUI::GetInputMappingContext_Implementation() const
 {
@@ -17,69 +17,33 @@ void UNewSaveSlotBoxUI::RefreshSlotData(const ESlateVisibility VisibilityState)
 {
 	if (VisibilityState == ESlateVisibility::Visible)
 	{
-		for (UNewSaveSlot* SaveSlot : SaveSlots)
+		for (UBaseContent* Content : ContentArray)
 		{
-			SaveSlot->SetSaveSlotInfo();
+			Content->SetInfo();
 		}	
 	}
 }
 
 void UNewSaveSlotBoxUI::OnMoveSelectionUp()
 {
-	DecreaseSaveSlotBoxFocusIndex();
+	DecreaseFocusIndex();
 }
 
 void UNewSaveSlotBoxUI::OnMoveSelectionDown()
 {
-	IncreaseSaveSlotBoxFocusIndex();
-}
-
-void UNewSaveSlotBoxUI::ChangeSaveSlotBoxFocusIndex(const int32 NewFocusIndex)
-{
-	for (int32 i = 0; i < SaveSlots.Num(); i++)
-	{
-		if (i == NewFocusIndex)
-		{
-			SaveSlots[i]->GetFocus();
-			CurrentSaveSlotBoxFocusIndex = NewFocusIndex;
-		}
-		else
-		{
-			SaveSlots[i]->LoseFocus();
-		}
-	}
-}
-
-void UNewSaveSlotBoxUI::IncreaseSaveSlotBoxFocusIndex()
-{
-	if (CurrentSaveSlotBoxFocusIndex >= MaxSaveSlotBoxFocusIndex)
-	{
-		return;
-	}
-
-	ChangeSaveSlotBoxFocusIndex(CurrentSaveSlotBoxFocusIndex + 1);
-}
-
-void UNewSaveSlotBoxUI::DecreaseSaveSlotBoxFocusIndex()
-{
-	if (CurrentSaveSlotBoxFocusIndex <= 0)
-	{
-		return;
-	}
-
-	ChangeSaveSlotBoxFocusIndex(CurrentSaveSlotBoxFocusIndex - 1);
+	IncreaseFocusIndex();
 }
 
 void UNewSaveSlotBoxUI::StartGame() const
 {
 	// SlotIndex는 위젯에서 설정
-	if (CurrentSaveSlotBoxFocusIndex != -1)
+	if (CurrentFocusIndex != -1)
 	{
 		auto* TitleController = Cast<ATitleController>(GetOwningPlayer());
 		check(TitleController);
 		TitleController->FadeOut();
 
-		int32 SlotIndexToUseTimer = CurrentSaveSlotBoxFocusIndex;
+		int32 SlotIndexToUseTimer = CurrentFocusIndex;
 		
 		FTimerHandle FadeTimerHandle;
 		TWeakObjectPtr WeakThis = this;
@@ -101,13 +65,13 @@ void UNewSaveSlotBoxUI::StartGame() const
 
 void UNewSaveSlotBoxUI::LoadGame() const
 {
-	if (CurrentSaveSlotBoxFocusIndex != -1)
+	if (CurrentFocusIndex != -1)
 	{
 		auto* TitleController = Cast<ATitleController>(GetOwningPlayer());
 		check(TitleController);
 		TitleController->FadeOut();
 
-		int32 SlotIndexToUseTimer = CurrentSaveSlotBoxFocusIndex;
+		int32 SlotIndexToUseTimer = CurrentFocusIndex;
 
 		FTimerHandle FadeTimerHandle;
 		TWeakObjectPtr WeakThis = this;
@@ -129,9 +93,9 @@ void UNewSaveSlotBoxUI::LoadGame() const
 
 void UNewSaveSlotBoxUI::DeleteGame()
 {
-	if (CurrentSaveSlotBoxFocusIndex != -1)
+	if (CurrentFocusIndex != -1)
 	{
-		SaveManagerSubsystemInstance->DeleteSaveSlot(CurrentSaveSlotBoxFocusIndex);
+		SaveManagerSubsystemInstance->DeleteSaveSlot(CurrentFocusIndex);
 		RefreshSlotData(ESlateVisibility::Visible);
 	}
 }
@@ -149,22 +113,6 @@ void UNewSaveSlotBoxUI::NativeConstruct()
 	{
 		SaveManagerSubsystemInstance = SaveManagerSubsystem;
 	}
-
-	const TArray<UWidget*> SlotArray = SaveSlotBox->GetAllChildren();
-	if (SlotArray.Num() > 0)
-	{
-		for (int32 i = 0; i < SlotArray.Num(); i++)
-		{
-			auto* SaveSlot = Cast<UNewSaveSlot>(SlotArray[i]);
-			if (SaveSlot)
-			{
-				SaveSlot->SetSaveSlotIndex(i);
-				SaveSlots.AddUnique(SaveSlot);
-			}
-		}
-	}
-	MaxSaveSlotBoxFocusIndex = SaveSlots.Num()-1;
-	CurrentSaveSlotBoxFocusIndex = 0;
 	
 	BindInputActionDelegates();
 
@@ -176,10 +124,10 @@ void UNewSaveSlotBoxUI::BindInputActionDelegates()
 	auto* TitleController = Cast<ATitleController>(GetOwningPlayer());
 	if (TitleController)
 	{
-		TitleController->OnSlotUIStartGame.AddUObject(this, &UNewSaveSlotBoxUI::OnStartGame);
-		TitleController->OnSlotUIDeleteGame.AddUObject(this, &UNewSaveSlotBoxUI::OnDeleteGame);
-		TitleController->OnSlotUIBackToTitleMenu.AddUObject(this, &UNewSaveSlotBoxUI::OnBackToTitleMenu);
-		TitleController->OnSlotUIMoveSelectionUp.AddUObject(this, &UNewSaveSlotBoxUI::OnMoveSelectionUp);
-		TitleController->OnSlotUIMoveSelectionDown.AddUObject(this, &UNewSaveSlotBoxUI::OnMoveSelectionDown);
+		TitleController->OnSlotUIStartGameEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnStartGame);
+		TitleController->OnSlotUIDeleteGameEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnDeleteGame);
+		TitleController->OnSlotUIBackToTitleMenuEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnBackToTitleMenu);
+		TitleController->OnSlotUIMoveSelectionUpEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnMoveSelectionUp);
+		TitleController->OnSlotUIMoveSelectionDownEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnMoveSelectionDown);
 	}
 }

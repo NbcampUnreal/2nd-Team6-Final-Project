@@ -8,15 +8,17 @@
 #include "DomiFramework/GameInstance/SaveManagerSubsystem.h"
 #include "EnumAndStruct/FCrackImageData.h"
 
-void UNewSaveSlot::SetSaveSlotInfo()
+void UNewSaveSlot::SetInfo()
 {
+	Super::SetInfo();
+
 	const TArray<FSaveSlotMetaData> SaveSlotArray = SaveManagerSubsystemInstance->GetSaveSlotArray();
-	if (!SaveSlotArray.IsValidIndex(SaveSlotIndex))
+	if (!SaveSlotArray.IsValidIndex(ContentIndex))
 	{
 		return;
 	}
 	
-	const FSaveSlotMetaData SaveSlotMetaData = SaveSlotArray[SaveSlotIndex];
+	const FSaveSlotMetaData SaveSlotMetaData = SaveSlotArray[ContentIndex];
 	if (SaveSlotMetaData.SaveSlotExist)
 	{
 		ExistSaveSlotData = SaveSlotMetaData.SaveSlotExist;
@@ -75,12 +77,11 @@ void UNewSaveSlot::SetSaveSlotInfo()
 	}
 	else
 	{
-		SetSaveSlotEmpty();
+		SetInfoEmpty();
 	}
-	
 }
 
-void UNewSaveSlot::SetSaveSlotEmpty()
+void UNewSaveSlot::SetInfoEmpty()
 {
 	ExistSaveSlotData = false;
 	CrackMapImage->SetBrushFromTexture(nullptr);
@@ -90,16 +91,6 @@ void UNewSaveSlot::SetSaveSlotEmpty()
 	CurrentLevelName->SetText(FText::FromString(TEXT("-")));
 	CurrentCrackName->SetText(FText::FromString(TEXT("-")));
 	PlayerLevel->SetText(FText::FromString(TEXT("")));
-}
-
-void UNewSaveSlot::GetFocus()
-{
-	GetFocusEffect();
-}
-
-void UNewSaveSlot::LoseFocus()
-{
-	LoseFocusEffect();
 }
 
 void UNewSaveSlot::NativeConstruct()

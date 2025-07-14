@@ -11,6 +11,7 @@ class AHelper;
 class UDataTable;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnUpdateDialogueText, FText)
+DECLARE_MULTICAST_DELEGATE(FOnActivateDialogueUIEvent)
 
 UCLASS()
 class DOMINIONPROTOCOL_API UDialogueManager : public UObject
@@ -19,6 +20,8 @@ class DOMINIONPROTOCOL_API UDialogueManager : public UObject
 	
 public:
     FOnUpdateDialogueText OnUpdateDialogueText;
+	FOnActivateDialogueUIEvent OnActivateDialogueUIEvent;
+	
 	UDataTable* LoadDialogueDataTable(const FString& Path);
 	bool TryStartDialogueIfExists(EGameStoryState InState, const FVector& CrackLocation, const FRotator& CrackRotation);
 	bool TryStartDialogueByID(const FString& DialogueID, AActor* TalkActor = nullptr);

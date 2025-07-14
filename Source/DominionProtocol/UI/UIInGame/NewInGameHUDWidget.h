@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UI/BaseHUDWidget.h"
+#include "WorldObjects/DialogueManager.h"
 #include "NewInGameHUDWidget.generated.h"
 
 class AInGameController;
@@ -31,7 +32,7 @@ public:
 	UFUNCTION()
 	void ActivateMainMenuUI();
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void DeactivateMainMenuUI();
 
 	UFUNCTION()
@@ -40,14 +41,17 @@ public:
 	UFUNCTION()
 	void DeactivateDialogueUI();
 
-	// UFUNCTION()
-	// void ShowAllDisplay();
-	//
-	// UFUNCTION()
-	// void HideAllDisplay();
-
 protected:
 	virtual void NativeConstruct() override;
+	
+	template<typename T>
+	void BindDialogueSources();
+	
+	void BindInputActionDelegates();
+	void BindCreateDialogueDelegate();
+	void BindActivateDialogueDelegate(UDialogueManager* DialogueManager);
+	void BindDialogueTypingFinishedDelegate();
+	void BindAlertDisplayFinishedDelegate();
 
 protected:
 

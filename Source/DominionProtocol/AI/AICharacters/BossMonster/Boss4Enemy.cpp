@@ -7,7 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Player/Characters/DomiCharacter.h"
 #include "WorldObjects/DialogueManager.h"
-#include "UI/UIInGame/NewDialogueWidget.h"
+#include "UI/UIInGame/NewDialogueUI.h"
 #include "Materials/MaterialParameterCollectionInstance.h"
 
 ABoss4Enemy::ABoss4Enemy()

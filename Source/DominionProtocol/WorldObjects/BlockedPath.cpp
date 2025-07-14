@@ -5,7 +5,7 @@
 #include "Player/Characters/DomiCharacter.h"
 #include "Components/ItemComponent/ItemComponent.h"
 #include "WorldObjects/DialogueManager.h"
-#include "UI/UIInGame/NewDialogueWidget.h"
+#include "UI/UIInGame/NewDialogueUI.h"
 #include "Util/DebugHelper.h"
 
 ABlockedPath::ABlockedPath()

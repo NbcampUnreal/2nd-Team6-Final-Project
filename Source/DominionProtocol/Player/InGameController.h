@@ -8,7 +8,8 @@
 
 #pragma region ForwardDeclaration
 
-DECLARE_MULTICAST_DELEGATE(FOnSwitchMainMenuUIActivationEvent);
+DECLARE_MULTICAST_DELEGATE(FOnMainMenuUIActivateActionEvent);
+DECLARE_MULTICAST_DELEGATE(FOnMainMenuUIDeactivateActionEvent);
 DECLARE_MULTICAST_DELEGATE(FOnMainMenuUIMoveSelectionLeftEvent);
 DECLARE_MULTICAST_DELEGATE(FOnMainMenuUIMoveSelectionRightEvent);
 DECLARE_MULTICAST_DELEGATE(FOnEquipmentUIMoveSelectionUpEvent);
@@ -29,6 +30,8 @@ DECLARE_MULTICAST_DELEGATE(FOnSettingUIMoveSelectionRightEvent);
 DECLARE_MULTICAST_DELEGATE(FOnSettingUIConfirmSelectionActionEvent);
 DECLARE_MULTICAST_DELEGATE(FOnDialogueUIChangeStoryStateNextEvent);
 DECLARE_MULTICAST_DELEGATE(FOnCrackMenuUIBackToCrackMenuEvent);
+DECLARE_MULTICAST_DELEGATE(FOnCrackMenuUIMoveSelectionUpEvent);
+DECLARE_MULTICAST_DELEGATE(FOnCrackMenuUIMoveSelectionDownEvent);
 DECLARE_MULTICAST_DELEGATE(FOnAbilityEnforceUISaveChangesEvent);
 DECLARE_MULTICAST_DELEGATE(FOnTeleportSubUISelectionUpEvent);
 DECLARE_MULTICAST_DELEGATE(FOnTeleportSubUISelectionDownEvent);
@@ -50,7 +53,8 @@ public:
 
 #pragma region DelegateEvent
 	
-	FOnSwitchMainMenuUIActivationEvent OnSwitchMainMenuUIActivationEvent;
+	FOnMainMenuUIActivateActionEvent OnMainMenuUIActivateActionEvent;
+	FOnMainMenuUIDeactivateActionEvent OnMainMenuUIDeactivateActionEvent;
 	FOnMainMenuUIMoveSelectionLeftEvent OnMainMenuUIMoveSelectionLeftEvent;
 	FOnMainMenuUIMoveSelectionRightEvent OnMainMenuUIMoveSelectionRightEvent;
 	FOnEquipmentUIMoveSelectionUpEvent OnEquipmentUIMoveSelectionUpEvent;
@@ -71,6 +75,8 @@ public:
 	FOnSettingUIConfirmSelectionActionEvent OnSettingUIConfirmSelectionActionEvent;
 	FOnDialogueUIChangeStoryStateNextEvent OnDialogueUIChangeStoryStateNextEvent;
 	FOnCrackMenuUIBackToCrackMenuEvent OnCrackMenuUIBackToCrackMenuEvent;
+	FOnCrackMenuUIMoveSelectionUpEvent OnCrackMenuUIMoveSelectionUpEvent;
+	FOnCrackMenuUIMoveSelectionDownEvent OnCrackMenuUIMoveSelectionDownEvent;
 	FOnAbilityEnforceUISaveChangesEvent OnAbilityEnforceUISaveChangesEvent;
 	FOnTeleportSubUISelectionUpEvent OnTeleportSubUISelectionUpEvent;
 	FOnTeleportSubUISelectionDownEvent OnTeleportSubUISelectionDownEvent;
@@ -103,7 +109,10 @@ protected:
 #pragma region InputBindingFunction
 	
 	UFUNCTION()
-	void OnSwitchMainMenuUIActivation() const;
+	void OnMainMenuUIActivateAction() const;
+
+	UFUNCTION()
+	void OnMainMenuUIDeactivateAction() const;
 	
 	UFUNCTION()
 	void OnMainMenuUIMoveSelectionLeft() const;
@@ -164,6 +173,12 @@ protected:
 	
 	UFUNCTION()
 	void OnCrackMenuUIBackToCrackMenu() const;
+
+	UFUNCTION()
+	void OnCrackMenuUIMoveSelectionUp() const;
+
+	UFUNCTION()
+	void OnCrackMenuUIMoveSelectionDown() const;
 	
 	UFUNCTION()
 	void OnAbilityEnforceUISaveChanges() const;
@@ -232,12 +247,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> SwapWeapon;
-	
+
+	// Widget Control
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InteractionScroll;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InteractAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputMainMenuUIActivateAction;
 	
 #pragma endregion
 	
@@ -245,7 +264,7 @@ public:
 
 	// MainMenuUI Common Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> InputSwitchMainMenuUIActivation;
+	TObjectPtr<UInputAction> InputMainMenuUIDeactivateAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InputMainMenuUIMoveSelectionLeft;
@@ -316,6 +335,12 @@ public:
 	// CrackMenuUI Common Input Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InputCrackMenuUIBackToCrackMenu;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputCrackMenuUIMoveSelectionUp;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputCrackMenuUIMoveSelectionDown;
 
 	// AbilityEnforceSubUI InputAction
 

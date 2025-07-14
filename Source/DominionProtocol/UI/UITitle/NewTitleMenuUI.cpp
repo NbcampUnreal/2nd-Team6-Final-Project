@@ -94,8 +94,8 @@ void UNewTitleMenuUI::BindInputActionDelegates()
 	auto* TitleController = Cast<ATitleController>(GetOwningPlayer());
 	if (TitleController)
 	{
-		TitleController->OnMenuUIMoveSelectionUp.AddUObject(this, &UNewTitleMenuUI::OnMoveSelectionUp);
-		TitleController->OnMenuUIMoveSelectionDown.AddUObject(this, &UNewTitleMenuUI::OnMoveSelectionDown);
-		TitleController->OnMenuUIConfirmSelection.AddUObject(this, &UNewTitleMenuUI::OnConfirmSelection);
+		TitleController->OnMenuUIMoveSelectionUpEvent.AddUObject(this, &UNewTitleMenuUI::OnMoveSelectionUp);
+		TitleController->OnMenuUIMoveSelectionDownEvent.AddUObject(this, &UNewTitleMenuUI::OnMoveSelectionDown);
+		TitleController->OnMenuUIConfirmSelectionEvent.AddUObject(this, &UNewTitleMenuUI::OnConfirmSelection);
 	}
 }

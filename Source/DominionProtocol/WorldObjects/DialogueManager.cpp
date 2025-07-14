@@ -160,6 +160,7 @@ void UDialogueManager::ExecuteDialogueLine()
 		Debug::Print(Line->DialogueText.ToString()); // 대사
 		CurrentDialogueString = Line->DialogueText.ToString();
 		OnUpdateDialogueText.Broadcast(FText::FromString(CurrentDialogueString)); // 대사 델리게이트
+		OnActivateDialogueUIEvent.Broadcast();
 	}
 }
 

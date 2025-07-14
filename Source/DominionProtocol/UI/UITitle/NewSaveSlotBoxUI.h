@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
 #include "Interface/UIInterface.h"
+#include "UI/BaseContentContainer.h"
 #include "NewSaveSlotBoxUI.generated.h"
 
 class UVerticalBox;
@@ -12,7 +12,7 @@ class UNewSaveSlot;
 class USaveManagerSubsystem;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewSaveSlotBoxUI : public UUserWidget, public IUIInterface
+class DOMINIONPROTOCOL_API UNewSaveSlotBoxUI : public UBaseContentContainer, public IUIInterface
 {
 	GENERATED_BODY()
 
@@ -42,15 +42,6 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void ChangeSaveSlotBoxFocusIndex(const int32 NewFocusIndex);
-
-	UFUNCTION(BlueprintCallable)
-	void IncreaseSaveSlotBoxFocusIndex();
-
-	UFUNCTION(BlueprintCallable)
-	void DecreaseSaveSlotBoxFocusIndex();
-	
-	UFUNCTION(BlueprintCallable)
 	void StartGame() const;
 	
 	UFUNCTION(BlueprintCallable)
@@ -67,18 +58,6 @@ protected:
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<USaveManagerSubsystem> SaveManagerSubsystemInstance;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UVerticalBox> SaveSlotBox;
-
-	UPROPERTY(BlueprintReadOnly)
-	TArray<TObjectPtr<UNewSaveSlot>> SaveSlots;
-	
-	UPROPERTY(BlueprintReadWrite)
-	int32 CurrentSaveSlotBoxFocusIndex = -1;
-
-	UPROPERTY()
-	int32 MaxSaveSlotBoxFocusIndex = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputMappingContext> TitleSlotUIMappingContext;

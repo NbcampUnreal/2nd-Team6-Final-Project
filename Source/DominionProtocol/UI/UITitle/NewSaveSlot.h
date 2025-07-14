@@ -3,37 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/BaseContent.h"
 #include "NewSaveSlot.generated.h"
 
 class UImage;
 class UTextBlock;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewSaveSlot : public UUserWidget
+class DOMINIONPROTOCOL_API UNewSaveSlot : public UBaseContent
 {
 	GENERATED_BODY()
 
 public:
-	void SetSaveSlotIndex(const int32 NewSaveSlotIndex) { SaveSlotIndex = NewSaveSlotIndex; }
-	
-	void SetSaveSlotInfo();
+	virtual void SetInfo() override;
 
-	UFUNCTION(BlueprintCallable)
-	void SetSaveSlotEmpty();
-
-	void GetFocus();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void GetFocusEffect();
-
-	UFUNCTION(BlueprintCallable)
-	void LoseFocus();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void LoseFocusEffect();
-
-	int32 GetSaveSlotIndex() const { return SaveSlotIndex; }
+	virtual void SetInfoEmpty() override;
 
 protected:
 	virtual void NativeConstruct() override;
@@ -47,9 +31,6 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<class USaveManagerSubsystem> SaveManagerSubsystemInstance;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 SaveSlotIndex = -1;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UImage> CrackMapImage;
