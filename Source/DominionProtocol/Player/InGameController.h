@@ -343,29 +343,26 @@ public:
 	TObjectPtr<UInputAction> InputCrackMenuUIMoveSelectionDown;
 
 	// AbilityEnforceSubUI InputAction
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InputAbilityEnforceUISaveChanges;
 
 	// TeleportCrackSubUI InputAction
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InputTeleportSubUIMoveSelectionUp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> InputTeleportSubUISelectionUp;
+	TObjectPtr<UInputAction> InputTeleportSubUIMoveSelectionDown;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> InputTeleportSubUISelectionDown;
+	TObjectPtr<UInputAction> InputTeleportSubUIMoveSelectionLeft;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> InputTeleportSubUISelectionLeft;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> InputTeleportSubUISelectionRight;
+	TObjectPtr<UInputAction> InputTeleportSubUIMoveSelectionRight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InputTeleportSubUIConfirmSelectionAction;
 
 	// PotionEnforceSubUI InputAction
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InputPotionEnforceUIEnforceConfirm;
 	

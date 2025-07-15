@@ -18,12 +18,6 @@ class DOMINIONPROTOCOL_API UNewInGameHUDWidget : public UBaseHUDWidget
 
 public:
 	UFUNCTION()
-	void ActivateAlertUI();
-
-	UFUNCTION()
-	void DeactivateAlertUI();
-	
-	UFUNCTION()
 	void ActivateCrackMenuUI();
 
 	UFUNCTION()
@@ -51,7 +45,6 @@ protected:
 	void BindCreateDialogueDelegate();
 	void BindActivateDialogueDelegate(UDialogueManager* DialogueManager);
 	void BindDialogueTypingFinishedDelegate();
-	void BindAlertDisplayFinishedDelegate();
 
 protected:
 
@@ -74,14 +67,13 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UUserWidget> LockOnDisplay;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UUserWidget> AlertDisplay;
 
 #pragma endregion
 
 #pragma region UI
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UUserWidget> AlertUI;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UUserWidget> CrackMenuUI;
 

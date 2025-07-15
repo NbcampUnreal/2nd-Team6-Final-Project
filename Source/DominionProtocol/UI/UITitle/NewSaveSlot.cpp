@@ -12,6 +12,11 @@ void UNewSaveSlot::SetInfo()
 {
 	Super::SetInfo();
 
+	if (!SaveManagerSubsystemInstance)
+	{
+		return; 
+	}
+	
 	const TArray<FSaveSlotMetaData> SaveSlotArray = SaveManagerSubsystemInstance->GetSaveSlotArray();
 	if (!SaveSlotArray.IsValidIndex(ContentIndex))
 	{
@@ -93,10 +98,22 @@ void UNewSaveSlot::SetInfoEmpty()
 	PlayerLevel->SetText(FText::FromString(TEXT("")));
 }
 
+void UNewSaveSlot::GetFocus()
+{
+	Super::GetFocus();
+
+	GetFocusEffects();
+}
+
+void UNewSaveSlot::LoseFocus()
+{
+	Super::LoseFocus();
+
+	LoseFocusEffects();
+}
+
 void UNewSaveSlot::NativeConstruct()
 {
-	Super::NativeConstruct();
-
 	const auto* GameInstance = GetWorld()->GetGameInstance();
 	auto* SaveManagerSubsystem = GameInstance->GetSubsystem<USaveManagerSubsystem>();
 	
@@ -106,4 +123,7 @@ void UNewSaveSlot::NativeConstruct()
 	{
 		SaveManagerSubsystemInstance = SaveManagerSubsystem;
 	}
+
+	// SetInfo 가 포함 된 Super 함수는 마지막에 위치
+	Super::NativeConstruct();
 }

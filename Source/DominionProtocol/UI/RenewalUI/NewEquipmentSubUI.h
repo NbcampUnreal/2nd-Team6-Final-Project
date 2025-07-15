@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "NewEquipmentSubUI.generated.h"
 
+class UItemComponent;
+class UStatusComponent;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewEquipmentSubUI : public UUserWidget
@@ -15,6 +17,7 @@ class DOMINIONPROTOCOL_API UNewEquipmentSubUI : public UUserWidget
 
 protected:
 	virtual void NativeConstruct() override;
+	
 	void BindEquippedSlotsDelegates();
 
 	UFUNCTION()
@@ -25,8 +28,8 @@ protected:
 	
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<class UItemComponent> ItemComponent;
+	TObjectPtr<UItemComponent> ItemComponent;
 
 	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<class UStatusComponent> StatusComponent;
+	TObjectPtr<UStatusComponent> StatusComponent;
 };

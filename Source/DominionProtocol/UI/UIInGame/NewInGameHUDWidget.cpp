@@ -3,7 +3,7 @@
 
 #include "NewInGameHUDWidget.h"
 
-#include "NewAlertUI.h"
+#include "NewAlertDisplay.h"
 #include "NewDialogueUI.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/InGameController.h"
@@ -13,16 +13,6 @@
 #include "WorldObjects/Crack.h"
 #include "WorldObjects/BossSpawner.h"
 
-
-void UNewInGameHUDWidget::ActivateAlertUI()
-{
-	PushUI(AlertUI);
-}
-
-void UNewInGameHUDWidget::DeactivateAlertUI()
-{
-	PopSpecificUI(AlertUI);
-}
 
 void UNewInGameHUDWidget::ActivateCrackMenuUI()
 {
@@ -64,7 +54,7 @@ void UNewInGameHUDWidget::NativeConstruct()
 	ensureMsgf(EventBoxDisplay, TEXT("EventBoxDisplay is Null"));
 	ensureMsgf(BossMonsterHPBarDisplay, TEXT("BossMonsterHPBarDisplay is Null"));
 	ensureMsgf(LockOnDisplay, TEXT("LockOnDisplay is Null"));
-	ensureMsgf(AlertUI, TEXT("AlertUI is Null"));
+	ensureMsgf(AlertDisplay, TEXT("AlertDisplay is Null"));
 	ensureMsgf(CrackMenuUI, TEXT("CrackMenuUI is Null"));
 	ensureMsgf(MainMenuUI, TEXT("MainMenuUI is Null"));
 	ensureMsgf(DialogueUI, TEXT("DialogueUI is Null"));
@@ -72,7 +62,6 @@ void UNewInGameHUDWidget::NativeConstruct()
 	BindInputActionDelegates();
 	BindCreateDialogueDelegate();
 	BindDialogueTypingFinishedDelegate();
-	BindAlertDisplayFinishedDelegate();
 }
 
 void UNewInGameHUDWidget::BindInputActionDelegates()
@@ -122,18 +111,6 @@ void UNewInGameHUDWidget::BindDialogueTypingFinishedDelegate()
 		if (NewDialogueUI)
 		{
 			NewDialogueUI->OnDialogueTypingFinishedEvent.AddUObject(this, &UNewInGameHUDWidget::DeactivateDialogueUI);
-		}
-	}
-}
-
-void UNewInGameHUDWidget::BindAlertDisplayFinishedDelegate()
-{
-	if (AlertUI)
-	{
-		auto* NewAlertUI = Cast<UNewAlertUI>(AlertUI);
-		if (NewAlertUI)
-		{
-			NewAlertUI->OnAlertDisplayFinishedEvent.AddUObject(this, &UNewInGameHUDWidget::DeactivateAlertUI);
 		}
 	}
 }

@@ -8,6 +8,7 @@
 
 class UImage;
 class UTextBlock;
+class USaveManagerSubsystem;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewSaveSlot : public UBaseContent
@@ -19,6 +20,16 @@ public:
 
 	virtual void SetInfoEmpty() override;
 
+	virtual void GetFocus() override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void GetFocusEffects();
+
+	virtual void LoseFocus() override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void LoseFocusEffects();
+
 protected:
 	virtual void NativeConstruct() override;
 
@@ -28,9 +39,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UDataTable> PresentCrackImageDataTable;
-	
+
 	UPROPERTY()
-	TObjectPtr<class USaveManagerSubsystem> SaveManagerSubsystemInstance;
+	TObjectPtr<USaveManagerSubsystem> SaveManagerSubsystemInstance;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UImage> CrackMapImage;

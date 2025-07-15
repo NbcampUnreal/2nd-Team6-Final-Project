@@ -113,6 +113,8 @@ void UNewSaveSlotBoxUI::NativeConstruct()
 	{
 		SaveManagerSubsystemInstance = SaveManagerSubsystem;
 	}
+
+	
 	
 	BindInputActionDelegates();
 

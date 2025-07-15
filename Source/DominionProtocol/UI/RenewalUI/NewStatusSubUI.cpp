@@ -6,6 +6,24 @@
 #include "DomiFramework/GameInstance/DomiGameInstance.h"
 #include "Components/StatusComponent/StatusComponent.h"
 
+void UNewStatusSubUI::RefreshStatusInfo(const ESlateVisibility NewVisibility)
+{
+	if (ESlateVisibility::Visible == NewVisibility)
+	{
+		UpdateStatusInfoEvent();
+	}
+}
+
+UInputMappingContext* UNewStatusSubUI::GetInputMappingContext_Implementation() const
+{
+	if (!StatusSubUIMappingContext)
+	{
+		return nullptr;	
+	}
+	
+	return StatusSubUIMappingContext;
+}
+
 void UNewStatusSubUI::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -21,4 +39,6 @@ void UNewStatusSubUI::NativeConstruct()
 	{
 		StatusComponent = PlayerStatusComponent;
 	}
+
+	OnVisibilityChanged.AddDynamic(this, &UNewStatusSubUI::RefreshStatusInfo);
 }

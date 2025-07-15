@@ -93,10 +93,10 @@ void AInGameController::BindInputActions()
 	HelperBindInputAction(EnhancedInputComp, InputCrackMenuUIMoveSelectionUp, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnCrackMenuUIMoveSelectionUp));
 	HelperBindInputAction(EnhancedInputComp, InputCrackMenuUIMoveSelectionDown, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnCrackMenuUIMoveSelectionDown));
 	HelperBindInputAction(EnhancedInputComp, InputAbilityEnforceUISaveChanges, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnAbilityEnforceUISaveChanges));
-	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUISelectionUp, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionUp));
-	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUISelectionDown, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionDown));
-	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUISelectionLeft, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionLeft));
-	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUISelectionRight, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionRight));
+	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUIMoveSelectionUp, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionUp));
+	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUIMoveSelectionDown, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionDown));
+	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUIMoveSelectionLeft, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionLeft));
+	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUIMoveSelectionRight, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUISelectionRight));
 	HelperBindInputAction(EnhancedInputComp, InputTeleportSubUIConfirmSelectionAction, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnTeleportSubUIConfirmSelectionAction));
 	HelperBindInputAction(EnhancedInputComp, InputPotionEnforceUIEnforceConfirm, ETriggerEvent::Started, GET_FUNCTION_NAME_CHECKED(AInGameController, OnPotionEnforceUIEnforceConfirm));
 	

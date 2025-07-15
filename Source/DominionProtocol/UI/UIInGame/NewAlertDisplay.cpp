@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/UIInGame/NewAlertUI.h"
+#include "UI/UIInGame/NewAlertDisplay.h"
 
 #include "AI/AICharacters/BossMonster/BaseBossEnemy.h"
 #include "Components/TextBlock.h"
@@ -11,13 +11,14 @@
 #include "WorldObjects/Crack.h"
 #include "WorldObjects/DropEssence.h"
 
-void UNewAlertUI::OnShowPlayerDeathAlert() const
+void UNewAlertDisplay::OnShowPlayerDeathAlert()
 {
 	const FText AlertTextToText = FText::FromString(FString(TEXT("플레이어 사망"))); 
 	AlertText->SetText(AlertTextToText);
+	SetVisibility(ESlateVisibility::Visible);
 }
 
-void UNewAlertUI::OnShowBossKillAlert(AActor* DeadMonster) const
+void UNewAlertDisplay::OnShowBossKillAlert(AActor* DeadMonster) 
 {
 	FString MonsterName;
 	
@@ -45,12 +46,14 @@ void UNewAlertUI::OnShowBossKillAlert(AActor* DeadMonster) const
 	
 	const FText AlertTextToText = FText::FromString(FString::Printf(TEXT("%s 처치"), *MonsterName));
 	AlertText->SetText(AlertTextToText);
+	SetVisibility(ESlateVisibility::Visible);
 }
 
-void UNewAlertUI::OnShowEssenceRestoredAlert(const int32 NewEssenceAmount) const
+void UNewAlertDisplay::OnShowEssenceRestoredAlert(const int32 NewEssenceAmount) 
 {
 	const FText AlertTextToText = FText::FromString(FString::Printf(TEXT("균열 정수 %d 회복 "), NewEssenceAmount));
 	AlertText->SetText(AlertTextToText);
+	SetVisibility(ESlateVisibility::Visible);
 	
 	// 에센스 획득 후 델리게이트 핸들 삭제, 에센스 자체에 있는 델리게이트는 파괴시 삭제되지만 이 경우엔 명시적으로 삭제해주면 좋음
 	auto* InGameMode = Cast<ABaseGameMode>(GetWorld()->GetAuthGameMode());
@@ -60,43 +63,41 @@ void UNewAlertUI::OnShowEssenceRestoredAlert(const int32 NewEssenceAmount) const
 	}
 }
 
-void UNewAlertUI::OnShowCrackActivationAlert(const FText CrackName) const
+void UNewAlertDisplay::OnShowCrackActivationAlert(const FText CrackName) 
 {
 	const FText AlertTextToText = FText::FromString(FString::Printf(TEXT("균열 %s 활성화"), *CrackName.ToString()));
 	AlertText->SetText(AlertTextToText);
+	SetVisibility(ESlateVisibility::Visible);
 }
 
-void UNewAlertUI::StartAlertUIDeactivateTimer()
+void UNewAlertDisplay::StartAlertDisplayDeactivateTimer()
 {
 	if (GetWorld())
 	{
-		if (GetWorld()->GetTimerManager().IsTimerActive(AlertUIDeactivateTimer))
+		if (GetWorld()->GetTimerManager().IsTimerActive(AlertDisplayDeactivateTimer))
 		{
-			GetWorld()->GetTimerManager().ClearTimer(AlertUIDeactivateTimer);
+			GetWorld()->GetTimerManager().ClearTimer(AlertDisplayDeactivateTimer);
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(
-			AlertUIDeactivateTimer,
-			this,
-			&UNewAlertUI::DeactivateAlertUIEvent,
+			AlertDisplayDeactivateTimer,
+			[this]()
+			{
+				SetVisibility(ESlateVisibility::Collapsed);	
+			},
 			4.f,
 			false);
 	}
 }
 
-void UNewAlertUI::DeactivateAlertUIEvent() const
-{
-	OnAlertDisplayFinishedEvent.Broadcast();
-}
-
-void UNewAlertUI::NativeConstruct()
+void UNewAlertDisplay::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 	BindAlertDelegates();
 }
 
-void UNewAlertUI::BindAlertDelegates()
+void UNewAlertDisplay::BindAlertDelegates()
 {
 	// 균열 활성화 바인딩 섹션
 	TArray<AActor*> FoundActors;
@@ -107,7 +108,7 @@ void UNewAlertUI::BindAlertDelegates()
 		auto* Crack = Cast<ACrack>(Actor);
 		if (Crack)
 		{
-			Crack->OnActiveCrack.AddUObject(this, &UNewAlertUI::OnShowCrackActivationAlert);
+			Crack->OnActiveCrack.AddUObject(this, &UNewAlertDisplay::OnShowCrackActivationAlert);
 		}
 	}
 
@@ -115,19 +116,19 @@ void UNewAlertUI::BindAlertDelegates()
 	auto* StatusComponent = GetOwningPlayerPawn()->GetComponentByClass<UStatusComponent>();
 	if (StatusComponent)
 	{
-		StatusComponent->OnDeath.AddUObject(this, &UNewAlertUI::OnShowPlayerDeathAlert);
+		StatusComponent->OnDeath.AddUObject(this, &UNewAlertDisplay::OnShowPlayerDeathAlert);
 	}
 
 	// 보스 사망 및 DropEssence 바인딩 섹션
 	auto* InGameMode = Cast<ABaseGameMode>(GetWorld()->GetAuthGameMode());
 	if (InGameMode)
 	{
-		InGameMode->OnEndBattle.AddUObject(this, &UNewAlertUI::OnShowBossKillAlert);
-		HandleBindRestoredEssence = InGameMode->OnSpawnDropEssence.AddUObject(this, &UNewAlertUI::BindRestoredEssence);
+		InGameMode->OnEndBattle.AddUObject(this, &UNewAlertDisplay::OnShowBossKillAlert);
+		HandleBindRestoredEssence = InGameMode->OnSpawnDropEssence.AddUObject(this, &UNewAlertDisplay::BindRestoredEssence);
 	}
 }
 
-void UNewAlertUI::BindRestoredEssence(class ADropEssence* DropEssence)
+void UNewAlertDisplay::BindRestoredEssence(class ADropEssence* DropEssence)
 {
-	DropEssence->OnDropEssenceRestored.AddUObject(this, &UNewAlertUI::OnShowEssenceRestoredAlert);
+	DropEssence->OnDropEssenceRestored.AddUObject(this, &UNewAlertDisplay::OnShowEssenceRestoredAlert);
 }

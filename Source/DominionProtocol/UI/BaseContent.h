@@ -7,7 +7,7 @@
 #include "BaseContent.generated.h"
 
 
-UCLASS()
+UCLASS(Abstract)
 class DOMINIONPROTOCOL_API UBaseContent : public UUserWidget
 {
 	GENERATED_BODY()
@@ -32,6 +32,7 @@ protected:
 	virtual void NativeConstruct() override;
 
 protected:
+	UPROPERTY(BlueprintReadWrite)
 	int32 ContentIndex = -1;
 	
 };

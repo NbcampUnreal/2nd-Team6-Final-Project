@@ -7,6 +7,7 @@
 #include "BaseHUDWidget.generated.h"
 
 class UEnhancedInputLocalPlayerSubsystem;
+class UCanvasPanel;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCurrentTopUIChanged, UUserWidget*)
 
@@ -46,7 +47,7 @@ protected:
 
 protected:
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UCanvasPanel> RootCanvasPanel;
+	TObjectPtr<UCanvasPanel> RootCanvasPanel;
 
 	UPROPERTY()
 	TArray<TObjectPtr<UUserWidget>> ActivatedUIStack;

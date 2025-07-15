@@ -8,19 +8,19 @@
 
 class UBaseContent;
 
-UCLASS()
+UCLASS(Abstract)
 class DOMINIONPROTOCOL_API UBaseContentContainer : public UUserWidget
 {
 	GENERATED_BODY()
 
 protected:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ChangeFocusIndex(const int32 NewFocusIndex);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void IncreaseFocusIndex();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void DecreaseFocusIndex();
 
 	virtual void NativeConstruct() override;
@@ -29,9 +29,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UPanelWidget> ContentContainer;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	TArray<TObjectPtr<UBaseContent>> ContentArray;
 	
+	UPROPERTY(BlueprintReadOnly)
 	int32 CurrentFocusIndex = -1;
 
 	int32 MaxFocusIndex = 0;

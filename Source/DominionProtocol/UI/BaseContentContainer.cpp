@@ -46,16 +46,19 @@ void UBaseContentContainer::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	const TArray<UWidget*> Widgets  = ContentContainer->GetAllChildren();
-	if (Widgets.Num() > 0)
+	if (ContentContainer)
 	{
-		for (int32 i = 0; i < Widgets.Num(); i++)
+		const TArray<UWidget*> Widgets  = ContentContainer->GetAllChildren();
+		if (Widgets.Num() > 0)
 		{
-			auto* ContentWidget = Cast<UBaseContent>(Widgets[i]);
-			if (ContentWidget)
+			for (int32 i = 0; i < Widgets.Num(); i++)
 			{
-				ContentWidget->GetFocus();
-				ContentArray.AddUnique(ContentWidget);
+				auto* ContentWidget = Cast<UBaseContent>(Widgets[i]);
+				if (ContentWidget)
+				{
+					ContentWidget->SetContentIndex(i);
+					ContentArray.AddUnique(ContentWidget);
+				}
 			}
 		}
 	}

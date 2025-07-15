@@ -4,38 +4,31 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "NewAlertUI.generated.h"
-
-DECLARE_MULTICAST_DELEGATE(FOnAlertDisplayFinishedEvent)
+#include "NewAlertDisplay.generated.h"
 
 class UTextBlock;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewAlertUI : public UUserWidget
+class DOMINIONPROTOCOL_API UNewAlertDisplay : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
-	FOnAlertDisplayFinishedEvent OnAlertDisplayFinishedEvent;
-	
 	UFUNCTION()
-	void OnShowPlayerDeathAlert() const;
+	void OnShowPlayerDeathAlert();
 
 	UFUNCTION()
-	void OnShowBossKillAlert(AActor* DeadMonster) const;
+	void OnShowBossKillAlert(AActor* DeadMonster);
 
 	UFUNCTION()
-	void OnShowEssenceRestoredAlert(const int32 NewEssenceAmount) const;
+	void OnShowEssenceRestoredAlert(const int32 NewEssenceAmount);
 
 	UFUNCTION()
-	void OnShowCrackActivationAlert(const FText CrackName) const;
+	void OnShowCrackActivationAlert(const FText CrackName);
 	
 protected:
 	UFUNCTION()
-	void StartAlertUIDeactivateTimer();
-
-	UFUNCTION()
-	void DeactivateAlertUIEvent() const;
+	void StartAlertDisplayDeactivateTimer();
 	
 	virtual void NativeConstruct() override;
 
@@ -52,6 +45,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UTextBlock> AlertText;
 
-	FTimerHandle AlertUIDeactivateTimer;
+	FTimerHandle AlertDisplayDeactivateTimer;
 	
 };
