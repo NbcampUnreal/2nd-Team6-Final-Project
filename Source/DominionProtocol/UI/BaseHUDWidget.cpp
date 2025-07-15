@@ -27,7 +27,19 @@ UUserWidget* UBaseHUDWidget::PushUI(UUserWidget* WidgetToPush)
 	const int32 ExistingWidgetIndex = ActivatedUIStack.Find(WidgetToPush);
 	if (ExistingWidgetIndex != INDEX_NONE)
 	{
+		// 1-1. 이미 존재하면 삭제 
 		ActivatedUIStack.Remove(WidgetToPush);
+
+		// 1-2. 나머지 비활성화
+		for (UUserWidget* UI : ActivatedUIStack)
+		{
+			if (UI && UI->GetParent() == RootCanvasPanel)
+			{
+				UI->SetVisibility(ESlateVisibility::Collapsed);
+			}
+		}
+
+		// 1-3. 추가하고 활성화 및 후처리
 		ActivatedUIStack.Add(WidgetToPush);
 		// OnCurrentTopUIChanged Delegate
 		OnCurrentTopUIChanged.Broadcast(WidgetToPush);

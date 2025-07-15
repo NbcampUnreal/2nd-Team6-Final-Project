@@ -8,16 +8,16 @@
 #include "Interface/UIInterface.h"
 #include "Player/BasePlayerController.h"
 
-void UNewMainMenuSubUIContainer::ChangeDisplaySubUI(const EDisplaySubMenuUI NewDisplaySubMenuUI)
+void UNewMainMenuSubUIContainer::ChangeDisplaySubUI(const int32 NewDisplaySubMenuUIIndex)
 {
-	const int32 DisplaySubUIIndex = static_cast<int32>(NewDisplaySubMenuUI);
-	if (DisplaySubUIIndex >= SubUIArray.Num())
+	if (SubUIArray.Num() > 0)
+	{
+		PushUI(SubUIArray[NewDisplaySubMenuUIIndex]);
+	}
+	else
 	{
 		PushUI(StatusSubUI);
-		return;
 	}
-	
-	PushUI(SubUIArray[DisplaySubUIIndex]);
 }
 
 void UNewMainMenuSubUIContainer::NativeConstruct()
@@ -28,6 +28,8 @@ void UNewMainMenuSubUIContainer::NativeConstruct()
 	SubUIArray.AddUnique(EquipmentSubUI);
 	SubUIArray.AddUnique(ItemSubUI);
 	SubUIArray.AddUnique(SettingSubUI);
+
+	ChangeDisplaySubUI(0);
 }
 
 void UNewMainMenuSubUIContainer::ChangeMappingContext(UUserWidget* NewTopUI) const

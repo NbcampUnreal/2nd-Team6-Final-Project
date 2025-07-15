@@ -15,7 +15,7 @@ class DOMINIONPROTOCOL_API UBaseContentContainer : public UUserWidget
 
 protected:
 	UFUNCTION(BlueprintCallable)
-    void ChangeFocusIndex(const int32 NewFocusIndex);
+    virtual void ChangeFocusIndex(const int32 NewFocusIndex);
     
     UFUNCTION(BlueprintCallable)
     void IncreaseFocusIndex();

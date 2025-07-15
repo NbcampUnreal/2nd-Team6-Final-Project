@@ -3,11 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EnumAndStruct/EDisplaySubMenuUI.h"
 #include "UI/BaseContentContainer.h"
 #include "NewMainMenuButtonContainer.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnCurrentDisplaySubMenuUIChangedEvent, EDisplaySubMenuUI);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnCurrentDisplaySubMenuUIChangedEvent, int32);
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewMainMenuButtonContainer : public UBaseContentContainer
@@ -17,17 +16,14 @@ class DOMINIONPROTOCOL_API UNewMainMenuButtonContainer : public UBaseContentCont
 public:
 	FOnCurrentDisplaySubMenuUIChangedEvent OnCurrentDisplaySubMenuUIChangedEvent;
 
-	UFUNCTION(BlueprintCallable)
-	void ChangeCurrentDisplaySubUI(const EDisplaySubMenuUI NewDisplaySubMenuUI);
-
 protected:
 	virtual void NativeConstruct() override;
 
+	virtual void ChangeFocusIndex(const int32 NewFocusIndex) override;
+	
+	UFUNCTION()
+	void ChangeCurrentDisplaySubUI() const;
+
 	UFUNCTION()
 	void BindInputActionDelegates();
-
-protected:
-	UPROPERTY()
-	EDisplaySubMenuUI CurrentDisplaySubMenuUI = EDisplaySubMenuUI::Default;
-	
 };

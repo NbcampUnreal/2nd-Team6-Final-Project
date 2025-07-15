@@ -42,7 +42,6 @@ void UNewMenuSelecter::NativeConstruct()
 {
 	// 외부 참조가 필요없는 단순 데이터 입력이고, 디자인이 중요하기에 PreConstruct 에서 SetInfo() 실행
 	// Super::NativeConstruct();
-	
 }
 
 void UNewMenuSelecter::NativePreConstruct()

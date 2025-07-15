@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EnumAndStruct/EDisplaySubMenuUI.h"
 #include "UI/BaseContent.h"
 #include "NewMenuSelecter.generated.h"
 
@@ -53,7 +52,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector2D Size = {200.f,50.f};
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EDisplaySubMenuUI DisplayMenu = EDisplaySubMenuUI::Default;
 };

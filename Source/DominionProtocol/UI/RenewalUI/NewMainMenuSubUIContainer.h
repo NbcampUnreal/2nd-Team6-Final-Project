@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EnumAndStruct/EDisplaySubMenuUI.h"
 #include "UI/BaseHUDWidget.h"
 #include "NewMainMenuSubUIContainer.generated.h"
 
@@ -22,7 +21,7 @@ public:
 	void BindDisplaySubUIChangedDelegate();
 
 protected:
-	void ChangeDisplaySubUI(const EDisplaySubMenuUI NewDisplaySubMenuUI);
+	void ChangeDisplaySubUI(const int32 NewDisplaySubMenuUIIndex);
 	
 	virtual void NativeConstruct() override;
 

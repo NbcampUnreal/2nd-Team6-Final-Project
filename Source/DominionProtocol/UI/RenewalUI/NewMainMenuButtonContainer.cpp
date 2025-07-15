@@ -5,19 +5,6 @@
 
 #include "Player/InGameController.h"
 
-void UNewMainMenuButtonContainer::ChangeCurrentDisplaySubUI(const EDisplaySubMenuUI NewDisplaySubMenuUI)
-{
-	if (EDisplaySubMenuUI::Default == NewDisplaySubMenuUI)
-	{
-		CurrentDisplaySubMenuUI = EDisplaySubMenuUI::StatusMenu;
-	}
-	else
-	{
-		CurrentDisplaySubMenuUI = NewDisplaySubMenuUI;	
-	}
-	OnCurrentDisplaySubMenuUIChangedEvent.Broadcast(CurrentDisplaySubMenuUI);
-}
-
 void UNewMainMenuButtonContainer::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -25,6 +12,18 @@ void UNewMainMenuButtonContainer::NativeConstruct()
 	BindInputActionDelegates();
 
 	ChangeFocusIndex(0);
+}
+
+void UNewMainMenuButtonContainer::ChangeFocusIndex(const int32 NewFocusIndex)
+{
+	Super::ChangeFocusIndex(NewFocusIndex);
+
+	ChangeCurrentDisplaySubUI();
+}
+
+void UNewMainMenuButtonContainer::ChangeCurrentDisplaySubUI() const
+{
+	OnCurrentDisplaySubMenuUIChangedEvent.Broadcast(CurrentFocusIndex);
 }
 
 void UNewMainMenuButtonContainer::BindInputActionDelegates()
