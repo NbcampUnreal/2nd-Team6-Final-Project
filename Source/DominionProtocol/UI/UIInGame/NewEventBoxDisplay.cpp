@@ -63,7 +63,7 @@ UUserWidget* UNewEventBoxDisplay::GetEventTextWidgetToPool()
 {
 	if (EventTextPool.Num() > 0)
 	{
-		auto* EventText = EventTextPool.Pop();
+		auto EventText = EventTextPool.Pop();
 		ActiveEventTextArray.Add(EventText);
 		EventText->SetVisibility(ESlateVisibility::Visible);
 		return EventText;

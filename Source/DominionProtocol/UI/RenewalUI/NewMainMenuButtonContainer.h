@@ -21,6 +21,12 @@ public:
 	void ChangeCurrentDisplaySubUI(const EDisplaySubMenuUI NewDisplaySubMenuUI);
 
 protected:
+	virtual void NativeConstruct() override;
+
+	UFUNCTION()
+	void BindInputActionDelegates();
+
+protected:
 	UPROPERTY()
 	EDisplaySubMenuUI CurrentDisplaySubMenuUI = EDisplaySubMenuUI::Default;
 	

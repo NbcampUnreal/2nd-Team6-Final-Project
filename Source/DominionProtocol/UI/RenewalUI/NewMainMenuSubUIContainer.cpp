@@ -13,6 +13,7 @@ void UNewMainMenuSubUIContainer::ChangeDisplaySubUI(const EDisplaySubMenuUI NewD
 	const int32 DisplaySubUIIndex = static_cast<int32>(NewDisplaySubMenuUI);
 	if (DisplaySubUIIndex >= SubUIArray.Num())
 	{
+		PushUI(StatusSubUI);
 		return;
 	}
 	

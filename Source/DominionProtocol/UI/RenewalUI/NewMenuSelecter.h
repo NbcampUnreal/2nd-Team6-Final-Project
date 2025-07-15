@@ -30,8 +30,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void LoseFocusEffects();
 
-	void SetMainMenuUI(UNewMainMenuUI* NewMainMenuUI) { MainMenuUI = NewMainMenuUI; }
-
 protected:
 	virtual void NativeConstruct() override;
 
@@ -49,9 +47,6 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	TObjectPtr<UBorder> SelectEffect;
-
-	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<UNewMainMenuUI> MainMenuUI;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText SelecterNameText;

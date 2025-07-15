@@ -7,6 +7,7 @@
 #include "Util/GameTagList.h"
 #include "NewEventBoxDisplay.generated.h"
 
+class UVerticalBox;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewEventBoxDisplay : public UUserWidget
@@ -36,23 +37,23 @@ protected:
 	void HandleBindEventDelegates();
 
 	UFUNCTION(BlueprintCallable)
-	class UUserWidget* GetEventTextWidgetToPool();
+	UUserWidget* GetEventTextWidgetToPool();
 
 	UFUNCTION(BlueprintCallable)
-	void ReturnEventTextWidgetToPool(class UUserWidget* TextWidget);
+	void ReturnEventTextWidgetToPool(UUserWidget* TextWidget);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSubclassOf<class UUserWidget> EventTextWidgetClass;
+	TSubclassOf<UUserWidget> EventTextWidgetClass;
 	
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UVerticalBox* EventTextContainer;
+	TObjectPtr<UVerticalBox> EventTextContainer;
 	
 	UPROPERTY(BlueprintReadWrite)
-	TArray<class UUserWidget*> EventTextPool;
+	TArray<TObjectPtr<UUserWidget>> EventTextPool;
 
 	UPROPERTY(BlueprintReadWrite)
-	TArray<class UUserWidget*> ActiveEventTextArray;
+	TArray<TObjectPtr<UUserWidget>> ActiveEventTextArray;
 
 	UPROPERTY(BlueprintReadWrite)
 	int32 WidgetPoolMaxCount = 12;

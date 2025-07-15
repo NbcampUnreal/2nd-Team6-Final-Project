@@ -15,14 +15,14 @@ class DOMINIONPROTOCOL_API UBaseContentContainer : public UUserWidget
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void ChangeFocusIndex(const int32 NewFocusIndex);
-
-	UFUNCTION(BlueprintCallable)
-	void IncreaseFocusIndex();
-
-	UFUNCTION(BlueprintCallable)
-	void DecreaseFocusIndex();
-
+    void ChangeFocusIndex(const int32 NewFocusIndex);
+    
+    UFUNCTION(BlueprintCallable)
+    void IncreaseFocusIndex();
+    
+    UFUNCTION(BlueprintCallable)
+    void DecreaseFocusIndex();
+          	
 	virtual void NativeConstruct() override;
 
 protected:

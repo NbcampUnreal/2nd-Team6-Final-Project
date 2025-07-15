@@ -28,16 +28,12 @@ void UNewMenuSelecter::GetFocus()
 {
 	Super::GetFocus();
 
-	check(MainMenuUI);
-
 	GetFocusEffects();
 }
 
 void UNewMenuSelecter::LoseFocus()
 {
 	Super::LoseFocus();
-
-	check(MainMenuUI);
 	
 	LoseFocusEffects();
 }

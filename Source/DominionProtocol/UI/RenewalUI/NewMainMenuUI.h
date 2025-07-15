@@ -16,8 +16,8 @@ class DOMINIONPROTOCOL_API UNewMainMenuUI : public UUserWidget, public IUIInterf
 	GENERATED_BODY()
 
 public:
+	UFUNCTION()
 	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
-
 
 protected:
 	virtual void NativeConstruct() override;
