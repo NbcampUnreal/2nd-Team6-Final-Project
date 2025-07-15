@@ -47,7 +47,6 @@ protected:
 	void BindDialogueTypingFinishedDelegate();
 
 protected:
-
 #pragma region HUD
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))

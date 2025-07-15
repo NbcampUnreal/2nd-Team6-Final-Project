@@ -17,14 +17,16 @@ class DOMINIONPROTOCOL_API UNewMainMenuSubUIContainer : public UBaseHUDWidget
 public:
 	UFUNCTION()
 	void SetMainMenuButtonContainer(UNewMainMenuButtonContainer* NewMainMenuButtonContainer) { MainMenuButtonContainer = NewMainMenuButtonContainer;}
+	
+	UFUNCTION()
+	void BindDisplaySubUIChangedDelegate();
 
 protected:
 	void ChangeDisplaySubUI(const EDisplaySubMenuUI NewDisplaySubMenuUI);
 	
 	virtual void NativeConstruct() override;
 
-	UFUNCTION()
-	void BindDisplaySubUIChangedDelegate();
+	virtual void ChangeMappingContext(UUserWidget* NewTopUI) const override;
 	
 protected:
 	UPROPERTY()
@@ -44,5 +46,4 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UUserWidget> SettingSubUI;
-	
 };

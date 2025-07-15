@@ -4,16 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Interface/UIInterface.h"
 #include "NewEquipmentSubUI.generated.h"
 
 class UItemComponent;
 class UStatusComponent;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewEquipmentSubUI : public UUserWidget
+class DOMINIONPROTOCOL_API UNewEquipmentSubUI : public UUserWidget, public IUIInterface
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION()
+	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 
 protected:
 	virtual void NativeConstruct() override;
@@ -32,4 +36,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<UStatusComponent> StatusComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputMappingContext> EquipmentSubUIMappingContext;
 };

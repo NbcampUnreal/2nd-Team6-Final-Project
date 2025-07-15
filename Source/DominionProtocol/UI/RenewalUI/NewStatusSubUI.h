@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Interface/UIInterface.h"
 #include "NewStatusSubUI.generated.h"
 
 class UStatusComponent;
@@ -12,7 +11,7 @@ class UDomiGameInstance;
 class UInputMappingContext;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewStatusSubUI : public UUserWidget, public IUIInterface
+class DOMINIONPROTOCOL_API UNewStatusSubUI : public UUserWidget
 {
 	GENERATED_BODY()
 
@@ -22,8 +21,6 @@ protected:
 
 	UFUNCTION()
 	void RefreshStatusInfo(const ESlateVisibility NewVisibility);
-
-	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 	
 	virtual void NativeConstruct() override;
 
@@ -33,7 +30,4 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<UDomiGameInstance> DomiGameInstance;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	TObjectPtr<UInputMappingContext> StatusSubUIMappingContext;
 };

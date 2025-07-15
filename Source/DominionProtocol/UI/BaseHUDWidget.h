@@ -41,7 +41,7 @@ protected:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
-	void ChangeMappingContext(UUserWidget* NewTopUI) const;
+	virtual void ChangeMappingContext(UUserWidget* NewTopUI) const;
 	
 	void BindTopUIChangeDelegate();
 

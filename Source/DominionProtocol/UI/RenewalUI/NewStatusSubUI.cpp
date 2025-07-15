@@ -14,16 +14,6 @@ void UNewStatusSubUI::RefreshStatusInfo(const ESlateVisibility NewVisibility)
 	}
 }
 
-UInputMappingContext* UNewStatusSubUI::GetInputMappingContext_Implementation() const
-{
-	if (!StatusSubUIMappingContext)
-	{
-		return nullptr;	
-	}
-	
-	return StatusSubUIMappingContext;
-}
-
 void UNewStatusSubUI::NativeConstruct()
 {
 	Super::NativeConstruct();

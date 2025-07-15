@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Interface/UIInterface.h"
 #include "NewSettingSubUI.generated.h"
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewSettingSubUI : public UUserWidget
+class DOMINIONPROTOCOL_API UNewSettingSubUI : public UUserWidget, public IUIInterface
 {
 	GENERATED_BODY()
 	
@@ -23,6 +24,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetUIEffectsVolumeValue(const float NewVolumeValue);
+
+	UFUNCTION()
+	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 
 
 protected:
@@ -64,5 +68,8 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class USoundInstanceSubsystem> SoundSubsystemInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputMappingContext> SettingSubUIMappingContext;
 	
 };

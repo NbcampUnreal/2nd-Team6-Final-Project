@@ -18,6 +18,16 @@ void UNewDialogueUI::SetDialogueDisplay(const FText NewText)
 	StartDialogueTyping();
 }
 
+UInputMappingContext* UNewDialogueUI::GetInputMappingContext_Implementation() const
+{
+	if (!DialogueUIMappingContext)
+	{
+		return nullptr;
+	}
+	
+	return DialogueUIMappingContext;
+}
+
 void UNewDialogueUI::NativeConstruct()
 {
 	Super::NativeConstruct();

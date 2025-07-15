@@ -3,3 +3,12 @@
 
 #include "UI/RenewalUI/NewItemSubUI.h"
 
+UInputMappingContext* UNewItemSubUI::GetInputMappingContext_Implementation() const
+{
+	if (!ItemSubUIMappingContext)
+	{
+		return nullptr;	
+	}
+
+	return ItemSubUIMappingContext;
+}

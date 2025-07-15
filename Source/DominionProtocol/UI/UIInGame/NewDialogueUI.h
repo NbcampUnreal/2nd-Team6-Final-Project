@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Interface/UIInterface.h"
 #include "NewDialogueUI.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnDialogueTypingFinishedEvent);
@@ -14,7 +15,7 @@ class ABossSpawner;
 class UTextBlock;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewDialogueUI : public UUserWidget
+class DOMINIONPROTOCOL_API UNewDialogueUI : public UUserWidget, public IUIInterface
 {
 	GENERATED_BODY()
 
@@ -24,6 +25,9 @@ public:
 	
 	UFUNCTION()
 	void SetDialogueDisplay(const FText NewText);
+
+	UFUNCTION()
+	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 
 protected:
 	UFUNCTION()
@@ -58,4 +62,7 @@ protected:
 	float DialogueTypingSpeed = 0.1f;
 	
 	FTimerHandle DialogueTypingTimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputMappingContext> DialogueUIMappingContext;
 };

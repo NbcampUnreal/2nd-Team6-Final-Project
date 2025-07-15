@@ -102,6 +102,8 @@ void AInGameController::BindInputActions()
 	
 }
 
+#pragma region Input Action Event
+
 void AInGameController::OnMainMenuUIActivateAction() const
 {
 	OnMainMenuUIActivateActionEvent.Broadcast();
@@ -256,6 +258,8 @@ void AInGameController::OnPotionEnforceUIEnforceConfirm() const
 {
 	OnPotionEnforceUIEnforceConfirmEvent.Broadcast();
 }
+
+#pragma endregion
 
 void AInGameController::SetupMappingContext(class UInputMappingContext* NewMappingContext)
 {

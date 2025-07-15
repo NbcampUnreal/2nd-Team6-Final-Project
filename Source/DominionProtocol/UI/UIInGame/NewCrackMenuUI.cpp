@@ -6,6 +6,16 @@
 #include "NewCrackMenuButton.h"
 #include "Player/InGameController.h"
 
+UInputMappingContext* UNewCrackMenuUI::GetInputMappingContext_Implementation() const
+{
+	if (!CrackMenuUIMappingContext)
+	{
+		return nullptr;	
+	}
+
+	return CrackMenuUIMappingContext;
+}
+
 void UNewCrackMenuUI::NativeConstruct()
 {
 	Super::NativeConstruct();

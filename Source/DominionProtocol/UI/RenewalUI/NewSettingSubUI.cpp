@@ -93,3 +93,13 @@ void UNewSettingSubUI::SetUIEffectsVolumeValue(const float NewVolumeValue)
 	}
 }
 
+UInputMappingContext* UNewSettingSubUI::GetInputMappingContext_Implementation() const
+{
+	if (!SettingSubUIMappingContext)
+	{
+		return nullptr;	
+	}
+
+	return SettingSubUIMappingContext;
+}
+

@@ -113,7 +113,6 @@ void UBaseHUDWidget::PopSpecificUI(UUserWidget* WidgetToPop)
 		{
 			WidgetToPop->SetVisibility(ESlateVisibility::Collapsed);
 		}
-		
 		ActivatedUIStack.Remove(WidgetToPop);
 
 		// 3. Pop 한 Widget 이 과거 최상위 위젯이었고, 스택에 위젯이 남아있다면 새로운 최상위 위젯 표시
@@ -126,6 +125,11 @@ void UBaseHUDWidget::PopSpecificUI(UUserWidget* WidgetToPop)
 				// OnCurrentTopUIChanged Delegate
 				OnCurrentTopUIChanged.Broadcast(NewTopUI);
 			}
+		}
+
+		if (ActivatedUIStack.Num() == 0)
+		{
+			OnCurrentTopUIChanged.Broadcast(nullptr);
 		}
 		
 		UpdateAllWidgetZOrderInStack();
@@ -219,7 +223,7 @@ void UBaseHUDWidget::ChangeMappingContext(UUserWidget* NewTopUI) const
 				if (MappingContext)
 				{
 					LocalPlayerInputSubsystem->ClearAllMappings();
-					LocalPlayerInputSubsystem->AddMappingContext(MappingContext, 1);
+					LocalPlayerInputSubsystem->AddMappingContext(MappingContext, 10);
 				}
 				else
 				{
@@ -228,7 +232,8 @@ void UBaseHUDWidget::ChangeMappingContext(UUserWidget* NewTopUI) const
 			}
 		}
 	}
-	else if (ActivatedUIStack.Num() == 0)
+
+	if (ActivatedUIStack.Num() == 0 || NewTopUI == nullptr)
 	{
 		auto* PlayerController = Cast<ABasePlayerController>(GetOwningPlayer());
 		if (PlayerController)

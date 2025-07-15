@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interface/UIInterface.h"
 #include "UI/BaseContentContainer.h"
 #include "NewCrackMenuUI.generated.h"
 
@@ -18,9 +19,13 @@ enum class ECurrentDisplayOption : uint8
 };
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewCrackMenuUI : public UBaseContentContainer
+class DOMINIONPROTOCOL_API UNewCrackMenuUI : public UBaseContentContainer, public IUIInterface
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION()
+	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 
 protected:
 	virtual void NativeConstruct() override;
@@ -32,4 +37,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	ECurrentDisplayOption CurrentDisplayOption = ECurrentDisplayOption::Default;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputMappingContext> CrackMenuUIMappingContext;
 };

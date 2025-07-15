@@ -6,6 +6,16 @@
 #include "Components/ItemComponent/ItemComponent.h"
 #include "Components/StatusComponent/StatusComponent.h"
 
+UInputMappingContext* UNewEquipmentSubUI::GetInputMappingContext_Implementation() const
+{
+	if (!EquipmentSubUIMappingContext)
+	{
+		return nullptr;	
+	}
+	
+	return EquipmentSubUIMappingContext;
+}
+
 void UNewEquipmentSubUI::NativeConstruct()
 {
 	Super::NativeConstruct();

@@ -4,19 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Interface/UIInterface.h"
 #include "NewMainMenuUI.generated.h"
 
 class UBaseContentContainer;
 class UBaseHUDWidget;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewMainMenuUI : public UUserWidget
+class DOMINIONPROTOCOL_API UNewMainMenuUI : public UUserWidget, public IUIInterface
 {
 	GENERATED_BODY()
+
+public:
+	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 
 
 protected:
 	virtual void NativeConstruct() override;
+
+	void BindMainMenuSubUIAndMainMenuButtonContainer() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
@@ -24,4 +30,7 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UBaseHUDWidget> MainMenuSubUIContainer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	TObjectPtr<UInputMappingContext> MainMenuUIMappingContext;
 };
