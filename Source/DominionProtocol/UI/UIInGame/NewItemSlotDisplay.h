@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "ItemInventory/ItemUISlotData.h"
 #include "Blueprint/UserWidget.h"
-#include "NewItemSlots.generated.h"
+#include "NewItemSlotDisplay.generated.h"
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewItemSlots : public UUserWidget
+class DOMINIONPROTOCOL_API UNewItemSlotDisplay : public UUserWidget
 {
 	GENERATED_BODY()
 

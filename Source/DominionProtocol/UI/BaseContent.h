@@ -13,12 +13,10 @@ class DOMINIONPROTOCOL_API UBaseContent : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UFUNCTION()
 	virtual void SetInfo();
-
-	UFUNCTION()
+	
 	virtual void SetInfoEmpty();
-
+	
 	UFUNCTION()
 	virtual void GetFocus();
 
@@ -27,6 +25,9 @@ public:
 
 	UFUNCTION()
 	void SetContentIndex(const int32 NewFocusIndex) { ContentIndex = NewFocusIndex; }
+
+	UFUNCTION()
+	int32 GetContentIndex() const { return ContentIndex; }
 
 protected:
 	virtual void NativeConstruct() override;

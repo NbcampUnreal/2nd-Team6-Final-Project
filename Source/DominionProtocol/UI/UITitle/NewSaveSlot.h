@@ -17,6 +17,11 @@ class DOMINIONPROTOCOL_API UNewSaveSlot : public UBaseContent
 
 public:
 	virtual void SetInfo() override;
+	
+	void SetInfo(bool ExistSaveSlotData, UTexture2D* CrackImage, const FString& GameIndexToString, const FString& SaveTimeToString, const
+	             FString
+	             & PlayTimeToString, const FText& CurrentCrackNameToText, const FText& CurrentLevelToString, const FString&
+	             PlayerLevelToString);
 
 	virtual void SetInfoEmpty() override;
 
@@ -34,12 +39,6 @@ protected:
 	virtual void NativeConstruct() override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UDataTable> PastCrackImageDataTable;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TObjectPtr<UDataTable> PresentCrackImageDataTable;
-
 	UPROPERTY()
 	TObjectPtr<USaveManagerSubsystem> SaveManagerSubsystemInstance;
 
@@ -65,6 +64,5 @@ protected:
 	TObjectPtr<UTextBlock> PlayerLevel;
 
 	UPROPERTY(BlueprintReadOnly)
-	bool ExistSaveSlotData = false;
-	
+	bool bExistSaveSlotData = false;
 };

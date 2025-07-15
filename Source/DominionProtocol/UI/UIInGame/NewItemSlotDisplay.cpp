@@ -1,18 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "NewItemSlots.h"
+#include "NewItemSlotDisplay.h"
 
 #include "Components/ItemComponent/ItemComponent.h"
 
-void UNewItemSlots::NativeConstruct()
+void UNewItemSlotDisplay::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 	BindItemSlotsDelegate();
 }
 
-void UNewItemSlots::BindItemSlotsDelegate()
+void UNewItemSlotDisplay::BindItemSlotsDelegate()
 {
 	AActor* PlayerCharacter = GetOwningPlayerPawn();
 	if (PlayerCharacter)
@@ -20,20 +20,20 @@ void UNewItemSlots::BindItemSlotsDelegate()
 		ItemComponent = PlayerCharacter->GetComponentByClass<UItemComponent>();
 		if (ItemComponent)
 		{
-			ItemComponent->OnInventoryEquippedSlotItemsChanged.AddUObject(this, &UNewItemSlots::OnUpdateEquippableSlotItems);
-			ItemComponent->OnInventoryConsumableSlotItemsChanged.AddUObject(this, &UNewItemSlots::OnUpdateConsumableSlotItems);
+			ItemComponent->OnInventoryEquippedSlotItemsChanged.AddUObject(this, &UNewItemSlotDisplay::OnUpdateEquippableSlotItems);
+			ItemComponent->OnInventoryConsumableSlotItemsChanged.AddUObject(this, &UNewItemSlotDisplay::OnUpdateConsumableSlotItems);
 		}
 	}
 }
 
-void UNewItemSlots::OnUpdateEquippableSlotItems()
+void UNewItemSlotDisplay::OnUpdateEquippableSlotItems()
 {
 	InventoryEquippableSlotItems = ItemComponent->GetEquippedDisplayItems();
 
 	UpdateEquippableSlotItems();
 }
 
-void UNewItemSlots::OnUpdateConsumableSlotItems()
+void UNewItemSlotDisplay::OnUpdateConsumableSlotItems()
 {
 	InventoryConsumableSlotItems = ItemComponent->GetConsumableDisplayItems();
 

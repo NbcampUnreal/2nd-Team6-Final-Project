@@ -40,5 +40,33 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	TMap<FName, FItemUISlotData> ConsumableSlotMap;
+
+	UPROPERTY(BlueprintReadWrite)
+	int32 CurrentFocusIndex = -1;
+
+	TArray<TObjectPtr<UUserWidget>> SlotWidgetArray;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UUserWidget> AccessorySlot_Primary;
 	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UUserWidget> AccessorySlot_Secondary;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UUserWidget> WeaponSlot_Primary;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UUserWidget> WeaponSlot_Secondary;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UUserWidget> SkillSlot;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UUserWidget> ConsumableSlot_Primary;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UUserWidget> ConsumableSlot_Secondary;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	TObjectPtr<UUserWidget> ConsumableSlot_Tertiary;
 };

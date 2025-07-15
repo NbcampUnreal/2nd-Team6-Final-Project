@@ -3,8 +3,10 @@
 
 #include "UI/UITitle/NewSaveSlotBoxUI.h"
 
+#include "NewSaveSlot.h"
 #include "Components/VerticalBox.h"
 #include "DomiFramework/GameInstance/SaveManagerSubsystem.h"
+#include "EnumAndStruct/FCrackImageData.h"
 #include "Player/TitleController.h"
 #include "UI/BaseContent.h"
 
@@ -19,7 +21,11 @@ void UNewSaveSlotBoxUI::RefreshSlotData(const ESlateVisibility VisibilityState)
 	{
 		for (UBaseContent* Content : ContentArray)
 		{
-			Content->SetInfo();
+			auto* NewSaveSlot = Cast<UNewSaveSlot>(Content);
+			if (NewSaveSlot)
+			{
+				InputSaveSlotData(NewSaveSlot);
+			}
 		}	
 	}
 }
@@ -97,6 +103,77 @@ void UNewSaveSlotBoxUI::DeleteGame()
 	{
 		SaveManagerSubsystemInstance->DeleteSaveSlot(CurrentFocusIndex);
 		RefreshSlotData(ESlateVisibility::Visible);
+	}
+}
+
+void UNewSaveSlotBoxUI::InputSaveSlotData(UNewSaveSlot* SaveSlot) const
+{
+	
+	if (!SaveManagerSubsystemInstance)
+	{
+		return; 
+	}
+	
+	const TArray<FSaveSlotMetaData> SaveSlotArray = SaveManagerSubsystemInstance->GetSaveSlotArray();
+	const int32 ContentIndex = SaveSlot->GetContentIndex();
+	if (!SaveSlotArray.IsValidIndex(ContentIndex))
+	{
+		return;
+	}
+	
+	const FSaveSlotMetaData SaveSlotMetaData = SaveSlotArray[ContentIndex];
+	
+	if (SaveSlotMetaData.SaveSlotExist)
+	{
+		UTexture2D* CrackMapImage = nullptr;
+		FText CurrentCrackName = FText::GetEmpty();
+		
+		if (PastCrackImageDataTable && PresentCrackImageDataTable)
+		{
+			const FString SaveSlotCrackName = SaveSlotMetaData.RecentCrackName.ToString();
+
+#pragma region SearchDataTable 
+			auto SearchDataTable = [&](const UDataTable* DataTableToSearch) -> bool
+			{
+				if (!DataTableToSearch)
+				{
+					return false;
+				}
+
+				const TArray<FName> RowNames = DataTableToSearch->GetRowNames();
+				for (const FName& RowName : RowNames)
+				{
+					FCrackImageData* FoundRow = DataTableToSearch->FindRow<FCrackImageData>(RowName, TEXT("SearchSingleDataTable"));
+					if (FoundRow)
+					{
+						if (FoundRow->CrackDescription.ToString().Contains(SaveSlotCrackName))
+						{
+							CrackMapImage = FoundRow->CrackImageData;
+							CurrentCrackName = SaveSlotMetaData.RecentCrackName;
+							return true;
+						}
+					}
+				}
+				return false;
+			};
+#pragma endregion
+
+			if (SearchDataTable(PastCrackImageDataTable))
+			{
+			}
+			else if (SearchDataTable(PresentCrackImageDataTable))
+			{
+			}
+		}
+
+		const FString GameIndexString = FString::Printf(TEXT("게임 번호 %d"), SaveSlotMetaData.SaveSlotIndex+1);
+		const FDateTime SaveDataTime = SaveSlotMetaData.SaveDateTime;
+		const FString SaveTimeString = FString::Printf(TEXT("마지막 저장 시간 : %d / %d / %d : %d"), SaveDataTime.GetMonth(), SaveDataTime.GetDay(), SaveDataTime.GetHour(), SaveDataTime.GetMinute());
+		const FString PlayTimeString = FString::Printf(TEXT("총 플레이 시간 : %d : %d"), SaveSlotMetaData.PlayTime/60, SaveSlotMetaData.PlayTime%60);
+		const FText CurrentLevelName = SaveSlotMetaData.PlayingLevelDisplayName;
+		const FString PlayerLevelString = FString::Printf(TEXT("플레이어 레벨 : %d"), SaveSlotMetaData.PlayerLevel);
+
+		SaveSlot->SetInfo(SaveSlotMetaData.SaveSlotExist, CrackMapImage, GameIndexString,SaveTimeString ,PlayTimeString, CurrentCrackName, CurrentLevelName, PlayerLevelString);
 	}
 }
 

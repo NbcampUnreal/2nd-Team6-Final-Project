@@ -5,23 +5,26 @@
 
 void UBaseContent::SetInfo()
 {
+	
 }
 
 void UBaseContent::SetInfoEmpty()
 {
+	
 }
 
 void UBaseContent::GetFocus()
 {
+	
 }
 
 void UBaseContent::LoseFocus()
 {
+	
 }
 
 void UBaseContent::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	SetInfo();
+	
 }

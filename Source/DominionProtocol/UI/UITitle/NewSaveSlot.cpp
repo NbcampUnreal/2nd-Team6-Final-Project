@@ -6,89 +6,27 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "DomiFramework/GameInstance/SaveManagerSubsystem.h"
-#include "EnumAndStruct/FCrackImageData.h"
 
 void UNewSaveSlot::SetInfo()
 {
 	Super::SetInfo();
+}
 
-	if (!SaveManagerSubsystemInstance)
-	{
-		return; 
-	}
-	
-	const TArray<FSaveSlotMetaData> SaveSlotArray = SaveManagerSubsystemInstance->GetSaveSlotArray();
-	if (!SaveSlotArray.IsValidIndex(ContentIndex))
-	{
-		return;
-	}
-	
-	const FSaveSlotMetaData SaveSlotMetaData = SaveSlotArray[ContentIndex];
-	if (SaveSlotMetaData.SaveSlotExist)
-	{
-		ExistSaveSlotData = SaveSlotMetaData.SaveSlotExist;
-		if (PastCrackImageDataTable && PresentCrackImageDataTable)
-		{
-			const FString SaveSlotCrackName = SaveSlotMetaData.RecentCrackName.ToString();
-
-#pragma region SearchDataTable 
-			auto SearchDataTable = [&](const UDataTable* DataTableToSearch) -> bool
-			{
-				if (!DataTableToSearch)
-				{
-					return false;
-				}
-
-				const TArray<FName> RowNames = DataTableToSearch->GetRowNames();
-				for (const FName& RowName : RowNames)
-				{
-					FCrackImageData* FoundRow = DataTableToSearch->FindRow<FCrackImageData>(RowName, TEXT("SearchSingleDataTable"));
-					if (FoundRow)
-					{
-						if (FoundRow->CrackDescription.ToString().Contains(SaveSlotCrackName))
-						{
-							CrackMapImage->SetBrushFromTexture(FoundRow->CrackImageData);
-							CurrentCrackName->SetText(SaveSlotMetaData.RecentCrackName);
-							return true;
-						}
-					}
-				}
-				return false;
-			};
-#pragma endregion
-
-			if (SearchDataTable(PastCrackImageDataTable))
-			{
-			}
-			else if (SearchDataTable(PresentCrackImageDataTable))
-			{
-			}
-		}
-
-		const FString GameIndexString = FString::Printf(TEXT("게임 번호 %d"), SaveSlotMetaData.SaveSlotIndex+1);
-		GameIndex->SetText(FText::FromString(GameIndexString));
-
-		const FDateTime SaveDataTime = SaveSlotMetaData.SaveDateTime;
-		const FString SaveTimeString = FString::Printf(TEXT("마지막 저장 시간 : %d / %d / %d : %d"), SaveDataTime.GetMonth(), SaveDataTime.GetDay(), SaveDataTime.GetHour(), SaveDataTime.GetMinute());
-		SaveTime->SetText(FText::FromString(SaveTimeString));
-		
-		const FString PlayTimeString = FString::Printf(TEXT("총 플레이 시간 : %d : %d"), SaveSlotMetaData.PlayTime/60, SaveSlotMetaData.PlayTime%60);
-		PlayTime->SetText(FText::FromString(PlayTimeString));
-
-		CurrentLevelName->SetText(SaveSlotMetaData.PlayingLevelDisplayName);
-
-		const FString PlayerLevelString = FString::Printf(TEXT("플레이어 레벨 : %d"), SaveSlotMetaData.PlayerLevel);
-		PlayerLevel->SetText(FText::FromString(PlayerLevelString));
-	}
-	else
-	{
-		SetInfoEmpty();
-	}
+void UNewSaveSlot::SetInfo(const bool ExistSaveSlotData, UTexture2D* CrackImage, const FString& GameIndexToString, const FString& SaveTimeToString, const FString& PlayTimeToString, const FText& CurrentCrackNameToText, const FText& CurrentLevelToString, const FString& PlayerLevelToString)
+{
+	bExistSaveSlotData = ExistSaveSlotData;
+	CrackMapImage->SetBrushFromTexture(CrackImage);
+	GameIndex->SetText(FText::FromString(GameIndexToString));
+	SaveTime->SetText(FText::FromString(SaveTimeToString));
+	PlayTime->SetText(FText::FromString(PlayTimeToString));
+	CurrentCrackName->SetText(CurrentCrackNameToText);
+	CurrentLevelName->SetText(CurrentLevelToString);
+	PlayerLevel->SetText(FText::FromString(PlayerLevelToString));
 }
 
 void UNewSaveSlot::SetInfoEmpty()
 {
-	ExistSaveSlotData = false;
+	bExistSaveSlotData = false;
 	CrackMapImage->SetBrushFromTexture(nullptr);
 	GameIndex->SetText(FText::FromString(TEXT("데이터없음")));
 	SaveTime->SetText(FText::FromString(TEXT("-- / -- / --")));

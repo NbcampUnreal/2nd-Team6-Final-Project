@@ -3,26 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "EnumAndStruct/EDisplayItemFilter.h"
+#include "UI/BaseContentContainer.h"
 #include "NewInventoryItemContainer.generated.h"
 
 struct FItemUISlotData;
 
-
-UENUM(BlueprintType)
-enum class EDisplayArray : uint8
-{
-	AllItemsArray				UMETA(DisplayName="AllItemsArray"),
-	WeaponItemsArray			UMETA(DisplayName="WeaponItemsArray"),
-	AccessoryItemsArray			UMETA(DisplayName="AccessoryItemsArray"),
-	ConsumableItemsArray		UMETA(DisplayName="ConsumableItemsArray"),
-	SkillItemsArray				UMETA(DisplayName="SkillItemsArray"),
-	OtherItemsArray				UMETA(DisplayName="OtherItemsArray"),
-};
-
-
 UCLASS()
-class DOMINIONPROTOCOL_API UNewInventoryItemContainer : public UUserWidget
+class DOMINIONPROTOCOL_API UNewInventoryItemContainer : public UBaseContentContainer
 {
 	GENERATED_BODY()
 
@@ -58,6 +46,6 @@ protected:
 	TArray<FItemUISlotData> OtherItemsArray;
 	
 	UPROPERTY(BlueprintReadWrite)
-	EDisplayArray LastDisplayArray = EDisplayArray::AllItemsArray;
+	EDisplayItemFilter LastDisplayArray = EDisplayItemFilter::AllItems;
 	
 };

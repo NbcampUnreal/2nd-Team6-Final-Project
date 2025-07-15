@@ -16,6 +16,16 @@ UInputMappingContext* UNewEquipmentSubUI::GetInputMappingContext_Implementation(
 	return EquipmentSubUIMappingContext;
 }
 
+void UNewEquipmentSubUI::RefreshEquipmentSubUI()
+{
+	
+}
+
+void UNewEquipmentSubUI::UpdateStatusPlateInfo()
+{
+	
+}
+
 void UNewEquipmentSubUI::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -41,8 +51,6 @@ void UNewEquipmentSubUI::BindEquippedSlotsDelegates()
 		ItemComponent->OnInventoryEquippedSlotItemsChanged.AddUObject(this, &UNewEquipmentSubUI::OnUpdateEquippedSlots);
 		ItemComponent->OnInventoryConsumableSlotItemsChanged.AddUObject(this, &UNewEquipmentSubUI::OnUpdateEquippedSlots);
 	}
-
-	
 }
 
 void UNewEquipmentSubUI::OnUpdateEquippedSlots()

@@ -50,12 +50,21 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void DeleteGame();
 
+	UFUNCTION()
+	void InputSaveSlotData(UNewSaveSlot* SaveSlot) const;
+
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
 	void BindInputActionDelegates();
 	
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UDataTable> PastCrackImageDataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UDataTable> PresentCrackImageDataTable;
+	
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<USaveManagerSubsystem> SaveManagerSubsystemInstance;
 

@@ -9,6 +9,7 @@
 class UStatusComponent;
 class UDomiGameInstance;
 class UInputMappingContext;
+class UNewStatusPlate;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewStatusSubUI : public UUserWidget
@@ -16,8 +17,8 @@ class DOMINIONPROTOCOL_API UNewStatusSubUI : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	UFUNCTION(BlueprintImplementableEvent)
-	void UpdateStatusInfoEvent();
+	UFUNCTION()
+	void SetInfo() const;
 
 	UFUNCTION()
 	void RefreshStatusInfo(const ESlateVisibility NewVisibility);
@@ -30,4 +31,16 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<UDomiGameInstance> DomiGameInstance;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewStatusPlate> BaseStatus;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewStatusPlate> Level;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewStatusPlate> AttackStatus;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewStatusPlate> BaseAbility;
 };

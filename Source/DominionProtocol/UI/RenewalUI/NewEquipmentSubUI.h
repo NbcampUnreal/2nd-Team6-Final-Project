@@ -9,6 +9,8 @@
 
 class UItemComponent;
 class UStatusComponent;
+class UNewEquippedSlotsContainer;
+class UNewInventoryItemContainer;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewEquipmentSubUI : public UUserWidget, public IUIInterface
@@ -18,6 +20,12 @@ class DOMINIONPROTOCOL_API UNewEquipmentSubUI : public UUserWidget, public IUIIn
 public:
 	UFUNCTION()
 	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
+
+	UFUNCTION()
+	void RefreshEquipmentSubUI();
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateStatusPlateInfo();
 
 protected:
 	virtual void NativeConstruct() override;
@@ -39,4 +47,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputMappingContext> EquipmentSubUIMappingContext;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewEquippedSlotsContainer> EquippedSlotContainer;
+	
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewInventoryItemContainer> InventoryItemContainer;
+	
 };

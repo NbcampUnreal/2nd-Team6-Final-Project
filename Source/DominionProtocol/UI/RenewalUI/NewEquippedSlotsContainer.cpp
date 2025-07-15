@@ -11,6 +11,14 @@ void UNewEquippedSlotsContainer::NativeConstruct()
 	Super::NativeConstruct();
 
 	BindItemSlotsDelegate();
+
+	SlotWidgetArray.AddUnique(AccessorySlot_Primary);
+	SlotWidgetArray.AddUnique(AccessorySlot_Secondary);
+	SlotWidgetArray.AddUnique(SkillSlot);
+	SlotWidgetArray.AddUnique(WeaponSlot_Primary);
+	SlotWidgetArray.AddUnique(WeaponSlot_Secondary);
+	SlotWidgetArray.AddUnique(ConsumableSlot_Secondary);
+	SlotWidgetArray.AddUnique(ConsumableSlot_Tertiary);
 }
 
 void UNewEquippedSlotsContainer::BindItemSlotsDelegate()
