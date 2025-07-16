@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EnumAndStruct/EDisplayItemFilter.h"
 #include "UI/BaseContent.h"
 #include "NewItemFilterIcon.generated.h"
 
@@ -35,7 +36,7 @@ protected:
 	TObjectPtr<UTexture2D> IconTexture;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText ItemFilterName;
+	EDisplayItemFilter ItemFilter;
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	TObjectPtr<UImage> ItemFilterImage;

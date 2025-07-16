@@ -8,11 +8,13 @@
 #include "UI/BaseContent.h"
 #include "NewItemSlot.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemSlotClickedEvent, FName, SlotName, EDisplayItemFilter, SlotItemFilter);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnItemSlotClickedEvent, FName, EDisplayItemFilter);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnItemSlotGetFocusEvent, FGameplayTag, int32);
 
 class UBorder;
 class USizeBox;
 class UItemComponent;
+class UNewItemSlotContainer;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewItemSlot : public UBaseContent
@@ -21,16 +23,34 @@ class DOMINIONPROTOCOL_API UNewItemSlot : public UBaseContent
 
 public:
 	FOnItemSlotClickedEvent OnItemSlotClickedEvent;
+	FOnItemSlotGetFocusEvent OnItemSlotGetFocusEvent;
+
+	virtual void GetFocus() override;
+
+	FName GetSlotName() const { return SlotName; }
+	
+	int32 GetItemQuantity() const { return ItemQuantity; }
+
+	void SetInfo(const FGameplayTag NewItemTag, const int32 NewItemQuantity);
+
+	void SetOwingWidget(UNewItemSlotContainer* NewEquippedSlotsContainer) { OwningWidget = NewEquippedSlotsContainer; }
 
 protected:
+	virtual void SetInfo() override;
+
+	UFUNCTION(BlueprintCallable)
+	void ItemSlotClickedEvent() const;
+	
 	bool SearchingSlotItem();
 	
 	virtual void NativeConstruct() override;
 
 	virtual void NativePreConstruct() override;
 
-
 protected:
+	UPROPERTY(BlueprintReadWrite)
+	int32 ItemQuantity = 0;
+	
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	TObjectPtr<UBorder> ItemImage;
 	
@@ -51,4 +71,7 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UItemComponent> ItemComponent;
+
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<UNewItemSlotContainer> OwningWidget;
 };

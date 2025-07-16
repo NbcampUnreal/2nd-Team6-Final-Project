@@ -14,6 +14,7 @@ void UBaseContentContainer::ChangeFocusIndex(const int32 NewFocusIndex)
 		{
 			ContentArray[i]->GetFocus();
 			CurrentFocusIndex = NewFocusIndex;
+			OnFocusIndexChanged.Broadcast(NewFocusIndex);
 		}
 		else
 		{

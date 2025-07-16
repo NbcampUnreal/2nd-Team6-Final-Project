@@ -3,6 +3,10 @@
 
 #include "UI/RenewalUI/NewEquipmentSubUI.h"
 
+#include "NewInventoryItemContainer.h"
+#include "NewItemSlot.h"
+#include "NewItemSlotContainer.h"
+#include "Components/Border.h"
 #include "Components/ItemComponent/ItemComponent.h"
 #include "Components/StatusComponent/StatusComponent.h"
 
@@ -21,9 +25,12 @@ void UNewEquipmentSubUI::RefreshEquipmentSubUI()
 	
 }
 
-void UNewEquipmentSubUI::UpdateStatusPlateInfo()
+void UNewEquipmentSubUI::ShowInventoryItemContainer(const FName SlotName, const EDisplayItemFilter DisplayFilter) const
 {
-	
+	InventoryBorder->SetVisibility(ESlateVisibility::Visible);
+
+	InventoryItemContainer->SetLastDisplayArray(DisplayFilter);
+	InventoryItemContainer->SetClickedSlotName(SlotName);
 }
 
 void UNewEquipmentSubUI::NativeConstruct()
@@ -42,6 +49,8 @@ void UNewEquipmentSubUI::NativeConstruct()
 		ItemComponent = PlayerItemComponent;
 		BindEquippedSlotsDelegates();
 	}
+
+	BindSlotClickedDelegates();
 }
 
 void UNewEquipmentSubUI::BindEquippedSlotsDelegates()
@@ -56,4 +65,16 @@ void UNewEquipmentSubUI::BindEquippedSlotsDelegates()
 void UNewEquipmentSubUI::OnUpdateEquippedSlots()
 {
 	UpdateEquippedSlots();
+}
+
+void UNewEquipmentSubUI::BindSlotClickedDelegates()
+{
+	TArray<UNewItemSlot*> SlotArray = EquippedSlotContainer->GetSlotWidgetArray();
+	if (SlotArray.Num() > 0)
+	{
+		for (UNewItemSlot* ItemSlot : SlotArray)
+		{
+			ItemSlot->OnItemSlotClickedEvent.AddUObject(this, &UNewEquipmentSubUI::ShowInventoryItemContainer);	
+		}
+	}
 }

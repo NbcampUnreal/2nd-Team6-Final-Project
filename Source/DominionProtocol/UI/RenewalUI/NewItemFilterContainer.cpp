@@ -5,6 +5,12 @@
 
 #include "Player/InGameController.h"
 
+void UNewItemFilterContainer::SetCurrentItemFilter(const EDisplayItemFilter NewItemFilter)
+{
+	CurrentItemFilter = NewItemFilter;
+	OnDisplayItemFilterChangedEvent.Broadcast(CurrentItemFilter);
+}
+
 void UNewItemFilterContainer::NativeConstruct()
 {
 	Super::NativeConstruct();

@@ -3,14 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Blueprint/UserWidget.h"
+#include "EnumAndStruct/EDisplayItemFilter.h"
 #include "Interface/UIInterface.h"
 #include "NewEquipmentSubUI.generated.h"
 
 class UItemComponent;
 class UStatusComponent;
-class UNewEquippedSlotsContainer;
+class UNewItemSlotContainer;
 class UNewInventoryItemContainer;
+class UBorder;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewEquipmentSubUI : public UUserWidget, public IUIInterface
@@ -24,10 +27,9 @@ public:
 	UFUNCTION()
 	void RefreshEquipmentSubUI();
 
-	UFUNCTION(BlueprintCallable)
-	void UpdateStatusPlateInfo();
-
 protected:
+	void ShowInventoryItemContainer(const FName SlotName, const EDisplayItemFilter DisplayFilter) const;
+	
 	virtual void NativeConstruct() override;
 	
 	void BindEquippedSlotsDelegates();
@@ -37,6 +39,8 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateEquippedSlots();
+
+	void BindSlotClickedDelegates();
 	
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -49,9 +53,11 @@ protected:
 	TObjectPtr<UInputMappingContext> EquipmentSubUIMappingContext;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UNewEquippedSlotsContainer> EquippedSlotContainer;
+	TObjectPtr<UNewItemSlotContainer> EquippedSlotContainer;
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UNewInventoryItemContainer> InventoryItemContainer;
-	
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UBorder> InventoryBorder;
 };

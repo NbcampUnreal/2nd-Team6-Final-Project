@@ -6,6 +6,29 @@
 #include "Components/SizeBox.h"
 #include "Components/ItemComponent/ItemComponent.h"
 
+void UNewItemSlot::SetInfo()
+{
+	Super::SetInfo();
+}
+
+void UNewItemSlot::ItemSlotClickedEvent() const
+{
+	OnItemSlotClickedEvent.Broadcast(SlotName, SlotItemFilter);
+}
+
+void UNewItemSlot::GetFocus()
+{
+	Super::GetFocus();
+
+	OnItemSlotGetFocusEvent.Broadcast(ItemTag, ItemQuantity);
+}
+
+void UNewItemSlot::SetInfo(const FGameplayTag NewItemTag, const int32 NewItemQuantity)
+{
+	ItemTag = NewItemTag;
+	ItemQuantity = NewItemQuantity;
+}
+
 bool UNewItemSlot::SearchingSlotItem()
 {
 	if (!ItemTag.IsValid())
