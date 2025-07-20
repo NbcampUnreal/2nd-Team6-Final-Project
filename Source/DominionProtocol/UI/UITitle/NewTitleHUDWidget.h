@@ -6,8 +6,6 @@
 #include "UI/BaseHUDWidget.h"
 #include "NewTitleHUDWidget.generated.h"
 
-class ATitleController;
-
 UCLASS()
 class DOMINIONPROTOCOL_API UNewTitleHUDWidget : public UBaseHUDWidget
 {
@@ -17,17 +15,26 @@ protected:
 	virtual void NativeConstruct() override;
 	
 	// for Button Event
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void ActivateSaveSlotUI();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void DeactivateSaveSlotUI();
+
+	UFUNCTION()
+	void ExitGame() const;
+
+	UFUNCTION()
+	void BindButtonActionDelegates();
+
+	UFUNCTION()
+	void BindInputActionDelegates();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UUserWidget> TitleMenuUI;
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UUserWidget> SaveSlotBoxUI;
+	TObjectPtr<UUserWidget> SaveSlotContainerUI;
 
 };

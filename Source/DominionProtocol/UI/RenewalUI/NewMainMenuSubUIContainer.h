@@ -25,6 +25,8 @@ protected:
 	
 	virtual void NativeConstruct() override;
 
+	virtual void SetInputModeForUIStack() override;
+
 	virtual void ChangeMappingContext(UUserWidget* NewTopUI) const override;
 	
 protected:

@@ -8,9 +8,9 @@
 #include "UI/BaseContentContainer.h"
 #include "NewInventoryItemContainer.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnLastDisplayArrayChangedEvent);
-
 struct FItemUISlotData;
+class UNewEquipmentSubUI;
+class UNewItemSubUI;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewInventoryItemContainer : public UBaseContentContainer
@@ -18,44 +18,35 @@ class DOMINIONPROTOCOL_API UNewInventoryItemContainer : public UBaseContentConta
 	GENERATED_BODY()
 
 public:
-	FOnLastDisplayArrayChangedEvent OnLastDisplayArrayChangedEvent;
-	
-	UFUNCTION(BlueprintCallable)
-	void SetLastDisplayArray(const EDisplayItemFilter& NewItemDisplay);
+	UFUNCTION()
+	void SetContentInfo();
 
-	UFUNCTION(BlueprintCallable)
-	void SetClickedSlotName(const FName& NewClickedSlotName) { ClickedSlotName = NewClickedSlotName; }
+	void RefreshWidget();
 
-	UFUNCTION(BlueprintCallable)
-	void SetClickedInventoryItemTag(const FGameplayTag& NewClickedInventoryItemTag) { ClickedInventoryItemTag = NewClickedInventoryItemTag; }
+	// Setter
+	void SetDisplayItemFilter(const EDisplayItemFilter NewDisplayItemFilter);
+	void SetClickedItemTag(const FGameplayTag NewClickedItemTag);
+	void SetClickedItemQuantity(const int32 NewClickedItemQuantity);
+
+	// Getter
+	EDisplayItemFilter GetDisplayItemFilter() const { return DisplayItemFilter; }
+	FGameplayTag GetClickedItemTag() const { return ClickedItemTag; }
+	int32 GetClickedItemQuantity() const { return ClickedItemQuantity; }
 	
-protected:
 	virtual void ChangeFocusIndex(const int32 NewFocusIndex) override;
 	
-	void RefreshInventoryItemInfo();
-
+protected:
 	void SetDisplayFocusIndex(const int32 NewFocusIndex);
-
-	UFUNCTION()
-	void SetInventoryItemInfo();
 
 	UFUNCTION()
 	void SetCurrentItemDataArray();
 
 	UFUNCTION()
 	void SetFocusIndex();
-	
-	void EquipItemToClick();
-	
-	void UnEquipItemToClick();
-
-	UFUNCTION()
-	void SetInventoryItemOwningWidget();
-
-	UFUNCTION()
-	void BindInventoryRefreshDelegates();
 
 	void BindInputActionsDelegates();
+
+	void BindChangeItemFilterFocusDelegates();
 
 	virtual void NativeConstruct() override;
 
@@ -70,21 +61,21 @@ protected:
 	TArray<FItemUISlotData> CurrentItemDataArray;
 	
 	UPROPERTY(BlueprintReadWrite)
-	EDisplayItemFilter LastDisplayArray = EDisplayItemFilter::AllItems;
+	EDisplayItemFilter DisplayItemFilter = EDisplayItemFilter::AllItems;
 
-	FName ClickedSlotName;
+	FGameplayTag ClickedItemTag;
 
-	FGameplayTag ClickedInventoryItemTag; 
+	int32 ClickedItemQuantity;
 	
-	int32 AllItemsIndex = 0;		
+	int32 AllItemsFocusIndex = 0;		
 	
-	int32 WeaponItemsIndex = 0;		
+	int32 WeaponItemsFocusIndex = 0;		
 	
-	int32 AccessoryItemsIndex = 0;	
+	int32 AccessoryItemsFocusIndex = 0;	
 	
-	int32 ConsumableItemsIndex = 0;	
+	int32 ConsumableItemsFocusIndex = 0;	
 	
-	int32 SkillItemsIndex = 0;		
+	int32 SkillItemsFocusIndex = 0;		
 	
-	int32 OtherItemsIndex = 0;		
+	int32 OtherItemsFocusIndex = 0;		
 };

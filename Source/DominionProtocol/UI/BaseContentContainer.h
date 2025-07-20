@@ -6,8 +6,6 @@
 #include "Blueprint/UserWidget.h"
 #include "BaseContentContainer.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnFocusIndexChangedEvent, int32);
-
 class UBaseContent;
 
 UCLASS(Abstract)
@@ -15,20 +13,19 @@ class DOMINIONPROTOCOL_API UBaseContentContainer : public UUserWidget
 {
 	GENERATED_BODY()
 
-public:
-	FOnFocusIndexChangedEvent OnFocusIndexChanged;
-
 protected:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
     virtual void ChangeFocusIndex(const int32 NewFocusIndex);
     
-    UFUNCTION(BlueprintCallable)
-    void IncreaseFocusIndex();
+    UFUNCTION()
+    virtual void IncreaseFocusIndex();
     
-    UFUNCTION(BlueprintCallable)
-    void DecreaseFocusIndex();
+    UFUNCTION()
+    virtual void DecreaseFocusIndex();
           	
 	virtual void NativeConstruct() override;
+
+	void BindFocusIndexChangedEventDelegates();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))

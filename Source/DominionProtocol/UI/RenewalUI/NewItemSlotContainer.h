@@ -27,7 +27,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DecreaseFocusIndex();
 
-	void RefreshInfo();
+	void RefreshWidget();
 
 	TArray<TObjectPtr<UNewItemSlot>> GetSlotWidgetArray() const { return SlotWidgetArray; }
 

@@ -3,9 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "Blueprint/UserWidget.h"
-#include "EnumAndStruct/EDisplayItemFilter.h"
 #include "Interface/UIInterface.h"
 #include "NewEquipmentSubUI.generated.h"
 
@@ -25,22 +23,20 @@ public:
 	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 
 	UFUNCTION()
-	void RefreshEquipmentSubUI();
+	void RequestRefreshWidget(const ESlateVisibility NewVisibility);
+	
+	UFUNCTION()
+	void RefreshWidget();
 
 protected:
-	void ShowInventoryItemContainer(const FName SlotName, const EDisplayItemFilter DisplayFilter) const;
-	
-	virtual void NativeConstruct() override;
-	
-	void BindEquippedSlotsDelegates();
-
-	UFUNCTION()
-	void OnUpdateEquippedSlots();
+	void ShowInventoryItemContainer() const;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void UpdateEquippedSlots();
+	void RequestRefreshStatusPlate();
 
-	void BindSlotClickedDelegates();
+	void BindRefreshWidgetDelegates();
+	
+	virtual void NativeConstruct() override;
 	
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -53,7 +49,7 @@ protected:
 	TObjectPtr<UInputMappingContext> EquipmentSubUIMappingContext;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UNewItemSlotContainer> EquippedSlotContainer;
+	TObjectPtr<UNewItemSlotContainer> ItemSlotContainer;
 	
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UNewInventoryItemContainer> InventoryItemContainer;

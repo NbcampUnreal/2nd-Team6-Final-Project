@@ -5,14 +5,15 @@
 #include "CoreMinimal.h"
 #include "Interface/UIInterface.h"
 #include "UI/BaseContentContainer.h"
-#include "NewSaveSlotBoxUI.generated.h"
+#include "NewSaveSlotContainerUI.generated.h"
 
 class UVerticalBox;
 class UNewSaveSlot;
 class USaveManagerSubsystem;
+class UNewShotcutButton;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewSaveSlotBoxUI : public UBaseContentContainer, public IUIInterface
+class DOMINIONPROTOCOL_API UNewSaveSlotContainerUI : public UBaseContentContainer, public IUIInterface
 {
 	GENERATED_BODY()
 
@@ -23,22 +24,18 @@ public:
 	void RefreshSlotData(const ESlateVisibility VisibilityState);
 	
 	// For Input Action 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION()
 	void OnStartGame();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION()
 	void OnDeleteGame();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnBackToTitleMenu();
+	FORCEINLINE USaveManagerSubsystem* GetSaveManagerSubsystemInstance() const { return SaveManagerSubsystemInstance; }
 
-	UFUNCTION()
-	void OnMoveSelectionUp();
-
-	UFUNCTION()
-	void OnMoveSelectionDown();
-
-	FORCEINLINE class USaveManagerSubsystem* GetSaveManagerSubsystemInstance() const { return SaveManagerSubsystemInstance; }
+	// Getter
+	UNewShotcutButton* GetStartButton() const { return StartButton; }
+	UNewShotcutButton* GetDeleteButton() const { return DeleteButton; }
+	UNewShotcutButton* GetBackButton() const { return BackButton; }
 
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -51,14 +48,26 @@ protected:
 	void DeleteGame();
 
 	UFUNCTION()
-	void InputSaveSlotData(UNewSaveSlot* SaveSlot) const;
+	void SetSaveSlotData(UNewSaveSlot* SaveSlot) const;
 
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
 	void BindInputActionDelegates();
+
+	UFUNCTION()
+	void BindButtonActionDelegates();
 	
 protected:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewShotcutButton> StartButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewShotcutButton> DeleteButton;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewShotcutButton> BackButton;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UDataTable> PastCrackImageDataTable;
 

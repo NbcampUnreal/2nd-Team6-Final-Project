@@ -43,6 +43,8 @@ void UNewInventoryItem::GetFocus()
 	Super::GetFocus();
 
 	GetFocusEffects();
+	
+	OnChangeInventoryItemFocusEvent.Broadcast(ItemData.ItemTag, ItemData.CurrentQuantity);
 }
 
 void UNewInventoryItem::LoseFocus()
@@ -50,6 +52,11 @@ void UNewInventoryItem::LoseFocus()
 	Super::LoseFocus();
 
 	LoseFocusEffects();
+}
+
+void UNewInventoryItem::BroadcastButtonClickEvent() const
+{
+	OnInventoryItemButtonClickedEvent.Broadcast();
 }
 
 void UNewInventoryItem::DisplayInfo()
@@ -63,7 +70,7 @@ void UNewInventoryItem::DisplayInfo()
 	
 	ItemIcon->SetVisibility(ESlateVisibility::Visible);
 
-	// 2. 장비 중 표시 확인 
+	// 2. 장착됨 표시 확인 
 	bIsEquippedItem = false;
 	
 	for (const TPair<FName, FGameplayTag> Pair : TotalItemSlotMap)
@@ -85,6 +92,7 @@ void UNewInventoryItem::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	// 장착됨 표시를 위한 변수 설정
 	APawn* PlayerPawn = GetOwningPlayerPawn();
 	if (PlayerPawn)
 	{

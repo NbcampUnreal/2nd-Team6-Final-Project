@@ -7,6 +7,9 @@
 #include "UI/BaseContent.h"
 #include "NewInventoryItem.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnChangeInventoryItemFocusEvent, FGameplayTag, int32)
+DECLARE_MULTICAST_DELEGATE(EOnInventoryItemButtonClickedEvent)
+
 class UNewInventoryItemContainer;
 class UImage;
 class UTextBlock;
@@ -19,6 +22,9 @@ class DOMINIONPROTOCOL_API UNewInventoryItem : public UBaseContent
 	GENERATED_BODY()
 
 public:
+	FOnChangeInventoryItemFocusEvent OnChangeInventoryItemFocusEvent;
+	EOnInventoryItemButtonClickedEvent OnInventoryItemButtonClickedEvent;
+	
 	virtual void SetInfo() override;
 	
 	void SetInfo(const FGameplayTag& ItemTag, UTexture2D* ItemTexture, const FString& ItemNameString, const FText& ItemDescription, int32
@@ -28,7 +34,8 @@ public:
 
 	virtual void LoseFocus() override;
 
-	void SetOwningWidget(UNewInventoryItemContainer* NewOwningWidget) { OwningWidget = NewOwningWidget;}
+	UFUNCTION(BlueprintCallable)
+	void BroadcastButtonClickEvent() const;
 
 protected:
 	UFUNCTION()
@@ -43,9 +50,6 @@ protected:
 	virtual void NativeConstruct() override;
 
 protected:
-	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<UNewInventoryItemContainer> OwningWidget;
-	
 	UPROPERTY()
 	TMap<FName, FGameplayTag> TotalItemSlotMap;
 	
@@ -65,5 +69,4 @@ protected:
 	FItemUISlotData ItemData;
 
 	bool bIsEquippedItem = false;
-	
 };

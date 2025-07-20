@@ -6,6 +6,11 @@
 #include "Components/SizeBox.h"
 #include "Components/TextBlock.h"
 
+void UNewShotcutButton::BroadcastButtonClickedEvent() const
+{
+	OnShotcutButtonClickedEvent.Broadcast();
+}
+
 void UNewShotcutButton::SetShotcutKeyText(const FText& NewShotcutKeyText)
 {
 	ShotcutKeyText = NewShotcutKeyText;

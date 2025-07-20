@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "BaseContent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FRequestChangingFocusIndexEvent, int32)
 
 UCLASS(Abstract)
 class DOMINIONPROTOCOL_API UBaseContent : public UUserWidget
@@ -13,9 +14,14 @@ class DOMINIONPROTOCOL_API UBaseContent : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	FRequestChangingFocusIndexEvent RequestChangingFocusIndexEvent;
+	
 	virtual void SetInfo();
 	
 	virtual void SetInfoEmpty();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void RequestChangingFocusIndex() const;
 	
 	UFUNCTION()
 	virtual void GetFocus();

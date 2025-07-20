@@ -32,6 +32,12 @@ void UNewMainMenuSubUIContainer::NativeConstruct()
 	ChangeDisplaySubUI(0);
 }
 
+void UNewMainMenuSubUIContainer::SetInputModeForUIStack()
+{
+	// InputMode 변경 필요 없어서 Super 함수 실행 차단
+	// Super::SetInputModeForUIStack();
+}
+
 void UNewMainMenuSubUIContainer::ChangeMappingContext(UUserWidget* NewTopUI) const
 {
 	if (ActivatedUIStack.Num() > 0)

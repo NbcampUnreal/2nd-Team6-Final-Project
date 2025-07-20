@@ -6,6 +6,8 @@
 #include "UI/BaseContent.h"
 #include "NewSaveSlot.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnButtonClickedEvent);
+
 class UImage;
 class UTextBlock;
 class USaveManagerSubsystem;
@@ -16,6 +18,8 @@ class DOMINIONPROTOCOL_API UNewSaveSlot : public UBaseContent
 	GENERATED_BODY()
 
 public:
+	FOnButtonClickedEvent OnButtonClickedEvent;
+	
 	virtual void SetInfo() override;
 	
 	void SetInfo(bool ExistSaveSlotData, UTexture2D* CrackImage, const FString& GameIndexToString, const FString& SaveTimeToString, const
@@ -27,16 +31,21 @@ public:
 
 	virtual void GetFocus() override;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void GetFocusEffects();
-
 	virtual void LoseFocus() override;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void LoseFocusEffects();
+	UFUNCTION(BlueprintCallable)
+	void BroadcastButtonClickEvent() const;
+
+	bool GetExistSaveSlotData() const { return bExistSaveSlotData; }
 
 protected:
 	virtual void NativeConstruct() override;
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void GetFocusEffects();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void LoseFocusEffects();
 
 protected:
 	UPROPERTY()

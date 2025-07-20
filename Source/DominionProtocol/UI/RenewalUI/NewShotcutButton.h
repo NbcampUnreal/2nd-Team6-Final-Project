@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "NewShotcutButton.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnShotcutButtonClickedEvent);
+
 class UTextBlock;
 class USizeBox;
 
@@ -15,6 +17,11 @@ class DOMINIONPROTOCOL_API UNewShotcutButton : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	FOnShotcutButtonClickedEvent OnShotcutButtonClickedEvent;
+
+	UFUNCTION(BlueprintCallable)
+	void BroadcastButtonClickedEvent() const;
+	
 	UFUNCTION(BlueprintCallable)
 	void SetShotcutKeyText(const FText& NewShotcutKeyText);
 

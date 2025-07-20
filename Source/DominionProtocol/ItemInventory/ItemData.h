@@ -6,7 +6,6 @@
 #include "ItemInventory/AccessoryData.h"
 #include "Engine/DataTable.h"
 #include "Engine/Texture2D.h"
-#include "Util/GameTagList.h"
 #include "ItemData.generated.h"
 
 UENUM(BlueprintType)
@@ -15,7 +14,6 @@ enum class EItemType : uint8
 	Equippable	UMETA(DisplayName = "Equippable"),
 	Consumable	UMETA(DisplayName = "Consumable"),
 	Other		UMETA(DisplayName = "Other")
-
 };
 
 USTRUCT(BlueprintType)

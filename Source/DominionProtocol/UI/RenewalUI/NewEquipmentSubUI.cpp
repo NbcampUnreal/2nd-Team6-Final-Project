@@ -4,7 +4,6 @@
 #include "UI/RenewalUI/NewEquipmentSubUI.h"
 
 #include "NewInventoryItemContainer.h"
-#include "NewItemSlot.h"
 #include "NewItemSlotContainer.h"
 #include "Components/Border.h"
 #include "Components/ItemComponent/ItemComponent.h"
@@ -20,17 +19,25 @@ UInputMappingContext* UNewEquipmentSubUI::GetInputMappingContext_Implementation(
 	return EquipmentSubUIMappingContext;
 }
 
-void UNewEquipmentSubUI::RefreshEquipmentSubUI()
+void UNewEquipmentSubUI::RequestRefreshWidget(const ESlateVisibility NewVisibility)
 {
-	
+	if (ESlateVisibility::Visible == NewVisibility)
+	{
+		RefreshWidget();
+	}
 }
 
-void UNewEquipmentSubUI::ShowInventoryItemContainer(const FName SlotName, const EDisplayItemFilter DisplayFilter) const
+void UNewEquipmentSubUI::RefreshWidget()
+{
+	ItemSlotContainer->RefreshWidget();
+	InventoryItemContainer->RefreshWidget();
+	
+	RequestRefreshStatusPlate();
+}
+
+void UNewEquipmentSubUI::ShowInventoryItemContainer() const
 {
 	InventoryBorder->SetVisibility(ESlateVisibility::Visible);
-
-	InventoryItemContainer->SetLastDisplayArray(DisplayFilter);
-	InventoryItemContainer->SetClickedSlotName(SlotName);
 }
 
 void UNewEquipmentSubUI::NativeConstruct()
@@ -47,34 +54,18 @@ void UNewEquipmentSubUI::NativeConstruct()
 	if (PlayerItemComponent)
 	{
 		ItemComponent = PlayerItemComponent;
-		BindEquippedSlotsDelegates();
 	}
+	
+	BindRefreshWidgetDelegates();
 
-	BindSlotClickedDelegates();
+	OnVisibilityChanged.AddDynamic(this, &UNewEquipmentSubUI::RequestRefreshWidget);
 }
 
-void UNewEquipmentSubUI::BindEquippedSlotsDelegates()
+void UNewEquipmentSubUI::BindRefreshWidgetDelegates()
 {
 	if (ItemComponent)
 	{
-		ItemComponent->OnInventoryEquippedSlotItemsChanged.AddUObject(this, &UNewEquipmentSubUI::OnUpdateEquippedSlots);
-		ItemComponent->OnInventoryConsumableSlotItemsChanged.AddUObject(this, &UNewEquipmentSubUI::OnUpdateEquippedSlots);
-	}
-}
-
-void UNewEquipmentSubUI::OnUpdateEquippedSlots()
-{
-	UpdateEquippedSlots();
-}
-
-void UNewEquipmentSubUI::BindSlotClickedDelegates()
-{
-	TArray<UNewItemSlot*> SlotArray = EquippedSlotContainer->GetSlotWidgetArray();
-	if (SlotArray.Num() > 0)
-	{
-		for (UNewItemSlot* ItemSlot : SlotArray)
-		{
-			ItemSlot->OnItemSlotClickedEvent.AddUObject(this, &UNewEquipmentSubUI::ShowInventoryItemContainer);	
-		}
+		ItemComponent->OnInventoryEquippedSlotItemsChanged.AddUObject(this, &UNewEquipmentSubUI::RefreshWidget);
+		ItemComponent->OnInventoryConsumableSlotItemsChanged.AddUObject(this, &UNewEquipmentSubUI::RefreshWidget);
 	}
 }

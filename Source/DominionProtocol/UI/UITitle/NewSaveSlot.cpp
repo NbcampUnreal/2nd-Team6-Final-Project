@@ -50,6 +50,11 @@ void UNewSaveSlot::LoseFocus()
 	LoseFocusEffects();
 }
 
+void UNewSaveSlot::BroadcastButtonClickEvent() const
+{
+	OnButtonClickedEvent.Broadcast();
+}
+
 void UNewSaveSlot::NativeConstruct()
 {
 	const auto* GameInstance = GetWorld()->GetGameInstance();

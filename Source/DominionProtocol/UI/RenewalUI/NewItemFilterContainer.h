@@ -7,24 +7,24 @@
 #include "UI/BaseContentContainer.h"
 #include "NewItemFilterContainer.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDisplayItemFilterChangedEvent, EDisplayItemFilter, CurrentItemFilter);
-
 UCLASS()
 class DOMINIONPROTOCOL_API UNewItemFilterContainer : public UBaseContentContainer
 {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintAssignable)
-	FOnDisplayItemFilterChangedEvent OnDisplayItemFilterChangedEvent;
-
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void SetCurrentItemFilter(const EDisplayItemFilter NewItemFilter);
+
+	UFUNCTION()
+	EDisplayItemFilter GetCurrentItemFilter() const { return CurrentItemFilter; }
 
 protected:
 	virtual void NativeConstruct() override;
 
 	void BindInputActionDelegates();
+
+	void BindChangeItemFilterFocusDelegates();
 
 protected:
 	UPROPERTY(BlueprintReadWrite)

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/UITitle/NewSaveSlotBoxUI.h"
+#include "UI/UITitle/NewSaveSlotContainerUI.h"
 
 #include "NewSaveSlot.h"
 #include "Components/VerticalBox.h"
@@ -9,13 +9,14 @@
 #include "EnumAndStruct/FCrackImageData.h"
 #include "Player/TitleController.h"
 #include "UI/BaseContent.h"
+#include "UI/RenewalUI/NewShotcutButton.h"
 
-UInputMappingContext* UNewSaveSlotBoxUI::GetInputMappingContext_Implementation() const
+UInputMappingContext* UNewSaveSlotContainerUI::GetInputMappingContext_Implementation() const
 {
 	return TitleSlotUIMappingContext;
 }
 
-void UNewSaveSlotBoxUI::RefreshSlotData(const ESlateVisibility VisibilityState)
+void UNewSaveSlotContainerUI::RefreshSlotData(const ESlateVisibility VisibilityState)
 {
 	if (VisibilityState == ESlateVisibility::Visible)
 	{
@@ -24,23 +25,46 @@ void UNewSaveSlotBoxUI::RefreshSlotData(const ESlateVisibility VisibilityState)
 			auto* NewSaveSlot = Cast<UNewSaveSlot>(Content);
 			if (NewSaveSlot)
 			{
-				InputSaveSlotData(NewSaveSlot);
+				SetSaveSlotData(NewSaveSlot);
 			}
 		}	
 	}
 }
 
-void UNewSaveSlotBoxUI::OnMoveSelectionUp()
+void UNewSaveSlotContainerUI::OnStartGame()
 {
-	DecreaseFocusIndex();
+	if (ContentArray.IsValidIndex(CurrentFocusIndex))
+	{
+		const auto* SaveSlot = Cast<UNewSaveSlot>(ContentArray[CurrentFocusIndex]);
+		if (SaveSlot)
+		{
+			if (!SaveSlot->GetExistSaveSlotData())
+			{
+				StartGame();
+				return;
+			}
+			LoadGame();
+		}
+	}
 }
 
-void UNewSaveSlotBoxUI::OnMoveSelectionDown()
+void UNewSaveSlotContainerUI::OnDeleteGame()
 {
-	IncreaseFocusIndex();
+	if (ContentArray.IsValidIndex(CurrentFocusIndex))
+	{
+		const auto* SaveSlot = Cast<UNewSaveSlot>(ContentArray[CurrentFocusIndex]);
+		if (SaveSlot)
+		{
+			if (!SaveSlot->GetExistSaveSlotData())
+			{
+				return;
+			}
+			DeleteGame();
+		}
+	}
 }
 
-void UNewSaveSlotBoxUI::StartGame() const
+void UNewSaveSlotContainerUI::StartGame() const
 {
 	// SlotIndex는 위젯에서 설정
 	if (CurrentFocusIndex != -1)
@@ -69,7 +93,7 @@ void UNewSaveSlotBoxUI::StartGame() const
 	}
 }
 
-void UNewSaveSlotBoxUI::LoadGame() const
+void UNewSaveSlotContainerUI::LoadGame() const
 {
 	if (CurrentFocusIndex != -1)
 	{
@@ -97,18 +121,19 @@ void UNewSaveSlotBoxUI::LoadGame() const
 	}
 }
 
-void UNewSaveSlotBoxUI::DeleteGame()
+void UNewSaveSlotContainerUI::DeleteGame()
 {
-	if (CurrentFocusIndex != -1)
+	if (CurrentFocusIndex == -1)
 	{
-		SaveManagerSubsystemInstance->DeleteSaveSlot(CurrentFocusIndex);
-		RefreshSlotData(ESlateVisibility::Visible);
+		return;
 	}
+	
+	SaveManagerSubsystemInstance->DeleteSaveSlot(CurrentFocusIndex);
+	RefreshSlotData(ESlateVisibility::Visible);
 }
 
-void UNewSaveSlotBoxUI::InputSaveSlotData(UNewSaveSlot* SaveSlot) const
+void UNewSaveSlotContainerUI::SetSaveSlotData(UNewSaveSlot* SaveSlot) const
 {
-	
 	if (!SaveManagerSubsystemInstance)
 	{
 		return; 
@@ -175,9 +200,13 @@ void UNewSaveSlotBoxUI::InputSaveSlotData(UNewSaveSlot* SaveSlot) const
 
 		SaveSlot->SetInfo(SaveSlotMetaData.SaveSlotExist, CrackMapImage, GameIndexString,SaveTimeString ,PlayTimeString, CurrentCrackName, CurrentLevelName, PlayerLevelString);
 	}
+	else
+	{
+		SaveSlot->SetInfoEmpty();
+	}
 }
 
-void UNewSaveSlotBoxUI::NativeConstruct()
+void UNewSaveSlotContainerUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 
@@ -190,23 +219,46 @@ void UNewSaveSlotBoxUI::NativeConstruct()
 	{
 		SaveManagerSubsystemInstance = SaveManagerSubsystem;
 	}
-
-	
 	
 	BindInputActionDelegates();
+	BindButtonActionDelegates();
 
-	OnVisibilityChanged.AddDynamic(this, &UNewSaveSlotBoxUI::RefreshSlotData);
+	OnVisibilityChanged.AddDynamic(this, &UNewSaveSlotContainerUI::RefreshSlotData);
 }
 
-void UNewSaveSlotBoxUI::BindInputActionDelegates()
+void UNewSaveSlotContainerUI::BindInputActionDelegates()
 {
 	auto* TitleController = Cast<ATitleController>(GetOwningPlayer());
 	if (TitleController)
 	{
-		TitleController->OnSlotUIStartGameEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnStartGame);
-		TitleController->OnSlotUIDeleteGameEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnDeleteGame);
-		TitleController->OnSlotUIBackToTitleMenuEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnBackToTitleMenu);
-		TitleController->OnSlotUIMoveSelectionUpEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnMoveSelectionUp);
-		TitleController->OnSlotUIMoveSelectionDownEvent.AddUObject(this, &UNewSaveSlotBoxUI::OnMoveSelectionDown);
+		TitleController->OnSlotUIStartGameEvent.AddUObject(this, &UNewSaveSlotContainerUI::OnStartGame);
+		TitleController->OnSlotUIDeleteGameEvent.AddUObject(this, &UNewSaveSlotContainerUI::OnDeleteGame);
+		TitleController->OnSlotUIMoveSelectionUpEvent.AddUObject(this, &UNewSaveSlotContainerUI::DecreaseFocusIndex);
+		TitleController->OnSlotUIMoveSelectionDownEvent.AddUObject(this, &UNewSaveSlotContainerUI::IncreaseFocusIndex);
+	}
+}
+
+void UNewSaveSlotContainerUI::BindButtonActionDelegates()
+{
+	if (StartButton)
+	{
+		StartButton->OnShotcutButtonClickedEvent.AddUObject(this, &UNewSaveSlotContainerUI::OnStartGame);
+	}
+
+	if (DeleteButton)
+	{
+		DeleteButton->OnShotcutButtonClickedEvent.AddUObject(this, &UNewSaveSlotContainerUI::OnDeleteGame);
+	}
+
+	if (ContentArray.Num() > 0)
+	{
+		for (UBaseContent* Content : ContentArray)
+		{
+			auto* SaveSlot = Cast<UNewSaveSlot>(Content);
+			if (SaveSlot)
+			{
+				SaveSlot->OnButtonClickedEvent.AddUObject(this, &UNewSaveSlotContainerUI::OnStartGame);
+			}
+		}
 	}
 }

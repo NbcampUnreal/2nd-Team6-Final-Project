@@ -13,6 +13,11 @@ void UBaseContent::SetInfoEmpty()
 	
 }
 
+void UBaseContent::RequestChangingFocusIndex() const
+{
+	RequestChangingFocusIndexEvent.Broadcast(ContentIndex);
+}
+
 void UBaseContent::GetFocus()
 {
 	

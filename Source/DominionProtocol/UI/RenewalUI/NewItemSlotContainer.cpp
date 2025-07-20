@@ -66,7 +66,7 @@ void UNewItemSlotContainer::DecreaseFocusIndex()
 	ChangeFocusIndex(CurrentFocusIndex - 1);
 }
 
-void UNewItemSlotContainer::RefreshInfo()
+void UNewItemSlotContainer::RefreshWidget()
 {
 	OnUpdateConsumableSlotItemMap();
 	OnUpdateEquippableSlotItemMap();

@@ -11,22 +11,7 @@ void UNewTitleMenuUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	ensureMsgf(ButtonBox, TEXT("ButtonBox Not Connected"));
-	
-	TArray<UWidget*> ButtonArray = ButtonBox->GetAllChildren();
-	for (int32 i = 0; i < ButtonArray.Num(); i++)
-	{
-		auto* Button = Cast<UNewTitleMenuButton>(ButtonArray[i]);
-		if (Button)
-		{
-			Button->SetButtonIndex(i);
-			TitleMenuButtons.AddUnique(Button);
-		}
-	}
-	MaxButtonBoxFocusIndex = TitleMenuButtons.Num() - 1;
-
 	BindInputActionDelegates();
-	ChangeButtonBoxFocusIndex(0);
 }
 
 UInputMappingContext* UNewTitleMenuUI::GetInputMappingContext_Implementation() const
@@ -34,59 +19,19 @@ UInputMappingContext* UNewTitleMenuUI::GetInputMappingContext_Implementation() c
 	return TitleMenuMappingContext;
 }
 
-void UNewTitleMenuUI::ChangeButtonBoxFocusIndex(const int32 NewFocusIndex)
+void UNewTitleMenuUI::OnConfirmSelection() const
 {
-	if (!TitleMenuButtons.IsEmpty())
+	if (ContentArray.Num() > 0)
 	{
-		for (int32 i = 0; i < TitleMenuButtons.Num(); i++)
+		if (ContentArray.IsValidIndex(CurrentFocusIndex))
 		{
-			if (i == NewFocusIndex)
+			const auto* TitleMenuButton = Cast<UNewTitleMenuButton>(ContentArray[CurrentFocusIndex]);
+			if (TitleMenuButton)
 			{
-				TitleMenuButtons[i]->GetFocus();
-				TitleMenuButtons[i]->SetFocus();
-				CurrentButtonBoxFocusIndex = NewFocusIndex;
-			}
-			else
-			{
-				TitleMenuButtons[i]->LoseFocus();
+				TitleMenuButton->BroadcastButtonClickEvent();
 			}
 		}
 	}
-}
-
-void UNewTitleMenuUI::IncreaseButtonBoxFocusIndex()
-{
-	if (CurrentButtonBoxFocusIndex >= MaxButtonBoxFocusIndex)
-	{
-		return; 
-	}
-
-	ChangeButtonBoxFocusIndex(CurrentButtonBoxFocusIndex + 1);
-}
-
-void UNewTitleMenuUI::DecreaseButtonBoxFocusIndex()
-{
-	if (CurrentButtonBoxFocusIndex <= 0)
-	{
-		return;
-	}
-
-	ChangeButtonBoxFocusIndex(CurrentButtonBoxFocusIndex - 1);
-}
-
-void UNewTitleMenuUI::OnMoveSelectionUp()
-{
-	DecreaseButtonBoxFocusIndex();	
-}
-
-void UNewTitleMenuUI::OnMoveSelectionDown()
-{
-	IncreaseButtonBoxFocusIndex();
-}
-
-void UNewTitleMenuUI::OnConfirmSelection()
-{
-	TitleMenuButtons[CurrentButtonBoxFocusIndex]->OnConfirm();
 }
 
 void UNewTitleMenuUI::BindInputActionDelegates()
@@ -94,8 +39,8 @@ void UNewTitleMenuUI::BindInputActionDelegates()
 	auto* TitleController = Cast<ATitleController>(GetOwningPlayer());
 	if (TitleController)
 	{
-		TitleController->OnMenuUIMoveSelectionUpEvent.AddUObject(this, &UNewTitleMenuUI::OnMoveSelectionUp);
-		TitleController->OnMenuUIMoveSelectionDownEvent.AddUObject(this, &UNewTitleMenuUI::OnMoveSelectionDown);
+		TitleController->OnMenuUIMoveSelectionUpEvent.AddUObject(this, &UNewTitleMenuUI::DecreaseFocusIndex);
+		TitleController->OnMenuUIMoveSelectionDownEvent.AddUObject(this, &UNewTitleMenuUI::IncreaseFocusIndex);
 		TitleController->OnMenuUIConfirmSelectionEvent.AddUObject(this, &UNewTitleMenuUI::OnConfirmSelection);
 	}
 }

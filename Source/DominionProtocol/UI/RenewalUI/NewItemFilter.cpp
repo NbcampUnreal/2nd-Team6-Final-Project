@@ -1,32 +1,33 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/RenewalUI/NewItemFilterIcon.h"
+#include "UI/RenewalUI/NewItemFilter.h"
 
 #include "Components/Image.h"
 
-void UNewItemFilterIcon::SetInfo()
+void UNewItemFilter::SetInfo()
 {
 	Super::SetInfo();
 
 	ItemFilterImage->SetBrushFromTexture(IconTexture);
 }
 
-void UNewItemFilterIcon::GetFocus()
+void UNewItemFilter::GetFocus()
 {
 	Super::GetFocus();
 
+	OnChangeItemFilterFocusEvent.Broadcast(ItemFilter);
 	GetFocusEffects();
 }
 
-void UNewItemFilterIcon::LoseFocus()
+void UNewItemFilter::LoseFocus()
 {
 	Super::LoseFocus();
 
 	LoseFocusEffects();
 }
 
-void UNewItemFilterIcon::NativePreConstruct()
+void UNewItemFilter::NativePreConstruct()
 {
 	Super::NativePreConstruct();
 

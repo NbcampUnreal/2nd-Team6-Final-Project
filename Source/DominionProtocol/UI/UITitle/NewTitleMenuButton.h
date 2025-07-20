@@ -3,42 +3,41 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/BaseContent.h"
 #include "NewTitleMenuButton.generated.h"
+
+DECLARE_MULTICAST_DELEGATE(FOnTitleMenuButtonClickedEvent)
 
 class UTextBlock;
 class USizeBox;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewTitleMenuButton : public UUserWidget
+class DOMINIONPROTOCOL_API UNewTitleMenuButton : public UBaseContent
 {
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable)
-	void SetButtonInfo();
+	FOnTitleMenuButtonClickedEvent OnTitleMenuButtonClickedEvent;
+	
+	virtual void SetInfo() override;
+
+	virtual void GetFocus() override;
+
+	virtual void LoseFocus() override;
 
 	UFUNCTION(BlueprintCallable)
-	void GetFocus();
+	void BroadcastButtonClickEvent() const;
+
+protected:
+	virtual void NativePreConstruct() override;
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void GetFocusEffect();
-
-	UFUNCTION(BlueprintCallable)
-	void LoseFocus();
-
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void LoseFocusEffect();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnConfirm();
-	
-	void SetButtonIndex(const int32 NewButtonIndex) { ButtonIndex = NewButtonIndex; }
-
 protected:
-	UPROPERTY(BlueprintReadOnly)
-	int32 ButtonIndex = -1;
-
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UTextBlock> ButtonName;
 

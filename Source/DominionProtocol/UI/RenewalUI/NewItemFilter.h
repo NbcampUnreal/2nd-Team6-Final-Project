@@ -5,16 +5,20 @@
 #include "CoreMinimal.h"
 #include "EnumAndStruct/EDisplayItemFilter.h"
 #include "UI/BaseContent.h"
-#include "NewItemFilterIcon.generated.h"
+#include "NewItemFilter.generated.h"
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnChangeItemFilterFocusEvent, EDisplayItemFilter)
 
 class UImage;
 
 UCLASS()
-class DOMINIONPROTOCOL_API UNewItemFilterIcon : public UBaseContent
+class DOMINIONPROTOCOL_API UNewItemFilter : public UBaseContent
 {
 	GENERATED_BODY()
 
 public:
+	FOnChangeItemFilterFocusEvent OnChangeItemFilterFocusEvent;
+	
 	virtual void SetInfo() override;
 
 	virtual void GetFocus() override;
@@ -26,7 +30,6 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void GetFocusEffects();
-
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void LoseFocusEffects();
