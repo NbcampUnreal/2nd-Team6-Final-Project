@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Util/DevCheatManager.h"
 #include "UI/UIInGame/NewInGameHUDWidget.h"
+#include "Util/DebugHelper.h"
 
 AInGameController::AInGameController()
 {
@@ -126,11 +127,13 @@ void AInGameController::OnMainMenuUIMoveSelectionRight() const
 
 void AInGameController::OnEquipmentUIMoveSelectionUp() const
 {
+	Debug::Print("EquipmentUIMoveSelectionUp");
 	OnEquipmentUIMoveSelectionUpEvent.Broadcast();
 }
 
 void AInGameController::OnEquipmentUIMoveSelectionDown() const
 {
+	Debug::Print("EquipmentUIMoveSelectionDown");
 	OnEquipmentUIMoveSelectionDownEvent.Broadcast();
 }
 
@@ -146,21 +149,25 @@ void AInGameController::OnEquipmentUIUnequipItemAction() const
 
 void AInGameController::OnItemUIMoveSelectionUp() const
 {
+	Debug::Print(TEXT("ItemMoveSelectionUp"));
 	OnItemUIMoveSelectionUpEvent.Broadcast();
 }
 
 void AInGameController::OnItemUIMoveSelectionDown() const
 {
+	Debug::Print(TEXT("ItemMoveSelectionDown"));
 	OnItemUIMoveSelectionDownEvent.Broadcast();
 }
 
 void AInGameController::OnItemUIMoveSelectionLeft() const
 {
+	Debug::Print(TEXT("ItemMoveSelectionLeft"));
 	OnItemUIMoveSelectionLeftEvent.Broadcast();
 }
 
 void AInGameController::OnItemUIMoveSelectionRight() const
 {
+	Debug::Print(TEXT("ItemMoveSelectionRight"));
 	OnItemUIMoveSelectionRightEvent.Broadcast();
 }
 
