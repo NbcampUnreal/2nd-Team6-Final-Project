@@ -14,6 +14,8 @@ class DOMINIONPROTOCOL_API UNewSettingMenuContainer : public UBaseContentContain
 	GENERATED_BODY()
 
 protected:
+
+protected:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	TObjectPtr<UNewSettingMenu> GraphicSettingButton;
 

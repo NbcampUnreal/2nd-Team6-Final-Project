@@ -8,6 +8,8 @@
 #include "NewSettingSubUI.generated.h"
 
 class USoundInstanceSubsystem;
+class UNewSettingMenuContainer;
+class UNewSettingOptionContainer;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewSettingSubUI : public UUserWidget, public IUIInterface
@@ -32,8 +34,14 @@ public:
 
 
 protected:
-	virtual void NativeConstruct() override;
+	void MoveSelectionUp() const;
 
+	void MoveSelectionDown() const;
+
+	void MoveSelectionLeft();
+
+	void MoveSelectionRight();
+	
 	UFUNCTION(BlueprintCallable)
 	void ApplyMasterVolumeValue(float NewVolumeValue);
 	UFUNCTION(BlueprintCallable)
@@ -42,8 +50,19 @@ protected:
 	void ApplySoundEffectsVolumeValue(float NewVolumeValue);
 	UFUNCTION(BlueprintCallable)
 	void ApplyUIEffectsVolumeValue(float NewVolumeValue);
+	
+	virtual void NativeConstruct() override;
+
+
+	void BindInputActionDelegates();
 
 protected:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewSettingMenuContainer> SettingMenuContainer;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	TObjectPtr<UNewSettingOptionContainer> SettingOptionContainer;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float MasterVolumeValue = 1.0f;
 
@@ -73,5 +92,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputMappingContext> SettingSubUIMappingContext;
-	
+
+	bool bSettingMenuSelected = false;
 };

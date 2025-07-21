@@ -27,8 +27,8 @@ public:
 	
 	virtual void SetInfo() override;
 	
-	void SetInfo(const FGameplayTag& ItemTag, UTexture2D* ItemTexture, const FString& ItemNameString, const FText& ItemDescription, int32
-	                     CurrentItemQuantity, int32 MaxItemQuantity, EItemType ItemType);
+	void SetItemInfo(const FGameplayTag& ItemTag = FGameplayTag::EmptyTag, UTexture2D* ItemTexture = nullptr, const FString& ItemNameString = TEXT(""), const FText& ItemDescription = FText::FromString(TEXT("")), int32
+	                     CurrentItemQuantity = 0, int32 MaxItemQuantity = 0, EItemType ItemType = EItemType::Other);
 	
 	virtual void GetFocus() override;
 

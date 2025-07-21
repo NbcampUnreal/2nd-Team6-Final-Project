@@ -132,11 +132,11 @@ void UNewInventoryItemContainer::SetContentInfo()
 			if (CurrentItemDataArray.IsValidIndex(i))
 			{
 				FItemUISlotData Data = CurrentItemDataArray[i];
-				InventoryItem->SetInfo(Data.ItemTag, Data.ItemIcon, Data.ItemName, Data.ItemDescription, Data.CurrentQuantity, Data.MaxStackQuantity, Data.ItemType);	
+				InventoryItem->SetItemInfo(Data.ItemTag, Data.ItemIcon, Data.ItemName, Data.ItemDescription, Data.CurrentQuantity, Data.MaxStackQuantity, Data.ItemType);	
 			}
 			else
 			{
-				InventoryItem->SetInfo();
+				InventoryItem->SetItemInfo();
 			}
 		}
 	}

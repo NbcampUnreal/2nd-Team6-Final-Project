@@ -3,7 +3,10 @@
 
 #include "UI/RenewalUI/NewSettingSubUI.h"
 
+#include "NewSettingMenuContainer.h"
+#include "NewSettingOptionContainer.h"
 #include "DomiFramework/GameInstance/SoundInstanceSubsystem.h"
+#include "Player/InGameController.h"
 
 
 void UNewSettingSubUI::NativeConstruct()
@@ -19,6 +22,8 @@ void UNewSettingSubUI::NativeConstruct()
 	{
 		SoundSubsystemInstance = SoundSubsystem;
 	}
+
+	BindInputActionDelegates();
 }
 
 void UNewSettingSubUI::ApplyMasterVolumeValue(const float NewVolumeValue)
@@ -54,6 +59,18 @@ void UNewSettingSubUI::ApplyUIEffectsVolumeValue(const float NewVolumeValue)
 	{
 		UIEffectsVolumeValue = NewVolumeValue;
 		SoundSubsystemInstance->SetUIVolume(NewVolumeValue);
+	}
+}
+
+void UNewSettingSubUI::BindInputActionDelegates()
+{
+	auto* InGameController = Cast<AInGameController>(GetOwningPlayer());
+	if (InGameController)
+	{
+		InGameController->OnSettingUIMoveSelectionUpEvent.AddUObject(this, &UNewSettingSubUI::MoveSelectionUp);
+		InGameController->OnSettingUIMoveSelectionDownEvent.AddUObject(this, &UNewSettingSubUI::MoveSelectionDown);
+		InGameController->OnSettingUIMoveSelectionLeftEvent.AddUObject(this, &UNewSettingSubUI::MoveSelectionLeft);
+		InGameController->OnSettingUIMoveSelectionRightEvent.AddUObject(this, &UNewSettingSubUI::MoveSelectionRight);
 	}
 }
 
@@ -101,5 +118,39 @@ UInputMappingContext* UNewSettingSubUI::GetInputMappingContext_Implementation() 
 	}
 
 	return SettingSubUIMappingContext;
+}
+
+void UNewSettingSubUI::MoveSelectionUp() const
+{
+	if (bSettingMenuSelected)
+	{
+		SettingOptionContainer->DecreaseFocusIndex();
+	}
+	else
+	{
+		SettingMenuContainer->DecreaseFocusIndex();
+	}
+}
+
+void UNewSettingSubUI::MoveSelectionDown() const
+{
+	if (bSettingMenuSelected)
+	{
+		SettingOptionContainer->IncreaseFocusIndex();
+	}
+	else
+	{
+		SettingMenuContainer->IncreaseFocusIndex();
+	}
+}
+
+void UNewSettingSubUI::MoveSelectionLeft()
+{
+	bSettingMenuSelected = false;
+}
+
+void UNewSettingSubUI::MoveSelectionRight()
+{
+	bSettingMenuSelected = true;
 }
 

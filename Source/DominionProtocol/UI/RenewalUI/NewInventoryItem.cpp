@@ -12,9 +12,9 @@ void UNewInventoryItem::SetInfo()
 {
 }
 
-void UNewInventoryItem::SetInfo(const FGameplayTag& ItemTag = FGameplayTag::EmptyTag, UTexture2D* ItemTexture = nullptr, const FString& ItemNameString = TEXT(""),
-                                const FText& ItemDescription = FText::FromString(TEXT("")), const int32 CurrentItemQuantity = 0, const int32 MaxItemQuantity = 0,
-                                const EItemType ItemType = EItemType::Other)
+void UNewInventoryItem::SetItemInfo(const FGameplayTag& ItemTag, UTexture2D* ItemTexture, const FString& ItemNameString,
+                                const FText& ItemDescription, const int32 CurrentItemQuantity, const int32 MaxItemQuantity,
+                                const EItemType ItemType)
 {
 	ItemData.ItemTag = ItemTag;
 	ItemData.ItemIcon = ItemTexture;
