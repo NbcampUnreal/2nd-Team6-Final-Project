@@ -13,6 +13,10 @@ class DOMINIONPROTOCOL_API UNewSettingOptionContainer : public UBaseContentConta
 {
 	GENERATED_BODY()
 
+public:
+	TArray<TObjectPtr<UNewSettingOption>> GetGraphicSettingOptionArray() const { return GraphicSettingOptionArray; }
+	TArray<TObjectPtr<UNewSettingOption>> GetSoundSettingOptionArray() const { return SoundSettingOptionArray; }
+
 protected:
 	virtual void NativeConstruct() override;
 

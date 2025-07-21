@@ -42,21 +42,29 @@ void UNewMainMenuSubUIContainer::ChangeMappingContext(UUserWidget* NewTopUI) con
 {
 	if (ActivatedUIStack.Num() > 0)
 	{
-		if (NewTopUI && NewTopUI->Implements<UUIInterface>())
+		for (UUserWidget* SubUI : ActivatedUIStack)
 		{
-			const auto* UIInterface = Cast<IUIInterface>(NewTopUI);
-			if (UIInterface)
+			if (SubUI->Implements<UUIInterface>())
 			{
-				const UInputMappingContext* MappingContext = IUIInterface::Execute_GetInputMappingContext(NewTopUI);
-				if (MappingContext)
+				const auto* UIInterface = Cast<IUIInterface>(SubUI);
+				if (UIInterface)
 				{
-					// MainMenuUI InputMapping 은 Common 으로 사용 중이기에 지우면 안 됨
-					// LocalPlayerInputSubsystem->ClearAllMappings();
-					LocalPlayerInputSubsystem->AddMappingContext(MappingContext, 10);
-				}
-				else
-				{
-					ensureMsgf(MappingContext, TEXT("Failed to load IMC assets. Check connections."));
+					const UInputMappingContext* MappingContext = IUIInterface::Execute_GetInputMappingContext(SubUI);
+					if (MappingContext)
+					{
+						if (SubUI == NewTopUI)
+						{
+							LocalPlayerInputSubsystem->AddMappingContext(MappingContext, 10);
+						}
+						else
+						{
+							LocalPlayerInputSubsystem->RemoveMappingContext(MappingContext);	
+						}
+					}
+					else
+					{
+						ensureMsgf(MappingContext, TEXT("Failed to load IMC assets. Check connections."));
+					}
 				}
 			}
 		}

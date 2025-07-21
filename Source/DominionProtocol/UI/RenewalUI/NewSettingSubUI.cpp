@@ -3,7 +3,9 @@
 
 #include "UI/RenewalUI/NewSettingSubUI.h"
 
+#include "NewSettingMenu.h"
 #include "NewSettingMenuContainer.h"
+#include "NewSettingOption.h"
 #include "NewSettingOptionContainer.h"
 #include "DomiFramework/GameInstance/SoundInstanceSubsystem.h"
 #include "Player/InGameController.h"
@@ -24,6 +26,7 @@ void UNewSettingSubUI::NativeConstruct()
 	}
 
 	BindInputActionDelegates();
+	BindFocusSettingMenuChangedDelegates();
 }
 
 void UNewSettingSubUI::ApplyMasterVolumeValue(const float NewVolumeValue)
@@ -67,11 +70,17 @@ void UNewSettingSubUI::BindInputActionDelegates()
 	auto* InGameController = Cast<AInGameController>(GetOwningPlayer());
 	if (InGameController)
 	{
-		InGameController->OnSettingUIMoveSelectionUpEvent.AddUObject(this, &UNewSettingSubUI::MoveSelectionUp);
-		InGameController->OnSettingUIMoveSelectionDownEvent.AddUObject(this, &UNewSettingSubUI::MoveSelectionDown);
-		InGameController->OnSettingUIMoveSelectionLeftEvent.AddUObject(this, &UNewSettingSubUI::MoveSelectionLeft);
-		InGameController->OnSettingUIMoveSelectionRightEvent.AddUObject(this, &UNewSettingSubUI::MoveSelectionRight);
+		InGameController->OnSettingUIMoveSelectionUpEvent.AddUObject(SettingMenuContainer, &UNewSettingMenuContainer::DecreaseFocusIndex);
+		InGameController->OnSettingUIMoveSelectionDownEvent.AddUObject(SettingMenuContainer, &UNewSettingMenuContainer::IncreaseFocusIndex);
 	}
+}
+
+void UNewSettingSubUI::BindFocusSettingMenuChangedDelegates()
+{
+	SettingMenuContainer->GetGraphicSettingButton()->OnGetFocusSettingMenuEvent.AddUObject(this, &UNewSettingSubUI::ShowSettingOption);
+	SettingMenuContainer->GetGraphicSettingButton()->OnLoseFocusSettingMenuEvent.AddUObject(this, &UNewSettingSubUI::HideSettingOption);
+	SettingMenuContainer->GetSoundSettingButton()->OnGetFocusSettingMenuEvent.AddUObject(this, &UNewSettingSubUI::ShowSettingOption);
+	SettingMenuContainer->GetSoundSettingButton()->OnLoseFocusSettingMenuEvent.AddUObject(this, &UNewSettingSubUI::HideSettingOption);
 }
 
 void UNewSettingSubUI::SetMasterVolumeValue(const float NewVolumeValue)
@@ -120,37 +129,60 @@ UInputMappingContext* UNewSettingSubUI::GetInputMappingContext_Implementation() 
 	return SettingSubUIMappingContext;
 }
 
-void UNewSettingSubUI::MoveSelectionUp() const
+void UNewSettingSubUI::ShowSettingOption(UNewSettingMenu* SettingMenu) const
 {
-	if (bSettingMenuSelected)
+	const UNewSettingMenu* GraphicMenu = SettingMenuContainer->GetGraphicSettingButton();
+	if (SettingMenu == GraphicMenu)
 	{
-		SettingOptionContainer->DecreaseFocusIndex();
+		const TArray<UNewSettingOption*> GraphicOptionArray = SettingOptionContainer->GetGraphicSettingOptionArray();
+		if (GraphicOptionArray.Num() > 0)
+		{
+			for (UNewSettingOption* GraphicOption : GraphicOptionArray)
+			{
+				GraphicOption->SetVisibility(ESlateVisibility::Visible);
+			}
+		}
 	}
-	else
+
+	const UNewSettingMenu* SoundMenu = SettingMenuContainer->GetSoundSettingButton();
+	if (SettingMenu == SoundMenu)
 	{
-		SettingMenuContainer->DecreaseFocusIndex();
+		const TArray<UNewSettingOption*> SoundOptionArray = SettingOptionContainer->GetSoundSettingOptionArray();
+		if (SoundOptionArray.Num() > 0)
+		{
+			for (UNewSettingOption* SoundOption : SoundOptionArray)
+			{
+				SoundOption->SetVisibility(ESlateVisibility::Visible);
+			}
+		}
 	}
 }
 
-void UNewSettingSubUI::MoveSelectionDown() const
+void UNewSettingSubUI::HideSettingOption(UNewSettingMenu* SettingMenu) const
 {
-	if (bSettingMenuSelected)
+	const UNewSettingMenu* GraphicMenu = SettingMenuContainer->GetGraphicSettingButton();
+	if (SettingMenu == GraphicMenu)
 	{
-		SettingOptionContainer->IncreaseFocusIndex();
+		const TArray<UNewSettingOption*> GraphicOptionArray = SettingOptionContainer->GetGraphicSettingOptionArray();
+		if (GraphicOptionArray.Num() > 0)
+		{
+			for (UNewSettingOption* GraphicOption : GraphicOptionArray)
+			{
+				GraphicOption->SetVisibility(ESlateVisibility::Collapsed);
+			}
+		}
 	}
-	else
+
+	const UNewSettingMenu* SoundMenu = SettingMenuContainer->GetSoundSettingButton();
+	if (SettingMenu == SoundMenu)
 	{
-		SettingMenuContainer->IncreaseFocusIndex();
+		const TArray<UNewSettingOption*> SoundOptionArray = SettingOptionContainer->GetSoundSettingOptionArray();
+		if (SoundOptionArray.Num() > 0)
+		{
+			for (UNewSettingOption* SoundOption : SoundOptionArray)
+			{
+				SoundOption->SetVisibility(ESlateVisibility::Collapsed);
+			}
+		}
 	}
 }
-
-void UNewSettingSubUI::MoveSelectionLeft()
-{
-	bSettingMenuSelected = false;
-}
-
-void UNewSettingSubUI::MoveSelectionRight()
-{
-	bSettingMenuSelected = true;
-}
-

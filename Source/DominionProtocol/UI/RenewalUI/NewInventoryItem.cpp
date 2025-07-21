@@ -42,6 +42,9 @@ void UNewInventoryItem::GetFocus()
 {
 	Super::GetFocus();
 
+	// Scroll 을 위해서 Focus 해야함
+	SetFocus();
+	
 	GetFocusEffects();
 	
 	OnChangeInventoryItemFocusEvent.Broadcast(ItemData.ItemTag, ItemData.CurrentQuantity);

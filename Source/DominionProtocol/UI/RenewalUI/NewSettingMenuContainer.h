@@ -13,6 +13,11 @@ class DOMINIONPROTOCOL_API UNewSettingMenuContainer : public UBaseContentContain
 {
 	GENERATED_BODY()
 
+public:
+	UNewSettingMenu* GetGraphicSettingButton() const { return GraphicSettingButton; }
+	UNewSettingMenu* GetSoundSettingButton() const { return SoundSettingButton; }
+	UNewSettingMenu* GetExitButton() const { return ExitButton; }
+
 protected:
 
 protected:

@@ -8,6 +8,7 @@
 #include "NewSettingSubUI.generated.h"
 
 class USoundInstanceSubsystem;
+class UNewSettingMenu;
 class UNewSettingMenuContainer;
 class UNewSettingOptionContainer;
 
@@ -32,29 +33,28 @@ public:
 	UFUNCTION()
 	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 
-
 protected:
-	void MoveSelectionUp() const;
-
-	void MoveSelectionDown() const;
-
-	void MoveSelectionLeft();
-
-	void MoveSelectionRight();
+	void ShowSettingOption(UNewSettingMenu* SettingMenu) const;
+	
+	void HideSettingOption(UNewSettingMenu* SettingMenu) const;
 	
 	UFUNCTION(BlueprintCallable)
 	void ApplyMasterVolumeValue(float NewVolumeValue);
+	
 	UFUNCTION(BlueprintCallable)
 	void ApplyBackgroundMusicVolumeValue(float NewVolumeValue);
+	
 	UFUNCTION(BlueprintCallable)
 	void ApplySoundEffectsVolumeValue(float NewVolumeValue);
+	
 	UFUNCTION(BlueprintCallable)
 	void ApplyUIEffectsVolumeValue(float NewVolumeValue);
 	
 	virtual void NativeConstruct() override;
 
-
 	void BindInputActionDelegates();
+
+	void BindFocusSettingMenuChangedDelegates();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
@@ -92,6 +92,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputMappingContext> SettingSubUIMappingContext;
-
-	bool bSettingMenuSelected = false;
 };
