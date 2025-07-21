@@ -6,7 +6,7 @@
 #include "UI/BaseContent.h"
 #include "NewSaveSlot.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnButtonClickedEvent);
+DECLARE_MULTICAST_DELEGATE(FOnSaveSlotButtonClickedEvent);
 
 class UImage;
 class UTextBlock;
@@ -18,7 +18,7 @@ class DOMINIONPROTOCOL_API UNewSaveSlot : public UBaseContent
 	GENERATED_BODY()
 
 public:
-	FOnButtonClickedEvent OnButtonClickedEvent;
+	FOnSaveSlotButtonClickedEvent OnSaveSlotButtonClickedEvent;
 	
 	virtual void SetInfo() override;
 	

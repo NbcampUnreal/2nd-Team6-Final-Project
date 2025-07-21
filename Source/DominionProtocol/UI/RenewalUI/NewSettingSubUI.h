@@ -7,6 +7,8 @@
 #include "Interface/UIInterface.h"
 #include "NewSettingSubUI.generated.h"
 
+class USoundInstanceSubsystem;
+
 UCLASS()
 class DOMINIONPROTOCOL_API UNewSettingSubUI : public UUserWidget, public IUIInterface
 {
@@ -67,7 +69,7 @@ protected:
 	float DesiredUIEffectsVolumeValue = 1.0f;
 
 	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<class USoundInstanceSubsystem> SoundSubsystemInstance;
+	TObjectPtr<USoundInstanceSubsystem> SoundSubsystemInstance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputMappingContext> SettingSubUIMappingContext;

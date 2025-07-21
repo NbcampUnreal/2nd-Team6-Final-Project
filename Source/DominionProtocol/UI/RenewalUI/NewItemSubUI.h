@@ -32,6 +32,8 @@ protected:
 
 	void BindInputActionDelegates();
 
+	void BindItemFilterChangedDelegates();
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputMappingContext> ItemSubUIMappingContext;

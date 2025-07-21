@@ -257,7 +257,7 @@ void UNewSaveSlotContainerUI::BindButtonActionDelegates()
 			auto* SaveSlot = Cast<UNewSaveSlot>(Content);
 			if (SaveSlot)
 			{
-				SaveSlot->OnButtonClickedEvent.AddUObject(this, &UNewSaveSlotContainerUI::OnStartGame);
+				SaveSlot->OnSaveSlotButtonClickedEvent.AddUObject(this, &UNewSaveSlotContainerUI::OnStartGame);
 			}
 		}
 	}

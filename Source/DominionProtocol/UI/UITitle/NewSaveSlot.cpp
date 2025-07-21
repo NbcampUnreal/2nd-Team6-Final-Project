@@ -52,7 +52,7 @@ void UNewSaveSlot::LoseFocus()
 
 void UNewSaveSlot::BroadcastButtonClickEvent() const
 {
-	OnButtonClickedEvent.Broadcast();
+	OnSaveSlotButtonClickedEvent.Broadcast();
 }
 
 void UNewSaveSlot::NativeConstruct()

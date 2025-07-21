@@ -8,6 +8,8 @@
 #include "UI/BaseContentContainer.h"
 #include "NewInventoryItemContainer.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnItemFilterChangedEvent)
+
 struct FItemUISlotData;
 class UNewEquipmentSubUI;
 class UNewItemSubUI;
@@ -18,10 +20,16 @@ class DOMINIONPROTOCOL_API UNewInventoryItemContainer : public UBaseContentConta
 	GENERATED_BODY()
 
 public:
+	FOnItemFilterChangedEvent OnItemFilterChangedEvent;
+	
 	UFUNCTION()
 	void SetContentInfo();
 
+	UFUNCTION()
 	void RefreshWidget();
+
+	UFUNCTION()
+	void RequestRefreshWidget(const ESlateVisibility NewVisibility);
 
 	// Setter
 	void SetDisplayItemFilter(const EDisplayItemFilter NewDisplayItemFilter);
@@ -32,21 +40,21 @@ public:
 	EDisplayItemFilter GetDisplayItemFilter() const { return DisplayItemFilter; }
 	FGameplayTag GetClickedItemTag() const { return ClickedItemTag; }
 	int32 GetClickedItemQuantity() const { return ClickedItemQuantity; }
+	int32 GetDisplayFocusIndex() const;
 	
 	virtual void ChangeFocusIndex(const int32 NewFocusIndex) override;
 	
 protected:
-	void SetDisplayFocusIndex(const int32 NewFocusIndex);
+	void SaveFocusIndex();
 
 	UFUNCTION()
-	void SetCurrentItemDataArray();
+	void SetItemDataArrays();
 
 	UFUNCTION()
-	void SetFocusIndex();
+	void SetCurrentDataArray();
 
-	void BindInputActionsDelegates();
-
-	void BindChangeItemFilterFocusDelegates();
+	UFUNCTION()
+	void SetFocusIndex(const int32 NewFocusIndex);
 
 	virtual void NativeConstruct() override;
 
@@ -56,6 +64,21 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FItemUISlotData> InventoryAllItemDataArray;
+	
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FItemUISlotData> InventoryWeaponItemDataArray;
+	
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FItemUISlotData> InventoryAccessoryItemDataArray;
+	
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FItemUISlotData> InventoryConsumableItemDataArray;
+	
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FItemUISlotData> InventorySkillItemDataArray;
+	
+	UPROPERTY(BlueprintReadOnly)
+	TArray<FItemUISlotData> InventoryOtherItemDataArray;
 	
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FItemUISlotData> CurrentItemDataArray;

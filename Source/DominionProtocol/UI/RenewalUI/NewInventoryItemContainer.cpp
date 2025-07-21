@@ -6,33 +6,19 @@
 #include "NewEquipmentSubUI.h"
 #include "NewInventoryItem.h"
 #include "Components/ItemComponent/ItemComponent.h"
-#include "Player/InGameController.h"
 
 void UNewInventoryItemContainer::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	BindInputActionsDelegates();
-}
-
-void UNewInventoryItemContainer::BindInputActionsDelegates()
-{
-	auto* InGameController = Cast<AInGameController>(GetOwningPlayer());
-	if (InGameController)
-	{
-		InGameController->OnItemUIMoveSelectionUpEvent.AddUObject(this, &UNewInventoryItemContainer::DecreaseFocusIndex);
-		InGameController->OnItemUIMoveSelectionDownEvent.AddUObject(this, &UNewInventoryItemContainer::IncreaseFocusIndex);
-	}
-}
-
-void UNewInventoryItemContainer::BindChangeItemFilterFocusDelegates()
-{
-	
+	OnVisibilityChanged.AddDynamic(this, &UNewInventoryItemContainer::RequestRefreshWidget);
+	OnItemFilterChangedEvent.AddUObject(this, &UNewInventoryItemContainer::RefreshWidget);
 }
 
 void UNewInventoryItemContainer::SetDisplayItemFilter(const EDisplayItemFilter NewDisplayItemFilter)
 {
 	DisplayItemFilter = NewDisplayItemFilter;
+	OnItemFilterChangedEvent.Broadcast();
 }
 
 void UNewInventoryItemContainer::SetClickedItemTag(const FGameplayTag NewClickedItemTag)
@@ -45,47 +31,93 @@ void UNewInventoryItemContainer::SetClickedItemQuantity(const int32 NewClickedIt
 	ClickedItemQuantity = NewClickedItemQuantity;
 }
 
-void UNewInventoryItemContainer::ChangeFocusIndex(const int32 NewFocusIndex)
-{
-	Super::ChangeFocusIndex(NewFocusIndex);
-
-	SetDisplayFocusIndex(NewFocusIndex);
-}
-
-void UNewInventoryItemContainer::RefreshWidget()
-{
-	SetCurrentItemDataArray();
-	SetContentInfo();
-	SetFocusIndex();
-}
-
-void UNewInventoryItemContainer::SetDisplayFocusIndex(const int32 NewFocusIndex)
+int32 UNewInventoryItemContainer::GetDisplayFocusIndex() const
 {
 	switch (DisplayItemFilter)
 	{
 	case EDisplayItemFilter::AllItems :
 		{
-			AllItemsFocusIndex = NewFocusIndex;
-		}
-	case EDisplayItemFilter::AccessoryItems :
-		{
-			AccessoryItemsFocusIndex = NewFocusIndex;
-		}
-	case EDisplayItemFilter::ConsumableItems :
-		{
-			ConsumableItemsFocusIndex = NewFocusIndex;
-		}
-	case EDisplayItemFilter::OtherItems :
-		{
-			OtherItemsFocusIndex = NewFocusIndex;
-		}
-	case EDisplayItemFilter::SkillItems :
-		{
-			SkillItemsFocusIndex = NewFocusIndex;
+			return AllItemsFocusIndex;
 		}
 	case EDisplayItemFilter::WeaponItems :
 		{
-			WeaponItemsFocusIndex = NewFocusIndex;
+			return WeaponItemsFocusIndex;
+		}
+	case EDisplayItemFilter::AccessoryItems :
+		{
+			return AccessoryItemsFocusIndex;
+		}
+	case EDisplayItemFilter::ConsumableItems :
+		{
+			return ConsumableItemsFocusIndex;
+		}
+	case EDisplayItemFilter::OtherItems :
+		{
+			return OtherItemsFocusIndex;
+		}
+	case EDisplayItemFilter::SkillItems :
+		{
+			return SkillItemsFocusIndex;
+		}
+	default :
+		{
+			return CurrentFocusIndex;
+		}
+	}
+}
+
+void UNewInventoryItemContainer::ChangeFocusIndex(const int32 NewFocusIndex)
+{
+	Super::ChangeFocusIndex(NewFocusIndex);
+
+	SaveFocusIndex();
+}
+
+void UNewInventoryItemContainer::RefreshWidget()
+{
+	SetItemDataArrays();
+	SetCurrentDataArray();
+	SetContentInfo();
+
+	const int32 NewFocusIndex = GetDisplayFocusIndex();
+	SetFocusIndex(NewFocusIndex);
+}
+
+void UNewInventoryItemContainer::RequestRefreshWidget(const ESlateVisibility NewVisibility)
+{
+	if (ESlateVisibility::Visible == NewVisibility)
+	{
+		RefreshWidget();
+	}
+}
+
+void UNewInventoryItemContainer::SaveFocusIndex()
+{
+	switch (DisplayItemFilter)
+	{
+	case EDisplayItemFilter::AllItems :
+		{
+			AllItemsFocusIndex = CurrentFocusIndex;
+		}
+	case EDisplayItemFilter::WeaponItems :
+		{
+			WeaponItemsFocusIndex = CurrentFocusIndex;
+		}
+	case EDisplayItemFilter::AccessoryItems :
+		{
+			AccessoryItemsFocusIndex = CurrentFocusIndex;
+		}
+	case EDisplayItemFilter::ConsumableItems :
+		{
+			ConsumableItemsFocusIndex = CurrentFocusIndex;
+		}
+	case EDisplayItemFilter::OtherItems :
+		{
+			OtherItemsFocusIndex = CurrentFocusIndex;
+		}
+	case EDisplayItemFilter::SkillItems :
+		{
+			SkillItemsFocusIndex = CurrentFocusIndex;
 		}
 	}
 }
@@ -110,7 +142,7 @@ void UNewInventoryItemContainer::SetContentInfo()
 	}
 }
 
-void UNewInventoryItemContainer::SetCurrentItemDataArray()
+void UNewInventoryItemContainer::SetItemDataArrays()
 {
 	if (!ItemComponent)
 	{
@@ -119,87 +151,108 @@ void UNewInventoryItemContainer::SetCurrentItemDataArray()
 
 	InventoryAllItemDataArray = ItemComponent->GetInventoryDisplayItems();
 
-	TArray<FItemUISlotData> TempInventoryItemArray;
+	TArray<FItemUISlotData> TempWeaponItemDataArray;
+	TArray<FItemUISlotData> TempAccessoryItemDataArray;
+	TArray<FItemUISlotData> TempConsumableItemDataArray;
+	TArray<FItemUISlotData> TempSkillItemDataArray;
+	TArray<FItemUISlotData> TempOtherItemDataArray;
 
-	for (FItemUISlotData Item : InventoryAllItemDataArray)
+	for (FItemUISlotData ItemData : InventoryAllItemDataArray)
 	{
-		switch (DisplayItemFilter)
+		if (ItemData.ItemTag.IsValid())
 		{
-		case EDisplayItemFilter::AllItems :
+			if (ItemData.ItemTag.MatchesTag(ItemTags::WeaponItem))
 			{
-				TempInventoryItemArray.Add(Item);
+				TempWeaponItemDataArray.Add(ItemData);
 			}
-		case EDisplayItemFilter::AccessoryItems :
+
+			if (ItemData.ItemTag.MatchesTag(ItemTags::AccessoryItem))
 			{
-				if (Item.ItemTag.MatchesTag(ItemTags::AccessoryItem))
-				{
-					TempInventoryItemArray.Add(Item);
-				}
+				TempAccessoryItemDataArray.Add(ItemData);
 			}
-		case EDisplayItemFilter::ConsumableItems :
+
+			if (ItemData.ItemTag.MatchesTag(ItemTags::ConsumableItem))
 			{
-				if (Item.ItemTag.MatchesTag(ItemTags::ConsumableItem))
-				{
-					TempInventoryItemArray.Add(Item);
-				}
+				TempConsumableItemDataArray.Add(ItemData);
 			}
-		case EDisplayItemFilter::WeaponItems :
+
+			if (ItemData.ItemTag.MatchesTag(ItemTags::SkillItem))
 			{
-				if (Item.ItemTag.MatchesTag(ItemTags::WeaponItem))
-				{
-					TempInventoryItemArray.Add(Item);
-				}
+				TempSkillItemDataArray.Add(ItemData);
 			}
-		case EDisplayItemFilter::SkillItems :
+
+			if (ItemData.ItemTag.MatchesTag(ItemTags::OtherItem))
 			{
-				if (Item.ItemTag.MatchesTag(ItemTags::SkillItem))
-				{
-					TempInventoryItemArray.Add(Item);
-				}
-			}
-		case EDisplayItemFilter::OtherItems :
-			{
-				if (Item.ItemTag.MatchesTag(ItemTags::OtherItem))
-				{
-					TempInventoryItemArray.Add(Item);
-				}
-			}
-		default :
-			{
-				TempInventoryItemArray.Add(Item);
+				TempOtherItemDataArray.Add(ItemData);
 			}
 		}
 	}
-	CurrentItemDataArray = TempInventoryItemArray;
+
+	InventoryWeaponItemDataArray = TempWeaponItemDataArray;
+	InventoryAccessoryItemDataArray = TempAccessoryItemDataArray;
+	InventoryConsumableItemDataArray = TempConsumableItemDataArray;
+	InventorySkillItemDataArray = TempSkillItemDataArray;
+	InventoryOtherItemDataArray = TempOtherItemDataArray;
 }
 
-void UNewInventoryItemContainer::SetFocusIndex()
+void UNewInventoryItemContainer::SetCurrentDataArray()
 {
 	switch (DisplayItemFilter)
 	{
 	case EDisplayItemFilter::AllItems :
 		{
-			ChangeFocusIndex(AllItemsFocusIndex);
-		}
-	case EDisplayItemFilter::AccessoryItems :
-		{
-			ChangeFocusIndex(AccessoryItemsFocusIndex);
-		}
-	case EDisplayItemFilter::ConsumableItems :
-		{
-			ChangeFocusIndex(ConsumableItemsFocusIndex);
-		}
-	case EDisplayItemFilter::OtherItems :
-		{
-			ChangeFocusIndex(OtherItemsFocusIndex);
-		}
-	case EDisplayItemFilter::SkillItems :
-		{
-			ChangeFocusIndex(SkillItemsFocusIndex);
+			CurrentItemDataArray = InventoryAllItemDataArray;
 		}
 	case EDisplayItemFilter::WeaponItems :
 		{
-			ChangeFocusIndex(WeaponItemsFocusIndex);
+			CurrentItemDataArray = InventoryWeaponItemDataArray;
+		}
+	case EDisplayItemFilter::AccessoryItems :
+		{
+			CurrentItemDataArray = InventoryAccessoryItemDataArray;
+		}
+	case EDisplayItemFilter::ConsumableItems :
+		{
+			CurrentItemDataArray = InventoryConsumableItemDataArray;
+		}
+	case EDisplayItemFilter::SkillItems :
+		{
+			CurrentItemDataArray =  InventorySkillItemDataArray;
+		}
+	case EDisplayItemFilter::OtherItems :
+		{
+			CurrentItemDataArray =  InventoryOtherItemDataArray;
+		}
+	}
+}
+
+void UNewInventoryItemContainer::SetFocusIndex(const int32 NewFocusIndex)
+{
+	switch (DisplayItemFilter)
+	{
+	case EDisplayItemFilter::AllItems :
+		{
+			ChangeFocusIndex(NewFocusIndex);
+		}
+	case EDisplayItemFilter::WeaponItems :
+		{
+			ChangeFocusIndex(NewFocusIndex);
+		}
+	case EDisplayItemFilter::AccessoryItems :
+		{
+			ChangeFocusIndex(NewFocusIndex);
+		}
+	case EDisplayItemFilter::ConsumableItems :
+		{
+			ChangeFocusIndex(NewFocusIndex);
+		}
+	case EDisplayItemFilter::OtherItems :
+		{
+			ChangeFocusIndex(NewFocusIndex);
+		}
+	case EDisplayItemFilter::SkillItems :
+		{
+			ChangeFocusIndex(NewFocusIndex);
 		}
 	}
 }

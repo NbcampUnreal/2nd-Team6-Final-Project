@@ -6,7 +6,7 @@
 #include "NewInventoryItemContainer.h"
 #include "NewItemFilterContainer.h"
 #include "NewItemInfoCard.h"
-#include "NewItemSlotContainer.h"
+#include "Player/InGameController.h"
 
 UInputMappingContext* UNewItemSubUI::GetInputMappingContext_Implementation() const
 {
@@ -20,9 +20,6 @@ UInputMappingContext* UNewItemSubUI::GetInputMappingContext_Implementation() con
 
 void UNewItemSubUI::RefreshWidget()
 {
-	// ItemSlotContainer->RefreshWidget();
-	InventoryItemContainer->RefreshWidget();
-
 	const FGameplayTag ItemTag = InventoryItemContainer->GetClickedItemTag();
 	const int32 ItemQuantity = InventoryItemContainer->GetClickedItemQuantity();
 	ItemInfoCard->SetInfo(ItemTag, ItemQuantity);
@@ -31,6 +28,9 @@ void UNewItemSubUI::RefreshWidget()
 void UNewItemSubUI::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	BindInputActionDelegates();
+	BindItemFilterChangedDelegates();
 
 	OnVisibilityChanged.AddDynamic(this, &UNewItemSubUI::RequestRefreshWidget);
 }
@@ -41,4 +41,22 @@ void UNewItemSubUI::RequestRefreshWidget(const ESlateVisibility NewVisibility)
 	{
 		RefreshWidget();
 	}
+}
+
+void UNewItemSubUI::BindInputActionDelegates()
+{
+	auto* InGameController = Cast<AInGameController>(GetOwningPlayer());
+	if (InGameController)
+	{
+		InGameController->OnItemUIMoveSelectionLeftEvent.AddUObject(ItemFilterContainer, &UNewItemFilterContainer::DecreaseFocusIndex);
+		InGameController->OnItemUIMoveSelectionRightEvent.AddUObject(ItemFilterContainer, &UNewItemFilterContainer::IncreaseFocusIndex);
+
+		InGameController->OnItemUIMoveSelectionUpEvent.AddUObject(InventoryItemContainer, &UNewInventoryItemContainer::DecreaseFocusIndex);
+		InGameController->OnItemUIMoveSelectionDownEvent.AddUObject(InventoryItemContainer, &UNewInventoryItemContainer::IncreaseFocusIndex);
+	}
+}
+
+void UNewItemSubUI::BindItemFilterChangedDelegates()
+{
+	ItemFilterContainer->OnCurrentItemFilterChangedEvent.AddUObject(InventoryItemContainer, &UNewInventoryItemContainer::SetDisplayItemFilter);
 }

@@ -13,15 +13,16 @@ class DOMINIONPROTOCOL_API UBaseContentContainer : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION()
+	virtual void IncreaseFocusIndex();
+    
+	UFUNCTION()
+	virtual void DecreaseFocusIndex();
+	
 protected:
 	UFUNCTION()
     virtual void ChangeFocusIndex(const int32 NewFocusIndex);
-    
-    UFUNCTION()
-    virtual void IncreaseFocusIndex();
-    
-    UFUNCTION()
-    virtual void DecreaseFocusIndex();
           	
 	virtual void NativeConstruct() override;
 

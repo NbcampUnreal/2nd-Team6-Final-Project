@@ -4,28 +4,18 @@
 #include "UI/RenewalUI/NewItemFilterContainer.h"
 
 #include "NewItemFilter.h"
-#include "Player/InGameController.h"
 
 void UNewItemFilterContainer::SetCurrentItemFilter(const EDisplayItemFilter NewItemFilter)
 {
 	CurrentItemFilter = NewItemFilter;
+	OnCurrentItemFilterChangedEvent.Broadcast(CurrentItemFilter);
 }
 
 void UNewItemFilterContainer::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
-	BindInputActionDelegates();
-}
 
-void UNewItemFilterContainer::BindInputActionDelegates()
-{
-	auto* InGameController = Cast<AInGameController>(GetOwningPlayer());
-	if (InGameController)
-	{
-		InGameController->OnItemUIMoveSelectionLeftEvent.AddUObject(this, &UNewItemFilterContainer::DecreaseFocusIndex);
-		InGameController->OnItemUIMoveSelectionRightEvent.AddUObject(this, &UNewItemFilterContainer::IncreaseFocusIndex);
-	}
+	BindChangeItemFilterFocusDelegates();
 }
 
 void UNewItemFilterContainer::BindChangeItemFilterFocusDelegates()
