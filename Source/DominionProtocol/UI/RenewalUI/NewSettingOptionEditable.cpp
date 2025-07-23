@@ -14,9 +14,13 @@ void UNewSettingOptionEditable::SetOptionInfo(const FText& NewValue) const
 		const int32 ClampedValue = FMath::Clamp(NewValueInt, 0, 100);
 		SettingValueText->SetText(FText::AsNumber(ClampedValue));
 	}
+	else if (NewValue.IsEmpty())
+	{
+		SettingValueText->SetText(FText::FromString("0"));
+	}
 	else
 	{
-		SettingValueText->SetText(NewValue);
+		SettingValueText->SetText(SettingOptionValue);
 	}
 }
 

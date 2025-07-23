@@ -75,26 +75,32 @@ void UNewInventoryItemContainer::SaveFocusIndex(const EDisplayItemFilter NewDisp
 	case EDisplayItemFilter::AllItems :
 		{
 			AllItemsFocusIndex = CurrentFocusIndex;
+			break;
 		}
 	case EDisplayItemFilter::WeaponItems :
 		{
 			WeaponItemsFocusIndex = CurrentFocusIndex;
+			break;
 		}
 	case EDisplayItemFilter::AccessoryItems :
 		{
 			AccessoryItemsFocusIndex = CurrentFocusIndex;
+			break;
 		}
 	case EDisplayItemFilter::ConsumableItems :
 		{
 			ConsumableItemsFocusIndex = CurrentFocusIndex;
+			break;
 		}
 	case EDisplayItemFilter::OtherItems :
 		{
 			OtherItemsFocusIndex = CurrentFocusIndex;
+			break;
 		}
 	case EDisplayItemFilter::SkillItems :
 		{
 			SkillItemsFocusIndex = CurrentFocusIndex;
+			break;
 		}
 	}
 }
@@ -185,26 +191,32 @@ void UNewInventoryItemContainer::SetCurrentDataArray(const EDisplayItemFilter Ne
 	case EDisplayItemFilter::AllItems :
 		{
 			CurrentItemDataArray.Append(InventoryAllItemDataArray);
+			break;
 		}
 	case EDisplayItemFilter::WeaponItems :
 		{
 			CurrentItemDataArray.Append(InventoryWeaponItemDataArray);
+			break;
 		}
 	case EDisplayItemFilter::AccessoryItems :
 		{
 			CurrentItemDataArray.Append(InventoryAccessoryItemDataArray);
+			break;
 		}
 	case EDisplayItemFilter::ConsumableItems :
 		{
 			CurrentItemDataArray.Append(InventoryConsumableItemDataArray);
+			break;
 		}
 	case EDisplayItemFilter::SkillItems :
 		{
 			CurrentItemDataArray.Append(InventorySkillItemDataArray);
+			break;
 		}
 	case EDisplayItemFilter::OtherItems :
 		{
 			CurrentItemDataArray.Append(InventoryOtherItemDataArray);
+			break;
 		}
 	}
 }
@@ -216,26 +228,32 @@ void UNewInventoryItemContainer::SetFocusIndex(const EDisplayItemFilter NewDispl
 	case EDisplayItemFilter::AllItems :
 		{
 			ChangeFocusIndex(NewFocusIndex);
+			break;
 		}
 	case EDisplayItemFilter::WeaponItems :
 		{
 			ChangeFocusIndex(NewFocusIndex);
+			break;
 		}
 	case EDisplayItemFilter::AccessoryItems :
 		{
 			ChangeFocusIndex(NewFocusIndex);
+			break;
 		}
 	case EDisplayItemFilter::ConsumableItems :
 		{
 			ChangeFocusIndex(NewFocusIndex);
+			break;
 		}
 	case EDisplayItemFilter::OtherItems :
 		{
 			ChangeFocusIndex(NewFocusIndex);
+			break;
 		}
 	case EDisplayItemFilter::SkillItems :
 		{
 			ChangeFocusIndex(NewFocusIndex);
+			break;
 		}
 	}
 }

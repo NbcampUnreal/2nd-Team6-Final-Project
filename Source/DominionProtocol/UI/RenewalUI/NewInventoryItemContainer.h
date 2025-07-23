@@ -21,6 +21,8 @@ public:
 
 	UFUNCTION()
 	void RefreshWidget(const EDisplayItemFilter NewDisplayItemFilter);
+	
+	void SaveFocusIndex(const EDisplayItemFilter NewDisplayItemFilter);
 
 	// Getter
 	int32 GetDisplayFocusIndex(const EDisplayItemFilter NewDisplayItemFilter) const;
@@ -28,8 +30,6 @@ public:
 	virtual void ChangeFocusIndex(const int32 NewFocusIndex) override;
 	
 protected:
-	void SaveFocusIndex(const EDisplayItemFilter NewDisplayItemFilter);
-
 	UFUNCTION()
 	void SetItemDataArrays();
 

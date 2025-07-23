@@ -8,6 +8,7 @@
 #include "NewItemFilter.h"
 #include "NewItemFilterContainer.h"
 #include "NewItemInfoCard.h"
+#include "Components/TextBlock.h"
 #include "Player/InGameController.h"
 
 UInputMappingContext* UNewItemSubUI::GetInputMappingContext_Implementation() const
@@ -20,25 +21,35 @@ UInputMappingContext* UNewItemSubUI::GetInputMappingContext_Implementation() con
 	return ItemSubUIMappingContext;
 }
 
-void UNewItemSubUI::RefreshWidget() const 
+void UNewItemSubUI::RefreshWidget() 
 {
 	InventoryItemContainer->RefreshWidget(CurrentItemFilter);
 	ItemInfoCard->SetInfo(FocusItemTag, FocusItemQuantity);
+	SetupItemTypeName();
 }
 
-void UNewItemSubUI::SetFocusItemInfo(const FGameplayTag NewItemTag, const int32 NewItemQuantity)
+void UNewItemSubUI::SetupItemTypeName()
 {
-	FocusItemTag = NewItemTag;
-	FocusItemQuantity = NewItemQuantity;
-
-	ItemInfoCard->SetInfo(FocusItemTag, FocusItemQuantity);
+	const UEnum* EnumPtr = StaticEnum<EDisplayItemFilter>();
+	if (EnumPtr)
+	{
+		const FText EnumDisplayName = EnumPtr->GetDisplayNameTextByValue(static_cast<int32>(CurrentItemFilter));
+		ItemTypeName->SetText(EnumDisplayName);
+	}
 }
 
-void UNewItemSubUI::SetCurrentItemFilter(const EDisplayItemFilter NewItemFilter)
+void UNewItemSubUI::SequenceChangeItemFilterEvent(const EDisplayItemFilter NewItemFilter)
 {
-	CurrentItemFilter = NewItemFilter;
-
+	InventoryItemContainer->SaveFocusIndex(CurrentItemFilter);	
+	SetCurrentItemFilter(NewItemFilter);
 	RefreshWidget();
+}
+
+void UNewItemSubUI::SequenceChangeFocusItemEvent(const FGameplayTag NewItemTag, const int32 NewItemQuantity)
+{
+	SetFocusItemTag(NewItemTag);
+	SetFocusItemQuantity(NewItemQuantity);
+	ItemInfoCard->SetInfo(FocusItemTag, FocusItemQuantity);
 }
 
 void UNewItemSubUI::NativeConstruct()
@@ -81,7 +92,7 @@ void UNewItemSubUI::BindItemFilterChangedDelegates()
 		for (UBaseContent* Content : ContentArray)
 		{
 			auto* ItemFilter = Cast<UNewItemFilter>(Content);
-			ItemFilter->OnChangeItemFilterFocusEvent.AddUObject(this, &UNewItemSubUI::SetCurrentItemFilter);
+			ItemFilter->OnChangeItemFilterFocusEvent.AddUObject(this, &UNewItemSubUI::SequenceChangeItemFilterEvent);
 		}
 	}
 }
@@ -94,7 +105,7 @@ void UNewItemSubUI::BindFocusItemChangedDelegates()
 		for (UBaseContent* Content : ContentArray)
 		{
 			auto* InventoryItem = Cast<UNewInventoryItem>(Content);
-			InventoryItem->OnChangeInventoryItemFocusEvent.AddUObject(this, &UNewItemSubUI::SetFocusItemInfo);
+			InventoryItem->OnChangeInventoryItemFocusEvent.AddUObject(this, &UNewItemSubUI::SequenceChangeFocusItemEvent);
 		}
 	}
 }
