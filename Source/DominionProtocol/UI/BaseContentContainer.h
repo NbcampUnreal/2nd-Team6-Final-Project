@@ -19,6 +19,9 @@ public:
     
 	UFUNCTION()
 	virtual void DecreaseFocusIndex();
+
+	UFUNCTION()
+	TArray<UBaseContent*> GetContentArray() const { return ContentArray; }
 	
 protected:
 	UFUNCTION()

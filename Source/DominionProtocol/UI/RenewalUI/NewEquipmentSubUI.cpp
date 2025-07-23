@@ -30,7 +30,7 @@ void UNewEquipmentSubUI::RequestRefreshWidget(const ESlateVisibility NewVisibili
 void UNewEquipmentSubUI::RefreshWidget()
 {
 	ItemSlotContainer->RefreshWidget();
-	InventoryItemContainer->RefreshWidget();
+	// InventoryItemContainer->RefreshWidget();
 	
 	RequestRefreshStatusPlate();
 }

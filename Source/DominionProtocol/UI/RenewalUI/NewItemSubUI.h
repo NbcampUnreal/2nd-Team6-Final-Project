@@ -3,10 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Util/GameTagList.h"
 #include "Blueprint/UserWidget.h"
+#include "EnumAndStruct/EDisplayItemFilter.h"
 #include "Interface/UIInterface.h"
 #include "NewItemSubUI.generated.h"
 
+enum class EDisplayItemFilter : uint8;
 class UNewItemFilterContainer;
 class UNewItemSlotContainer;
 class UNewInventoryItemContainer;
@@ -22,7 +25,12 @@ public:
 	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
 
 	UFUNCTION()
-	void RefreshWidget();
+	void RefreshWidget() const;
+
+	// Setter
+	void SetFocusItemInfo(const FGameplayTag NewItemTag, const int32 NewItemQuantity);
+
+	void SetCurrentItemFilter(const EDisplayItemFilter NewItemFilter);
 
 protected:
 	virtual void NativeConstruct() override;
@@ -33,6 +41,8 @@ protected:
 	void BindInputActionDelegates();
 
 	void BindItemFilterChangedDelegates();
+
+	void BindFocusItemChangedDelegates();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
@@ -49,4 +59,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UNewItemInfoCard> ItemInfoCard;
+
+	UPROPERTY()
+	FGameplayTag FocusItemTag;
+
+	int32 FocusItemQuantity = 0;
+
+	UPROPERTY()
+	EDisplayItemFilter CurrentItemFilter = EDisplayItemFilter::AllItems;
 };

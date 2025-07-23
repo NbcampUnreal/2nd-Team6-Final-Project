@@ -3,7 +3,9 @@
 
 #include "UI/RenewalUI/NewItemSubUI.h"
 
+#include "NewInventoryItem.h"
 #include "NewInventoryItemContainer.h"
+#include "NewItemFilter.h"
 #include "NewItemFilterContainer.h"
 #include "NewItemInfoCard.h"
 #include "Player/InGameController.h"
@@ -18,11 +20,25 @@ UInputMappingContext* UNewItemSubUI::GetInputMappingContext_Implementation() con
 	return ItemSubUIMappingContext;
 }
 
-void UNewItemSubUI::RefreshWidget()
+void UNewItemSubUI::RefreshWidget() const 
 {
-	const FGameplayTag ItemTag = InventoryItemContainer->GetClickedItemTag();
-	const int32 ItemQuantity = InventoryItemContainer->GetClickedItemQuantity();
-	ItemInfoCard->SetInfo(ItemTag, ItemQuantity);
+	InventoryItemContainer->RefreshWidget(CurrentItemFilter);
+	ItemInfoCard->SetInfo(FocusItemTag, FocusItemQuantity);
+}
+
+void UNewItemSubUI::SetFocusItemInfo(const FGameplayTag NewItemTag, const int32 NewItemQuantity)
+{
+	FocusItemTag = NewItemTag;
+	FocusItemQuantity = NewItemQuantity;
+
+	ItemInfoCard->SetInfo(FocusItemTag, FocusItemQuantity);
+}
+
+void UNewItemSubUI::SetCurrentItemFilter(const EDisplayItemFilter NewItemFilter)
+{
+	CurrentItemFilter = NewItemFilter;
+
+	RefreshWidget();
 }
 
 void UNewItemSubUI::NativeConstruct()
@@ -31,6 +47,7 @@ void UNewItemSubUI::NativeConstruct()
 
 	BindInputActionDelegates();
 	BindItemFilterChangedDelegates();
+	BindFocusItemChangedDelegates();
 
 	OnVisibilityChanged.AddDynamic(this, &UNewItemSubUI::RequestRefreshWidget);
 }
@@ -58,5 +75,26 @@ void UNewItemSubUI::BindInputActionDelegates()
 
 void UNewItemSubUI::BindItemFilterChangedDelegates()
 {
-	ItemFilterContainer->OnCurrentItemFilterChangedEvent.AddUObject(InventoryItemContainer, &UNewInventoryItemContainer::SetDisplayItemFilter);
+	const TArray<UBaseContent*> ContentArray = ItemFilterContainer->GetContentArray();
+	if (ContentArray.Num() > 0)
+	{
+		for (UBaseContent* Content : ContentArray)
+		{
+			auto* ItemFilter = Cast<UNewItemFilter>(Content);
+			ItemFilter->OnChangeItemFilterFocusEvent.AddUObject(this, &UNewItemSubUI::SetCurrentItemFilter);
+		}
+	}
+}
+
+void UNewItemSubUI::BindFocusItemChangedDelegates()
+{
+	const TArray<UBaseContent*> ContentArray = InventoryItemContainer->GetContentArray();
+	if (ContentArray.Num() > 0)
+	{
+		for (UBaseContent* Content : ContentArray)
+		{
+			auto* InventoryItem = Cast<UNewInventoryItem>(Content);
+			InventoryItem->OnChangeInventoryItemFocusEvent.AddUObject(this, &UNewItemSubUI::SetFocusItemInfo);
+		}
+	}
 }

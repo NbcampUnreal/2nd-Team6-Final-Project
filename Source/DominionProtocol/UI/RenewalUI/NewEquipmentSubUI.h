@@ -56,4 +56,6 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UBorder> InventoryBorder;
+
+	
 };

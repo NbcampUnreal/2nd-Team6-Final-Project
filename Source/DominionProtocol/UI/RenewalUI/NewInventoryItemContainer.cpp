@@ -3,37 +3,24 @@
 
 #include "UI/RenewalUI/NewInventoryItemContainer.h"
 
-#include "NewEquipmentSubUI.h"
 #include "NewInventoryItem.h"
 #include "Components/ItemComponent/ItemComponent.h"
+#include "EnumAndStruct/EDisplayItemFilter.h"
 
 void UNewInventoryItemContainer::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	OnVisibilityChanged.AddDynamic(this, &UNewInventoryItemContainer::RequestRefreshWidget);
-	OnItemFilterChangedEvent.AddUObject(this, &UNewInventoryItemContainer::RefreshWidget);
+	APawn* PlayerPawn = GetOwningPlayerPawn();
+	if (PlayerPawn)
+	{
+		ItemComponent = PlayerPawn->GetComponentByClass<UItemComponent>();
+	}
 }
 
-void UNewInventoryItemContainer::SetDisplayItemFilter(const EDisplayItemFilter NewDisplayItemFilter)
+int32 UNewInventoryItemContainer::GetDisplayFocusIndex(const EDisplayItemFilter NewDisplayItemFilter) const
 {
-	DisplayItemFilter = NewDisplayItemFilter;
-	OnItemFilterChangedEvent.Broadcast();
-}
-
-void UNewInventoryItemContainer::SetClickedItemTag(const FGameplayTag NewClickedItemTag)
-{
-	ClickedItemTag = NewClickedItemTag;
-}
-
-void UNewInventoryItemContainer::SetClickedItemQuantity(const int32 NewClickedItemQuantity)
-{
-	ClickedItemQuantity = NewClickedItemQuantity;
-}
-
-int32 UNewInventoryItemContainer::GetDisplayFocusIndex() const
-{
-	switch (DisplayItemFilter)
+	switch (NewDisplayItemFilter)
 	{
 	case EDisplayItemFilter::AllItems :
 		{
@@ -69,31 +56,21 @@ int32 UNewInventoryItemContainer::GetDisplayFocusIndex() const
 void UNewInventoryItemContainer::ChangeFocusIndex(const int32 NewFocusIndex)
 {
 	Super::ChangeFocusIndex(NewFocusIndex);
-
-	SaveFocusIndex();
 }
 
-void UNewInventoryItemContainer::RefreshWidget()
+void UNewInventoryItemContainer::RefreshWidget(const EDisplayItemFilter NewDisplayItemFilter)
 {
 	SetItemDataArrays();
-	SetCurrentDataArray();
+	SetCurrentDataArray(NewDisplayItemFilter);
 	SetContentInfo();
 
-	const int32 NewFocusIndex = GetDisplayFocusIndex();
-	SetFocusIndex(NewFocusIndex);
+	const int32 NewFocusIndex = GetDisplayFocusIndex(NewDisplayItemFilter);
+	SetFocusIndex(NewDisplayItemFilter, NewFocusIndex);
 }
 
-void UNewInventoryItemContainer::RequestRefreshWidget(const ESlateVisibility NewVisibility)
+void UNewInventoryItemContainer::SaveFocusIndex(const EDisplayItemFilter NewDisplayItemFilter)
 {
-	if (ESlateVisibility::Visible == NewVisibility)
-	{
-		RefreshWidget();
-	}
-}
-
-void UNewInventoryItemContainer::SaveFocusIndex()
-{
-	switch (DisplayItemFilter)
+	switch (NewDisplayItemFilter)
 	{
 	case EDisplayItemFilter::AllItems :
 		{
@@ -144,12 +121,11 @@ void UNewInventoryItemContainer::SetContentInfo()
 
 void UNewInventoryItemContainer::SetItemDataArrays()
 {
-	if (!ItemComponent)
-	{
-		return;
-	}
+	check(ItemComponent);
 
-	InventoryAllItemDataArray = ItemComponent->GetInventoryDisplayItems();
+	const TArray<FItemUISlotData> InventoryArray = ItemComponent->GetInventoryDisplayItems();
+	InventoryAllItemDataArray.Empty();
+	InventoryAllItemDataArray.Append(InventoryArray);
 
 	TArray<FItemUISlotData> TempWeaponItemDataArray;
 	TArray<FItemUISlotData> TempAccessoryItemDataArray;
@@ -188,47 +164,54 @@ void UNewInventoryItemContainer::SetItemDataArrays()
 		}
 	}
 
-	InventoryWeaponItemDataArray = TempWeaponItemDataArray;
-	InventoryAccessoryItemDataArray = TempAccessoryItemDataArray;
-	InventoryConsumableItemDataArray = TempConsumableItemDataArray;
-	InventorySkillItemDataArray = TempSkillItemDataArray;
-	InventoryOtherItemDataArray = TempOtherItemDataArray;
+	InventoryWeaponItemDataArray.Empty();
+	InventoryWeaponItemDataArray.Append(TempWeaponItemDataArray);
+	InventoryAccessoryItemDataArray.Empty();
+	InventoryAccessoryItemDataArray.Append(TempAccessoryItemDataArray);
+	InventoryConsumableItemDataArray.Empty();
+	InventoryConsumableItemDataArray.Append(TempConsumableItemDataArray);
+	InventorySkillItemDataArray.Empty();
+	InventorySkillItemDataArray.Append(TempSkillItemDataArray);
+	InventoryOtherItemDataArray.Empty();
+	InventoryOtherItemDataArray.Append(TempOtherItemDataArray);
 }
 
-void UNewInventoryItemContainer::SetCurrentDataArray()
+void UNewInventoryItemContainer::SetCurrentDataArray(const EDisplayItemFilter NewDisplayItemFilter)
 {
-	switch (DisplayItemFilter)
+	CurrentItemDataArray.Empty();
+	
+	switch (NewDisplayItemFilter)
 	{
 	case EDisplayItemFilter::AllItems :
 		{
-			CurrentItemDataArray = InventoryAllItemDataArray;
+			CurrentItemDataArray.Append(InventoryAllItemDataArray);
 		}
 	case EDisplayItemFilter::WeaponItems :
 		{
-			CurrentItemDataArray = InventoryWeaponItemDataArray;
+			CurrentItemDataArray.Append(InventoryWeaponItemDataArray);
 		}
 	case EDisplayItemFilter::AccessoryItems :
 		{
-			CurrentItemDataArray = InventoryAccessoryItemDataArray;
+			CurrentItemDataArray.Append(InventoryAccessoryItemDataArray);
 		}
 	case EDisplayItemFilter::ConsumableItems :
 		{
-			CurrentItemDataArray = InventoryConsumableItemDataArray;
+			CurrentItemDataArray.Append(InventoryConsumableItemDataArray);
 		}
 	case EDisplayItemFilter::SkillItems :
 		{
-			CurrentItemDataArray =  InventorySkillItemDataArray;
+			CurrentItemDataArray.Append(InventorySkillItemDataArray);
 		}
 	case EDisplayItemFilter::OtherItems :
 		{
-			CurrentItemDataArray =  InventoryOtherItemDataArray;
+			CurrentItemDataArray.Append(InventoryOtherItemDataArray);
 		}
 	}
 }
 
-void UNewInventoryItemContainer::SetFocusIndex(const int32 NewFocusIndex)
+void UNewInventoryItemContainer::SetFocusIndex(const EDisplayItemFilter NewDisplayItemFilter, const int32 NewFocusIndex)
 {
-	switch (DisplayItemFilter)
+	switch (NewDisplayItemFilter)
 	{
 	case EDisplayItemFilter::AllItems :
 		{

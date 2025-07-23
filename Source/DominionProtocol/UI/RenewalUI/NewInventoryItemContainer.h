@@ -3,16 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "EnumAndStruct/EDisplayItemFilter.h"
 #include "UI/BaseContentContainer.h"
 #include "NewInventoryItemContainer.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnItemFilterChangedEvent)
-
 struct FItemUISlotData;
-class UNewEquipmentSubUI;
-class UNewItemSubUI;
+class UItemComponent;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewInventoryItemContainer : public UBaseContentContainer
@@ -20,47 +16,34 @@ class DOMINIONPROTOCOL_API UNewInventoryItemContainer : public UBaseContentConta
 	GENERATED_BODY()
 
 public:
-	FOnItemFilterChangedEvent OnItemFilterChangedEvent;
-	
 	UFUNCTION()
 	void SetContentInfo();
 
 	UFUNCTION()
-	void RefreshWidget();
-
-	UFUNCTION()
-	void RequestRefreshWidget(const ESlateVisibility NewVisibility);
-
-	// Setter
-	void SetDisplayItemFilter(const EDisplayItemFilter NewDisplayItemFilter);
-	void SetClickedItemTag(const FGameplayTag NewClickedItemTag);
-	void SetClickedItemQuantity(const int32 NewClickedItemQuantity);
+	void RefreshWidget(const EDisplayItemFilter NewDisplayItemFilter);
 
 	// Getter
-	EDisplayItemFilter GetDisplayItemFilter() const { return DisplayItemFilter; }
-	FGameplayTag GetClickedItemTag() const { return ClickedItemTag; }
-	int32 GetClickedItemQuantity() const { return ClickedItemQuantity; }
-	int32 GetDisplayFocusIndex() const;
+	int32 GetDisplayFocusIndex(const EDisplayItemFilter NewDisplayItemFilter) const;
 	
 	virtual void ChangeFocusIndex(const int32 NewFocusIndex) override;
 	
 protected:
-	void SaveFocusIndex();
+	void SaveFocusIndex(const EDisplayItemFilter NewDisplayItemFilter);
 
 	UFUNCTION()
 	void SetItemDataArrays();
 
 	UFUNCTION()
-	void SetCurrentDataArray();
+	void SetCurrentDataArray(const EDisplayItemFilter NewDisplayItemFilter);
 
 	UFUNCTION()
-	void SetFocusIndex(const int32 NewFocusIndex);
+	void SetFocusIndex(const EDisplayItemFilter NewDisplayItemFilter, const int32 NewFocusIndex);
 
 	virtual void NativeConstruct() override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<class UItemComponent> ItemComponent;
+	TObjectPtr<UItemComponent> ItemComponent;
 
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FItemUISlotData> InventoryAllItemDataArray;
@@ -82,13 +65,6 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly)
 	TArray<FItemUISlotData> CurrentItemDataArray;
-	
-	UPROPERTY(BlueprintReadWrite)
-	EDisplayItemFilter DisplayItemFilter = EDisplayItemFilter::AllItems;
-
-	FGameplayTag ClickedItemTag;
-
-	int32 ClickedItemQuantity;
 	
 	int32 AllItemsFocusIndex = 0;		
 	

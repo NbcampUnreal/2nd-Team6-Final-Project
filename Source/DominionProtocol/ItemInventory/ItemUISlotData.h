@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Util/GameTagList.h"
 #include "ItemData.h"
 #include "ItemUISlotData.generated.h"
 

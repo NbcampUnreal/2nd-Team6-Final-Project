@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
+#include "Util/GameTagList.h"
 #include "EnumAndStruct/EDisplayItemFilter.h"
 #include "UI/BaseContent.h"
 #include "NewItemSlot.generated.h"
@@ -67,7 +67,7 @@ protected:
 	FName SlotName;
 
 	UPROPERTY(BlueprintReadOnly)
-	FGameplayTag ItemTag = FGameplayTag::RequestGameplayTag(FName("None"));
+	FGameplayTag ItemTag;
 
 	UPROPERTY()
 	TObjectPtr<UItemComponent> ItemComponent;

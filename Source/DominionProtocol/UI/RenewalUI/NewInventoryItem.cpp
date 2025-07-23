@@ -28,12 +28,14 @@ void UNewInventoryItem::SetItemInfo(const FGameplayTag& ItemTag, UTexture2D* Ite
 	{
 		ItemName->SetText(FText::FromString(TEXT("")));
 		ItemAmount->SetText(FText::FromString(TEXT("")));
-		return;
+	}
+	else
+	{
+		ItemName->SetText(FText::FromString(ItemNameString));
+		ItemAmount->SetText(FText::FromString(FString::Printf(TEXT("%d / %d"), CurrentItemQuantity, MaxItemQuantity)));
 	}
 	
 	ItemIcon->SetBrushFromTexture(ItemTexture);
-	ItemName->SetText(FText::FromString(ItemNameString));
-	ItemAmount->SetText(FText::FromString(FString::Printf(TEXT("%d / %d"), CurrentItemQuantity, MaxItemQuantity)));
 
 	DisplayInfo();
 }
@@ -68,6 +70,7 @@ void UNewInventoryItem::DisplayInfo()
 	if (!ItemData.ItemTag.IsValid())
 	{
 		ItemIcon->SetVisibility(ESlateVisibility::Hidden);
+		EquipItemEffect->SetVisibility(ESlateVisibility::Collapsed);
 		return;
 	}
 	
