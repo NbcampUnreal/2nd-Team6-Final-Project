@@ -8,12 +8,11 @@
 #include "UI/BaseContent.h"
 #include "NewItemSlot.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnItemSlotClickedEvent, FName, EDisplayItemFilter);
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnItemSlotGetFocusEvent, FGameplayTag, int32);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnItemSlotGetFocusEvent, FGameplayTag, int32, FName);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemSlotClickedEvent, EDisplayItemFilter);
 
 class UBorder;
 class USizeBox;
-class UItemComponent;
 class UNewItemSlotContainer;
 
 UCLASS()
@@ -31,25 +30,29 @@ public:
 	
 	int32 GetItemQuantity() const { return ItemQuantity; }
 
-	void SetInfo(const FGameplayTag NewItemTag, const int32 NewItemQuantity);
-
-	void SetOwingWidget(UNewItemSlotContainer* NewEquippedSlotsContainer) { OwningWidget = NewEquippedSlotsContainer; }
+	void SetInfo(const FGameplayTag NewItemTag, UTexture2D* NewItemIcon, const int32 NewItemQuantity);
 
 protected:
 	virtual void SetInfo() override;
 
 	UFUNCTION(BlueprintCallable)
-	void ItemSlotClickedEvent() const;
-	
-	bool SearchingSlotItem();
-	
-	virtual void NativeConstruct() override;
+	void BroadcastButtonClickEvent() const;
 
 	virtual void NativePreConstruct() override;
 
 protected:
+	UPROPERTY(BlueprintReadOnly)
+	FGameplayTag ItemTag;
+	
 	UPROPERTY(BlueprintReadWrite)
 	int32 ItemQuantity = 0;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName SlotName;
+
+	// Widget
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector2D Size = {100.f,100.f};
 	
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	TObjectPtr<UBorder> ItemImage;
@@ -59,19 +62,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EDisplayItemFilter SlotItemFilter;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector2D Size = {100.f,100.f};
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName SlotName;
-
-	UPROPERTY(BlueprintReadOnly)
-	FGameplayTag ItemTag;
-
-	UPROPERTY()
-	TObjectPtr<UItemComponent> ItemComponent;
-
-	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<UNewItemSlotContainer> OwningWidget;
 };

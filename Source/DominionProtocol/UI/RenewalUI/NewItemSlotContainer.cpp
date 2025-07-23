@@ -17,11 +17,12 @@ void UNewItemSlotContainer::SetItemSlotInfo(TMap<FName, FItemUISlotData> Updated
 		{
 			const FName SlotName = SlotWidget->GetSlotName();
 			const FItemUISlotData* SlotData = UpdatedSlotMap.Find(SlotName);
-			if (SlotData)
+			if (SlotData && SlotData->ItemTag.IsValid())
 			{
 				const FGameplayTag SlotItemTag = SlotData->ItemTag;
+				UTexture2D* SlotItemIcon = SlotData->ItemIcon;
 				const int32 SlotItemQuantity = SlotData->CurrentQuantity;
-				SlotWidget->SetInfo(SlotItemTag, SlotItemQuantity);
+				SlotWidget->SetInfo(SlotItemTag, SlotItemIcon, SlotItemQuantity);
 			}
 		}
 	}
@@ -84,13 +85,14 @@ void UNewItemSlotContainer::NativeConstruct()
 	SlotWidgetArray.AddUnique(SkillSlot);
 	SlotWidgetArray.AddUnique(WeaponSlot_Primary);
 	SlotWidgetArray.AddUnique(WeaponSlot_Secondary);
+	SlotWidgetArray.AddUnique(ConsumableSlot_Primary);
 	SlotWidgetArray.AddUnique(ConsumableSlot_Secondary);
 	SlotWidgetArray.AddUnique(ConsumableSlot_Tertiary);
 
 	for (int32 i = 0; i < SlotWidgetArray.Num(); i++)
 	{
 		SlotWidgetArray[i]->SetContentIndex(i);
-		SlotWidgetArray[i]->SetOwingWidget(this);
+		SlotWidgetArray[i]->RequestChangingFocusIndexEvent.AddUObject(this, &UNewItemSlotContainer::ChangeFocusIndex);
 	}
 
 	MaxFocusIndex = SlotWidgetArray.Num() - 1;

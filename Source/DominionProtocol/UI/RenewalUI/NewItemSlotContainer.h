@@ -62,6 +62,7 @@ protected:
 
 	TArray<TObjectPtr<UNewItemSlot>> SlotWidgetArray;
 
+	// Widget
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	TObjectPtr<UNewItemSlot> AccessorySlot_Primary;
 	

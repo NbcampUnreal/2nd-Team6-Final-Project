@@ -9,6 +9,7 @@
 #include "NewItemFilterContainer.h"
 #include "NewItemInfoCard.h"
 #include "Components/TextBlock.h"
+#include "Components/ItemComponent/ItemComponent.h"
 #include "Player/InGameController.h"
 
 UInputMappingContext* UNewItemSubUI::GetInputMappingContext_Implementation() const
@@ -59,6 +60,7 @@ void UNewItemSubUI::NativeConstruct()
 	BindInputActionDelegates();
 	BindItemFilterChangedDelegates();
 	BindFocusItemChangedDelegates();
+	BindUpdateInventoryDataDelegates();
 
 	OnVisibilityChanged.AddDynamic(this, &UNewItemSubUI::RequestRefreshWidget);
 }
@@ -106,6 +108,21 @@ void UNewItemSubUI::BindFocusItemChangedDelegates()
 		{
 			auto* InventoryItem = Cast<UNewInventoryItem>(Content);
 			InventoryItem->OnChangeInventoryItemFocusEvent.AddUObject(this, &UNewItemSubUI::SequenceChangeFocusItemEvent);
+		}
+	}
+}
+
+void UNewItemSubUI::BindUpdateInventoryDataDelegates()
+{
+	APawn* PlayerPawn = GetOwningPlayerPawn();
+	if (PlayerPawn)
+	{
+		ItemComponent = PlayerPawn->GetComponentByClass<UItemComponent>();
+		if (ItemComponent)
+		{
+			ItemComponent->OnInventoryItemListChanged.AddUObject(this, &UNewItemSubUI::RefreshWidget);
+			ItemComponent->OnInventoryEquippedSlotItemsChanged.AddUObject(this, &UNewItemSubUI::RefreshWidget);
+			ItemComponent->OnInventoryConsumableSlotItemsChanged.AddUObject(this, &UNewItemSubUI::RefreshWidget);
 		}
 	}
 }

@@ -3,64 +3,31 @@
 
 #include "NewItemSlot.h"
 
+#include "Components/Border.h"
 #include "Components/SizeBox.h"
-#include "Components/ItemComponent/ItemComponent.h"
 
 void UNewItemSlot::SetInfo()
 {
 	Super::SetInfo();
 }
 
-void UNewItemSlot::ItemSlotClickedEvent() const
+void UNewItemSlot::BroadcastButtonClickEvent() const
 {
-	OnItemSlotClickedEvent.Broadcast(SlotName, SlotItemFilter);
+	OnItemSlotClickedEvent.Broadcast(SlotItemFilter);
 }
 
 void UNewItemSlot::GetFocus()
 {
 	Super::GetFocus();
 
-	OnItemSlotGetFocusEvent.Broadcast(ItemTag, ItemQuantity);
+	OnItemSlotGetFocusEvent.Broadcast(ItemTag, ItemQuantity, SlotName);
 }
 
-void UNewItemSlot::SetInfo(const FGameplayTag NewItemTag, const int32 NewItemQuantity)
+void UNewItemSlot::SetInfo(const FGameplayTag NewItemTag, UTexture2D* NewItemIcon, const int32 NewItemQuantity)
 {
 	ItemTag = NewItemTag;
 	ItemQuantity = NewItemQuantity;
-}
-
-bool UNewItemSlot::SearchingSlotItem()
-{
-	if (!ItemTag.IsValid())
-	{
-		if (ItemComponent)
-		{
-			TMap<FName, FGameplayTag> ConsumableItemSlotMap = ItemComponent->GetConsumableSlots();
-			TMap<FName, FGameplayTag> EquipmentSlotMap = ItemComponent->GetEquipmentSlots();
-				
-			if (ConsumableItemSlotMap.Find(SlotName))
-			{
-				ItemTag = ConsumableItemSlotMap[SlotName];
-			}
-			else if (EquipmentSlotMap.Find(SlotName))
-			{
-				ItemTag = EquipmentSlotMap[SlotName];
-			}
-		}
-	}
-
-	return ItemTag.IsValid();
-}
-
-void UNewItemSlot::NativeConstruct()
-{
-	const APawn* PlayerPawn = GetOwningPlayerPawn();
-	if (PlayerPawn)
-	{
-		ItemComponent = PlayerPawn->GetComponentByClass<UItemComponent>();
-	}
-	
-	Super::NativeConstruct();
+	ItemImage->SetBrushFromTexture(NewItemIcon);
 }
 
 void UNewItemSlot::NativePreConstruct()

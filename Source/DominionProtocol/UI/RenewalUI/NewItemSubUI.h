@@ -15,6 +15,7 @@ class UNewItemSlotContainer;
 class UNewInventoryItemContainer;
 class UNewItemInfoCard;
 class UTextBlock;
+class UItemComponent;
 
 UCLASS()
 class DOMINIONPROTOCOL_API UNewItemSubUI : public UUserWidget, public IUIInterface
@@ -22,11 +23,9 @@ class DOMINIONPROTOCOL_API UNewItemSubUI : public UUserWidget, public IUIInterfa
 	GENERATED_BODY()
 
 public:
+	// Getter
 	UFUNCTION()
 	virtual UInputMappingContext* GetInputMappingContext_Implementation() const override;
-
-	UFUNCTION()
-	void RefreshWidget();
 
 	// Setter
 	void SetFocusItemTag(const FGameplayTag NewItemTag) { FocusItemTag = NewItemTag;}
@@ -41,19 +40,38 @@ protected:
 	void SequenceChangeItemFilterEvent(const EDisplayItemFilter NewItemFilter);
 
 	void SequenceChangeFocusItemEvent(const FGameplayTag NewItemTag, const int32 NewItemQuantity);
-	
-	virtual void NativeConstruct() override;
 
+	// Refresh
+	UFUNCTION()
+	void RefreshWidget();
+	
 	UFUNCTION()
 	void RequestRefreshWidget(const ESlateVisibility NewVisibility);
-
+	
+	// Bind Section
 	void BindInputActionDelegates();
 
 	void BindItemFilterChangedDelegates();
 
 	void BindFocusItemChangedDelegates();
 
+	void BindUpdateInventoryDataDelegates();
+
+	// Lift Cycle
+	virtual void NativeConstruct() override;
+
 protected:
+	UPROPERTY()
+	FGameplayTag FocusItemTag;
+
+	int32 FocusItemQuantity = 0;
+
+	UPROPERTY()
+	EDisplayItemFilter CurrentItemFilter = EDisplayItemFilter::AllItems;
+	
+	UPROPERTY()
+	TObjectPtr<UItemComponent> ItemComponent;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputMappingContext> ItemSubUIMappingContext;
 
@@ -71,12 +89,4 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UTextBlock> ItemTypeName;
-
-	UPROPERTY()
-	FGameplayTag FocusItemTag;
-
-	int32 FocusItemQuantity = 0;
-
-	UPROPERTY()
-	EDisplayItemFilter CurrentItemFilter = EDisplayItemFilter::AllItems;
 };

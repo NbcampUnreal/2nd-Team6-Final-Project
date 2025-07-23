@@ -40,6 +40,5 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UTextBlock> ItemExplain;
-
 	
 };
